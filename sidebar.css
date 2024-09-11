@@ -1,0 +1,247 @@
+/* css/style.css */
+/*body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  display: flex;
+}
+
+.sidebar {
+  background-color: #5a4dad; // Sidebar color
+  width: 200px;
+  padding-top: 20px;
+  height: 100vh; // Full height 
+  color: #fff;
+  position:sticky;
+}
+
+.sidebar .logo {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.sidebar .logo img {
+  width: 120px;
+  height: auto;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  padding: 15px 10px;
+}
+
+.sidebar ul li a {
+  text-decoration: none;
+  color: #fff;
+  display: block;
+  padding: 10px;
+  transition: background 0.3s ease;
+}
+
+.sidebar ul li a:hover,
+.sidebar ul li a.active {
+  background-color: #3a2a9b; // Darker background for active or hover 
+  border-radius: 4px;
+}
+
+.profile-section {
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+  text-align: center;
+}
+
+.profile-section .profile {
+  margin-bottom: 10px;
+}
+
+.profile-section .logout-btn {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.content {
+  flex-grow: 1;
+  padding: 20px;
+  background-color: #f0e7ff;
+  height: 100vh; // Full height 
+  overflow-y: auto;
+}
+*/
+
+* {
+  box-sizing: border-box; /* Ensure padding and border are included in width/height calculations */
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%; /* Ensure the body takes the full height of the viewport */
+  font-family: Arial, sans-serif;
+  display: flex;
+}
+
+.container {
+  display: flex;
+  width: 100vw;
+  /* height: 100vh; Ensure the container takes the full viewport height */
+}
+.toggle-sidebar-btn{
+  display: none;
+}
+
+.sidebar {
+  background-color: #5a4dad; /* Sidebar color */
+  width: 200px; /* Fixed width for sidebar */
+  min-height: 100vh;
+  color: #fff;
+  position: fixed; /* Sidebar stays fixed on the left */
+  top: 0;
+  left: 0;
+  transition: transform 0.3s ease; /* Smooth transition for slide-in effect */
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.sidebar .logo {
+  background-color: #fff; /* White background for the logo section */
+  text-align: center;
+  margin-bottom: 20px;
+  max-height: 120px; /* Maximum height for the logo container */
+  display: flex; /* Flexbox to center the logo */
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* Ensures no overflow outside the container */
+  padding: 10px;
+}
+
+.sidebar .logo img {
+  height: 100%; /* Make the logo cover the full height of the container */
+  width: auto;  /* Keep aspect ratio by adjusting the width automatically */
+  max-height: 100%; /* Ensure the logo fits within the container */
+  max-width: 100%; /* Ensure the width of the logo doesn’t overflow */
+  object-fit: cover;
+  transform: scale(1.8); /* Ensures the logo scales properly to fit the container */
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  padding:5px
+}
+
+.sidebar ul li a {
+  text-decoration: none;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  transition: background 0.3s ease;
+}
+
+.sidebar ul li a i {
+  margin-right: 10px;
+  font-size: 18px;
+}
+
+.sidebar ul li a:hover,
+.sidebar ul li a.active {
+  background-color: #3a2a9b; /* Darker background for active or hover */
+  border-radius: 4px;
+}
+
+.profile-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  bottom: 30px;
+  width: 100%;
+  padding-right: 30px;
+  gap: 20px;
+}
+
+.profile-section .profile i {
+  margin-right: 5px;
+}
+
+.profile-section .logout-btn {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.left-lower-box{
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.content {
+  margin-left: 200px; /* To prevent overlap with the fixed sidebar */
+  padding: 20px;
+  flex-grow: 1; /* Content takes up the remaining available space */
+  background-color: #f0e7ff;
+  overflow-y: auto;
+  /* height: 100vh; Full height of viewport */
+}
+
+/* Media Queries for Responsiveness */
+
+/* Small screens like phones */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%); /* Hide sidebar offscreen */
+    position: absolute;
+  }
+
+  .sidebar.active {
+    transform: translateX(0); /* Sidebar slides back into view */
+  }
+
+  .content {
+    margin-left: 0; /* Content takes full width when sidebar is hidden */
+    width: 100vw;
+  }
+
+  .toggle-sidebar-btn {
+    display: block;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    background-color: #5a4dad;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+  }
+}
+
+/* Tablets and larger screens */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .sidebar {
+    width: 150px; /* Slightly smaller sidebar for tablets */
+  }
+
+  .content {
+    margin-left: 150px;
+    padding: 15px;
+  }
+}
