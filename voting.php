@@ -15,9 +15,28 @@
     </script>
 
     <div class="content">
-      <h1>Voting section</h1>
-      <p>We can vote here as this is the voting page</p>
+    <form id="voteForm">
+        <label>Select your candidate:</label><br>
+        <input type="radio" name="candidate" value="Candidate 1"> Candidate 1<br>
+        <input type="radio" name="candidate" value="Candidate 2"> Candidate 2<br>
+        <br>
+        <button type="button" onclick="submitVote()">Submit Vote</button>
+    </form>
+    <p id="voteConfirmation"></p>
     </div>
   </div>
+  <script>
+function submitVote() {
+    let form = document.getElementById('voteForm');
+    let candidate = form.candidate.value;
+    
+    if (candidate) {
+        document.getElementById('voteConfirmation').innerHTML = "You voted for: " + candidate;
+        // Here you can send the data using AJAX or PHP form submission
+    } else {
+        alert('Please select a candidate!');
+    }
+}
+</script>
 </body>
 </html>

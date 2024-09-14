@@ -15,8 +15,13 @@
     </script>
 
     <div class="content">
-      <h1>Resultsss</h1>
-      <p>Hello everyone. THis is result page and the winner will be announced here.</p>
+    <h1>Election Results</h1>
+    <div id="results">
+        <h2>Live Results</h2>
+        <p>Candidate 1: 55%</p>
+        <p>Candidate 2: 45%</p>
+        <!-- Dynamic content: Fetch live results using PHP and database -->
+    </div>
     </div>
   </div>
 </body>

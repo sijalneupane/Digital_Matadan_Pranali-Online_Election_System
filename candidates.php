@@ -17,8 +17,14 @@
     </script>
 
     <div class="content">
-      <h1>Candidates Information</h1>
-      <p>Here you will find information about the candidates running for office.</p>
+    <h1>Candidates</h1>
+    <div id="candidates-list">
+        <h2>Candidate 1</h2>
+        <p>Biography and agenda.</p>
+        <h2>Candidate 2</h2>
+        <p>Biography and agenda.</p>
+        <!-- You can dynamically fetch candidates using PHP from a database -->
+    </div>
     </div>
   </div>
 </body>

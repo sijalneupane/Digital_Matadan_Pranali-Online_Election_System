@@ -15,8 +15,15 @@
     </script>
 
     <div class="content">
-      <h1>Election Guidelines</h1>
-      <p>Read the official guidelines for the election process.</p>
+    <h1>Election Guidelines</h1>
+    <h2>Eligibility</h2>
+    <p>Details on who can vote and what is required.</p>
+    <h2>How to Vote</h2>
+    <p>Step-by-step instructions on how to vote.</p>
+    <h2>Security Measures</h2>
+    <p>Details about how we keep the election secure.</p>
+    <h2>FAQs</h2>
+    <p>Answers to common questions.</p>
     </div>
   </div>
 </body>

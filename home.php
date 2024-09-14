@@ -15,23 +15,42 @@
     </script>
 
     <div class="content">
-      <h1>Welcome to the Home Page!</h1>
-      <p>This is where you can find information about the election process.</p>
-      <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae libero aut perferendis eum alias, enim harum asperiores quis, doloremque explicabo totam molestias obcaecati officia! Sunt ea excepturi sequi pariatur magni.</p>
-      <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel error porro, quod laborum quibusdam quasi sequi consequuntur sunt at eveniet molestiae laudantium inventore autem asperiores ipsam itaque architecto hic veniam.</p>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde animi hic veritatis, ipsa repudiandae vitae voluptates beatae sequi magnam saepe excepturi, temporibus vero repellat velit. Neque fuga iure aspernatur nesciunt!</p>
-
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni magnam praesentium laborum vel excepturi adipisci esse earum. Iusto eaque ducimus possimus, sint molestiae numquam, veritatis voluptate vel, dignissimos optio repellendus.</p>
-
-      <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Amet corporis unde aperiam adipisci nisi doloremque similique, quaerat laudantium dolorem illum, dignissimos id necessitatibus. Blanditiis soluta, quo doloremque aliquid delectus corrupti!</p>
-
-      <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae libero aut perferendis eum alias, enim harum asperiores quis, doloremque explicabo totam molestias obcaecati officia! Sunt ea excepturi sequi pariatur magni.</p>
-      <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel error porro, quod laborum quibusdam quasi sequi consequuntur sunt at eveniet molestiae laudantium inventore autem asperiores ipsam itaque architecto hic veniam.</p>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde animi hic veritatis, ipsa repudiandae vitae voluptates beatae sequi magnam saepe excepturi, temporibus vero repellat velit. Neque fuga iure aspernatur nesciunt!</p>
-
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni magnam praesentium laborum vel excepturi adipisci esse earum. Iusto eaque ducimus possimus, sint molestiae numquam, veritatis voluptate vel, dignissimos optio repellendus.</p>
-
-      <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Amet corporis unde aperiam adipisci nisi doloremque similique, quaerat laudantium dolorem illum, dignissimos id necessitatibus. Blanditiis soluta, quo doloremque aliquid delectus corrupti!</p>
+    <h1>Welcome to the Election System</h1>
+    <p>Stay updated with the current election phases, important dates, and announcements.</p>
+    <h2>Important Dates</h2>
+    <ul>
+        <li>Registration Deadline: October 1</li>
+        <li>Voting Period: October 10 - October 20</li>
+        <li>Results Announcement: October 25</li>
+    </ul>
+    <p>
+      Lorem ipsum, dolor sit amet consectetur adipisicing elit. Temporibus illo amet consequatur ratione autem explicabo eius dolores iusto dolorem recusandae, rem sapiente et numquam vero, qui cupiditate! Autem, non explicabo.
+    </p>
+    <p>
+      Lorem ipsum, dolor sit amet consectetur adipisicing elit. Temporibus illo amet consequatur ratione autem explicabo eius dolores iusto dolorem recusandae, rem sapiente et numquam vero, qui cupiditate! Autem, non explicabo.
+    </p>
+    <p>
+      Lorem ipsum, dolor sit amet consectetur adipisicing elit. Temporibus illo amet consequatur ratione autem explicabo eius dolores iusto dolorem recusandae, rem sapiente et numquam vero, qui cupiditate! Autem, non explicabo.
+    </p>
+    <p>
+      Lorem ipsum, dolor sit amet consectetur adipisicing elit. Temporibus illo amet consequatur ratione autem explicabo eius dolores iusto dolorem recusandae, rem sapiente et numquam vero, qui cupiditate! Autem, non explicabo.
+    </p>
+    <p>
+      Lorem ipsum, dolor sit amet consectetur adipisicing elit. Temporibus illo amet consequatur ratione autem explicabo eius dolores iusto dolorem recusandae, rem sapiente et numquam vero, qui cupiditate! Autem, non explicabo.
+    </p>
+    <p>
+      Lorem ipsum, dolor sit amet consectetur adipisicing elit. Temporibus illo amet consequatur ratione autem explicabo eius dolores iusto dolorem recusandae, rem sapiente et numquam vero, qui cupiditate! Autem, non explicabo.
+    </p>
+    <p>
+      Lorem ipsum, dolor sit amet consectetur adipisicing elit. Temporibus illo amet consequatur ratione autem explicabo eius dolores iusto dolorem recusandae, rem sapiente et numquam vero, qui cupiditate! Autem, non explicabo.
+    </p>
+    <p>
+      Lorem ipsum, dolor sit amet consectetur adipisicing elit. Temporibus illo amet consequatur ratione autem explicabo eius dolores iusto dolorem recusandae, rem sapiente et numquam vero, qui cupiditate! Autem, non explicabo.
+    </p>
+    <p>
+      Lorem ipsum, dolor sit amet consectetur adipisicing elit. Temporibus illo amet consequatur ratione autem explicabo eius dolores iusto dolorem recusandae, rem sapiente et numquam vero, qui cupiditate! Autem, non explicabo.
+    </p>
+    
     </div>
   </div>
 </body>
