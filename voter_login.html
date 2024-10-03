@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glassmorphism Login</title>
+
+    <script>
+        function validateForm() {
+            const email = document.getElementById('email').value.trim();
+            const citizenshipNumber = document.getElementById('citizenshipNumber').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            const emailError = document.getElementById('emailError');
+            const citizenshipNumberError = document.getElementById('citizenshipNumberError');
+            const passwordError = document.getElementById('passwordError');
+
+            const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            const passwordRegex = /^.{8,}$/;
+
+            let isValid = true;
+
+            // Email validation
+            if (email === "") {
+                emailError.textContent = "Email should not be empty";
+                isValid = false;
+            } else if (!emailRegex.test(email)) {
+                emailError.textContent = "Invalid email format";
+                isValid = false;
+            } else {
+                emailError.textContent = "";
+            }
+
+            // Citizenship Number validation
+            if (citizenshipNumber === "") {
+                citizenshipNumberError.textContent = "Citizenship Number should not be empty";
+                isValid = false;
+            } else {
+                citizenshipNumberError.textContent = "";
+            }
+
+            // Password validation
+            if (password === "") {
+                passwordError.textContent = "Password should not be empty";
+                isValid = false;
+            } else if (!passwordRegex.test(password)) {
+                passwordError.textContent = "Password must be at least 8 characters";
+                isValid = false;
+            } else {
+                passwordError.textContent = "";
+            }
+
+            // Return whether the form is valid or not
+            return isValid;
+        }
+    </script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: url('https://static.vecteezy.com/system/resources/previews/007/167/445/non_2x/abstract-simple-shape-fluid-shapes-memphis-style-background-free-line-blue-shape-free-vector.jpg') no-repeat center center fixed;
+            background-size: cover;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .glass-container {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0px 0px 30px 7px rgba(0, 0, 0, 0.5);
+            border-radius: 6px;
+            /* padding: 20px; */
+            width: 60%;
+            min-width: 380px;
+            text-align: center;
+            display: flex;
+        }
+
+        .left-box,
+        .right-box {
+            padding: 40px;
+        }
+
+        .left-box {
+            flex: 1.75;
+        }
+
+        .glass-container img {
+            width: 100px;
+            margin-bottom: 20px;
+        }
+
+        input {
+            border: 1px solid burlywood;
+            border-radius: 5px;
+            padding: 10px;
+            color: rgb(0, 0, 0);
+            width: 100%;
+            font-size: 1.2em;
+            margin-bottom: 5px;
+        }
+
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        input:not(input[type="submit"])::placeholder {
+            color: rgb(0, 0, 0);
+            font-size: 0.8em;
+        }
+
+        input[type="submit"] {
+            background: #6e8efb;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        input[type="submit"]:hover {
+            background: #a777e3;
+        }
+
+        .register-direction {
+            font-size: 1.1em;
+            margin: 8px 0px;
+            text-align: center;
+        }
+
+        .register-direction a {
+            text-decoration: none;
+            margin-left: 1%;
+        }
+
+        .register a:hover {
+            text-decoration: underline;
+            color: rebeccapurple;
+        }
+
+        .error {
+            color: red;
+            font-size: 12px;
+            display: block;
+            height: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="glass-container">
+        <div class="left-box">
+            <img src="DMP logo.png" alt="Logo">
+            <h2>Voter Login ! ! !</h2>
+            <form id="loginForm" method="POST" action="voter_login.php" onsubmit="return validateForm()">
+                <input type="text" id="email" name="email" placeholder="Email">
+                <span id="emailError" class="error"></span>
+
+                <input type="text" id="citizenshipNumber" name="citizenshipNumber" placeholder="Citizenship Number">
+                <span id="citizenshipNumberError" class="error"></span>
+
+                <input type="password" id="password" name="password" placeholder="Password">
+                <span id="passwordError" class="error"></span>
+
+                <input type="submit" value="Login">
+                <div class="register-direction">
+                    <span>Haven't Registered till now? </span><a href="voter_register.html">Register Here</a>
+                </div>
+            </form>
+        </div>
+        <div class="right-box">
+            <img src="DMP logo.png" alt="Logo" class="logo">
+            <img src="vote2.jpg" alt="Center Image" class="center-image">
+            <div class="left-2">
+                <h1>Ready to cast a Vote</h1>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
