@@ -1,4 +1,10 @@
 <!-- home.php -->
+<?php
+session_start();
+if (!isset($_SESSION["email"])) {
+  header('Location: index.html');
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,12 +15,12 @@
 <body>
   <div class="container">
     <?php include 'sidebar.php'; ?>
-    
     <script>
       document.querySelector('a[href="home.php"]').classList.add('active');
     </script>
 
     <div class="content">
+   
     <h1>Welcome to the Election System</h1>
     <p>Stay updated with the current election phases, important dates, and announcements.</p>
     <h2>Important Dates</h2>

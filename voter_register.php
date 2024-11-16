@@ -1,18 +1,5 @@
 <?php
-// Database connection details
-$servername ="localhost";
-$username = "root";   // Your MySQL username
-$password = "";       // Your MySQL password
-$dbname = "online_election";  // Replace with your database name
-
-// Create connection
-$conn = mysqli_connect($servername, $username, $password, $dbname);
-
-// Check connection
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-}
-
+require 'dbconnection.php';
 // Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get data from form

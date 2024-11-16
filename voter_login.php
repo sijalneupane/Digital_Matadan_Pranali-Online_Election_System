@@ -1,20 +1,7 @@
 <?php
 session_start(); // Start the session to store session variables
 
-// Database connection details
-$servername = "localhost";  // Replace with your database server details
-$username = "root";         // Replace with your MySQL username
-$password = "";             // Replace with your MySQL password
-$dbname = "online_election"; // Your database name
-
-// Create connection (procedural style)
-$conn = mysqli_connect($servername, $username, $password, $dbname);
-
-// Check connection
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-}
-
+require 'dbconnection.php';
 // Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = $_POST['email'];
@@ -36,12 +23,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             // Set session variables for successful login
             $_SESSION['email'] = $row['email'];
             $_SESSION['election_region'] = $row['election_region'];
-            $_SESSION['id'] = $row['id'];
+            $_SESSION['voterId'] = $row['id'];
             $_SESSION['name'] = $row['name'];
             $_SESSION['district']=$row['district'];
-            $_SESSION['election_region']=$row['election_region'];
             $_SESSION['local_address']=$row['local_address'];
             $_SESSION['contactNo']=$row['contact'];
+            $_SESSION['citizenshipNumber']=$row['citizenship_number'];
+            $_SESSION['birthDate']=$row['date_of_birth'];
 
             // Redirect to the dashboard or homepage after successful login
             echo "<script>window.location.href='home.php'</script>"; // Replace with the page you want to redirect to

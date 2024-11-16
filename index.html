@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Online Election System</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+
+        }
+
+        *::-webkit-scrollbar {
+            display: none;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: url('https://static.vecteezy.com/system/resources/previews/007/622/546/non_2x/banner-template-design-abstract-black-and-white-geometric-squares-overlapping-layer-on-clean-background-vector.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .navbar {
+            height: 15%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 3%;
+            background-color: rgba(230, 230, 244, 0.9);
+            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.7);
+
+        }
+
+        .logo img {
+            max-width: 105px;
+        }
+
+        .nav-links .admin-login {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.2rem;
+            background-color: #ff6347;
+            padding: 0.5rem 1.5rem;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-links .admin-login:hover {
+            background-color: #ff4500;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 5% 2%;
+            flex: 1;
+            box-shadow: 0 8px 32px rgba(255, 255, 255, 0.3);
+            /* Light white shadow */
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(10px);
+            /* For Safari support */
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            margin: 3% 10%;
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .main-content h1 {
+            color: black;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 0px 0px 4px rgba(255, 255, 255, 0.6);
+        }
+
+        .main-content p {
+            color: black;
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .action-buttons a {
+            margin: 0 1rem;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            background-color: rgb(129, 23, 23);
+            color: white;
+            border: 3px solid rgb(170, 147, 14);
+            border-radius: 30px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            /* transition:;? */
+            transition: background-color 0.1s ease-in-out, all 0.2s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action-buttons a span {
+            margin-left: 0.5rem;
+            font-size: 1.5rem;
+        }
+
+        .action-buttons a:hover {
+            background-color: rgb(223, 223, 223);
+            color: red;
+            transform: translateY(-10px);
+            box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.4);
+
+        }
+
+
+
+        .voting-image {
+            border: none;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .content {
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .logo img {
+                width: 80%;
+            }
+
+            .main-content {
+                margin: 3% 10%;
+                flex-direction: column;
+            }
+
+            .main-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .main-content p {
+                font-size: 1.2rem;
+            }
+
+            .action-buttons a {
+                font-size: 1rem;
+                padding: 0.8rem 1.5rem;
+            }
+
+            .voting-image {
+                width: 70%;
+            }
+
+            .arrow img {
+                width: 15%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo img {
+                width: 80%;
+            }
+
+            .main-content h1 {
+                font-size: 2rem;
+            }
+
+            .main-content p {
+                font-size: 1rem;
+            }
+
+            .voting-image {
+                width: 80%;
+            }
+
+            .action-buttons a {
+                font-size: 0.9rem;
+            }
+
+            .arrow img {
+                width: 20%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <img src="DMP logo.png" alt="Election Logo">
+        </div>
+        <div class="nav-links">
+            <a href="#" class="admin-login">Admin Login</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="content">
+            <h1>Welcome to the Online Election System</h1>
+            <p>Participate in a fair and transparent voting system. Your vote matters.</p>
+            <div class="action-buttons">
+                <a href="voter_login.html" class="voter-login">Voter Login <span>&rarr;</span></a>
+                <a href="voter_register.html" class="voter-register">Voter Register<span>&rarr;</span></a>
+            </div>
+        </div>
+        <div class="image-section">
+            <img src="https://media.istockphoto.com/id/1258633187/vector/online-vote.jpg?s=612x612&w=0&k=20&c=7eOLMUx6_EKkXPjMrElvFYkz2x0rdShD8DNAlrff6-E="
+                alt="Voting Image" class="voting-image">
+        </div>
+    </div>
+
+</body>
+
+</html>
