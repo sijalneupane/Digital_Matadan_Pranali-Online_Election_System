@@ -63,9 +63,10 @@ body {
   color: rgb(63, 8, 151);
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: start;
+  row-gap:30px;
   align-items: center;
-  padding: 40px 40px 0px 40px;
+  padding: 80px 40px 0px 40px;
   border-right: 2px burlywood;
   border-right-style: solid;
   border-top-right-radius: 10px;
@@ -82,7 +83,7 @@ body {
 }
 
 .center-image {
-  width: 85%; /* Allow the image to take the full width of its container */
+  width: 55%; /* Allow the image to take the full width of its container */
   max-width: 220px;
   margin-bottom: 20px;
   border-radius: 10px;
@@ -93,10 +94,11 @@ body {
   margin-left: 2%;
 }
 
+
 .left .left-2 h1 {
   /* position: relative; */
   /* top:50px; */
-  font-size: 2.5rem;
+  /* font-size: 2.5rem; */
   text-align: center;
   font-family: cursive;
   font-weight: bold;
@@ -109,6 +111,7 @@ body {
   font-family: math;
 }
 
+/* rightbox */
 .right {
   width: 65%;
   padding: 10px 40px 0px 40px;
@@ -206,6 +209,7 @@ label {
   margin-bottom: 0px;
   flex-direction: column;
   gap: 0px;
+  width: 50%;
 }
 
 .two-columns input {
