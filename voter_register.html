@@ -102,7 +102,7 @@
         // };
     </script>
 
-<script src="togglepassword.js"></script>
+    <script src="togglepassword.js"></script>
 </head>
 
 <body>
@@ -162,13 +162,14 @@
                     </div>
                     <div class="field-error-groups input-container">
                         <!-- <div class="input-container"> -->
-                            <input type="password" id="password" name="password" placeholder="Password">
-                            <i id="togglePasswordIcon" class="fas fa-eye toggle-password" onclick="togglePasswordVisibility()"></i>
+                        <input type="password" id="password" name="password" placeholder="Password">
+                        <i id="togglePasswordIcon" class="fas fa-eye toggle-password"
+                            onclick="togglePasswordVisibility()"></i>
                         <!-- </div> -->
                         <span id="passwordError" class="error"></span>
                     </div>
                 </div>
-                
+
                 <div class="form-group "><!--two-columns -->
                     <!-- <input type="text" name="nin_number" placeholder="NIN Number"> -->
                     <input type="text" name="citizenship_number" placeholder="Citizenship Number">
@@ -179,14 +180,14 @@
                     <input type="date" name="date_of_birth" placeholder="DOB:">
                     <span id="dobError" class="error"></span>
                 </div>
-                <!-- <div class="form-group two-columns">
+                <div class="form-group two-columns">
                     <div class="citizenship">
-                        <label for="">Citizenship Front Photo</label><input type="file" accept="image/*">
+                        <label for="">Citizenship Front Photo</label><input type="file" accept="image/*" capture>
                     </div>
                     <div class="citizenship">
-                        <label for="">Citizenship back Photo</label><input type="file" accept="image/*">
+                        <label for="">Citizenship back Photo</label><input type="file" accept="image/*" capture>
                     </div>
-                </div> -->
+                </div>
                 <div class="form-group">
                     <label>User Photo</label>
                     <input type="file" accept="image/*">

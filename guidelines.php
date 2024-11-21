@@ -110,9 +110,9 @@
     /* Back Button Styles */
     .back-button {
       position: fixed;
-      top: 10%;
+      top: 5%;
       left: 20px;
-      transform: translateY(-30%);
+      transform: translateY(-10%);
       background-color: #5a4dad;
       color: #fff;
       padding: 10px 15px;
@@ -184,7 +184,7 @@
       <div class="section">
         <h2>Important Notes</h2>
         <ul>
-          <li>The voting period is open from <strong>9:00 AM</strong> to <strong>6:00 PM</strong> on the scheduled election day.</li>
+          <li>The voting period will <strong>9:00 AM</strong> to <strong>6:00 PM</strong> on the scheduled election day.</li>
           <li>If you encounter technical issues, contact the election support team immediately.</li>
           <li>Results will be announced on the <strong>Results</strong> page after the counting process is complete.</li>
         </ul>
@@ -196,7 +196,7 @@
   </div>
 
   <!-- Back Button -->
-  <a href="index.html" class="back-button">Back to Home</a>
+  <a href="index.html" class="back-button">	&larr; Back to Home</a>
 </body>
 
 </html>

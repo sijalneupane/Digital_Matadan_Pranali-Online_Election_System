@@ -43,7 +43,8 @@
         }
 
         .logo img {
-            max-width: 105px;
+            width: 145px;
+            min-width: 50px;
         }
 
         .nav-links .admin-login {
@@ -66,8 +67,9 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 5% 2%;
+            padding: 4% 2% 2%;
             flex: 1;
+            gap: 7%;
             box-shadow: 0 8px 32px rgba(255, 255, 255, 0.3);
             /* Light white shadow */
             backdrop-filter: blur(5px);
@@ -89,7 +91,7 @@
             color: black;
             font-size: 1.5rem;
             margin-bottom: 2rem;
-            max-width: 600px;
+            max-width: fit-content;
         }
 
         .action-buttons {
@@ -100,16 +102,16 @@
 
         .action-buttons a {
             margin: 0 1rem;
-            padding: 1rem 2rem;
+            padding: 0.5rem 1rem;
             text-decoration: none;
             background-color: rgb(129, 23, 23);
             color: white;
             border: 3px solid rgb(170, 147, 14);
-            border-radius: 30px;
-            font-size: 1.5rem;
-            font-weight: bold;
+            border-radius: 20px;
+             font-size: 1.2rem;
+            /* font-weight: bold; */ 
             /* transition:;? */
-            transition: background-color 0.1s ease-in-out, all 0.2s ease-in-out;
+            transition:background-color 0.1s ease-in-out, all 0.2s ease-in-out;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -117,7 +119,7 @@
 
         .action-buttons a span {
             margin-left: 0.5rem;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
         }
 
         .action-buttons a:hover {
@@ -128,7 +130,26 @@
 
         }
 
+        .guidelines-link {
+            display: block;
+            padding: 10px 16px;
+            width: 50%;
+            margin: 4% auto 0px;
+            background-color: whitesmoke;
+            text-decoration: none;
+            padding: 16px 10px;
+            border: none;
+            border-radius: 5px;
+            transition: all ease-in-out 0.05s;
+            text-align: center;
+        }
 
+        .guidelines-link:hover {
+            background-color: rgb(18, 56, 71);
+            color: white;
+            box-shadow: 0 2px 5px 4px rgba(0255, 0255, 255, 0.45);
+            transform: scale(1.1);
+        }
 
         .voting-image {
             border: none;
@@ -142,9 +163,6 @@
         }
 
         @media (max-width: 768px) {
-            .logo img {
-                width: 80%;
-            }
 
             .main-content {
                 margin: 3% 10%;
@@ -174,10 +192,6 @@
         }
 
         @media (max-width: 480px) {
-            .logo img {
-                width: 80%;
-            }
-
             .main-content h1 {
                 font-size: 2rem;
             }
@@ -222,6 +236,7 @@
                 <a href="voter_login.html" class="voter-login">Voter Login <span>&rarr;</span></a>
                 <a href="voter_register.html" class="voter-register">Voter Register<span>&rarr;</span></a>
             </div>
+            <a href="guidelines.php" class="guidelines-link">Need Some Guidelines? Click here</a>
         </div>
         <div class="image-section">
             <img src="https://media.istockphoto.com/id/1258633187/vector/online-vote.jpg?s=612x612&w=0&k=20&c=7eOLMUx6_EKkXPjMrElvFYkz2x0rdShD8DNAlrff6-E="
