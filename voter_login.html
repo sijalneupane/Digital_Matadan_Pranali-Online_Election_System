@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
     <title>Glassmorphism Login</title>
 
     <script>
@@ -55,6 +57,7 @@
             return isValid;
         }
     </script>
+    <script src="togglepassword.js"></script>
     <style>
         * {
             box-sizing: border-box;
@@ -64,9 +67,9 @@
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
-            background: url('https://static.vecteezy.com/system/resources/previews/007/167/445/non_2x/abstract-simple-shape-fluid-shapes-memphis-style-background-free-line-blue-shape-free-vector.jpg') no-repeat center center fixed;
+            background: url('https://booking-manager-api-hop-nepal.s3.eu-west-1.amazonaws.com/23/people-of-nepal.jpg') no-repeat center center fixed;
             background-size: cover;
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -77,25 +80,26 @@
             background: rgba(255, 255, 255, 0.1);
             box-shadow: 0px 0px 30px 7px rgba(0, 0, 0, 0.5);
             border-radius: 6px;
-            /* padding: 20px; */
-            width: 60%;
+            width: 37%;
             min-width: 380px;
             text-align: center;
-            display: flex;
-        }
-
-        .left-box,
-        .right-box {
-            padding: 40px;
         }
 
         .left-box {
-            flex: 1.75;
+            padding: 40px;
+            width: 100%;
         }
 
         .glass-container img {
-            width: 100px;
+            width: 150px;
             margin-bottom: 20px;
+            filter: brightness(0.5);
+        }
+
+        .input-container {
+            position: relative;
+            width: 100%;
+            margin-bottom: 5px;
         }
 
         input {
@@ -105,7 +109,6 @@
             color: rgb(0, 0, 0);
             width: 100%;
             font-size: 1.2em;
-            margin-bottom: 5px;
         }
 
         input:focus {
@@ -116,6 +119,14 @@
         input:not(input[type="submit"])::placeholder {
             color: rgb(0, 0, 0);
             font-size: 0.8em;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
         }
 
         input[type="submit"] {
@@ -170,7 +181,10 @@
                 <input type="text" id="citizenshipNumber" name="citizenshipNumber" placeholder="Citizenship Number">
                 <span id="citizenshipNumberError" class="error"></span>
 
-                <input type="password" id="password" name="password" placeholder="Password">
+                <div class="input-container">
+                    <input type="password" id="password" name="password" placeholder="Password">
+                    <i id="togglePasswordIcon" class="fas fa-eye toggle-password" onclick="togglePasswordVisibility()"></i>
+                </div>
                 <span id="passwordError" class="error"></span>
 
                 <input type="submit" value="Login">
@@ -179,15 +193,7 @@
                 </div>
             </form>
         </div>
-        <div class="right-box">
-            <img src="DMP logo.png" alt="Logo" class="logo">
-            <img src="vote2.jpg" alt="Center Image" class="center-image">
-            <div class="left-2">
-                <h1>Ready to cast a Vote</h1>
-            </div>
-        </div>
     </div>
-
 </body>
 
 </html>

@@ -17,12 +17,12 @@
     <div class="logo">
       <img src="DMP logo.png" alt="Logo" />
     </div>
-
+<!-- -->
     <div class="left-lower-box">
       <ul>
         <li><a href="home.php"><i class="fas fa-home"></i> Home</a></li>
         <li><a href="candidates.php"><i class="fas fa-users"></i>Candidates</a></li>
-        <li><a href="guidelines.php"><i class="fas fa-file-alt"></i> Election Guidelines</a></li>
+        <!-- <li><a href="guidelines.php"><i class="fas fa-file-alt"></i> Election Guidelines</a></li> -->
         <li><a href="voting.php"><i class="fas fa-vote-yea"></i> Voting</a></li>
         <li><a href="results.php"><i class="fas fa-chart-pie"></i> Results</a></li>
       </ul>

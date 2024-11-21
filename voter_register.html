@@ -5,14 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register Voter</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles/register.css">
     <script>
-        // Function to set max date as today
-        // function setMaxDate() {
-        //     const today = new Date().toISOString().split('T')[0]; // Get today's date in 'YYYY-MM-DD' format
-        //     document.getElementById('dob').setAttribute('max', today); // Set as max attribute for the date input
-        // }
-
         function showError(elementId, message) {
             document.getElementById(elementId).innerHTML = message;
         }
@@ -107,6 +102,7 @@
         // };
     </script>
 
+<script src="togglepassword.js"></script>
 </head>
 
 <body>
@@ -164,8 +160,11 @@
                         <input type="text" name="email" placeholder="Email">
                         <span id="emailError" class="error"></span>
                     </div>
-                    <div class="field-error-groups">
-                        <input type="text" name="password" placeholder="Password">
+                    <div class="field-error-groups input-container">
+                        <!-- <div class="input-container"> -->
+                            <input type="password" id="password" name="password" placeholder="Password">
+                            <i id="togglePasswordIcon" class="fas fa-eye toggle-password" onclick="togglePasswordVisibility()"></i>
+                        <!-- </div> -->
                         <span id="passwordError" class="error"></span>
                     </div>
                 </div>
