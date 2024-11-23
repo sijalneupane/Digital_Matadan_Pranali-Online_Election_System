@@ -110,8 +110,8 @@
     /* Back Button Styles */
     .back-button {
       position: fixed;
-      top: 5%;
-      left: 20px;
+      top: 3%;
+        left: 1%;
       transform: translateY(-10%);
       background-color: #5a4dad;
       color: #fff;
