@@ -11,7 +11,7 @@ if (!isset($_SESSION['email'])) {
 <html>
 <head>
     <title>Enter OTP</title>
-
+    <link rel="stylesheet" href="style1.css">
     <script>
         
 function validateForm() {
@@ -33,21 +33,20 @@ function validateForm() {
   return isValid;
 }
     </script>
-    <style>
-        .error{
-            color: red;
-            font-size: 12px;
-        }
-    </style>
 </head>
 <body>
+    <!-- Logo Section -->
+    <div class="logo-container">
+        <img src="../DMP logo.png" alt="Logo">
+    </div>
+
     <h2>Enter OTP</h2>
     <form action="verify_otp.php" method="post" onsubmit="return validateForm();">
         <label for="otp">Enter the OTP sent to <?php echo htmlspecialchars($_SESSION['email']); ?>:</label><br>
-        <input type="number" name="otp" id="otp"><br>
+        <input type="number" name="otp" id="otp">
         <span class="error" id="otpError"></span>
-        <br>
-        <button type="submit">Verify</button>
+        <br><br>
+        <input type="submit" value="Verify">
     </form>
 </body>
 </html>

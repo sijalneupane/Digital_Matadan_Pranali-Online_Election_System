@@ -3,12 +3,7 @@
 
 <head>
     <title>Forgot Password</title>
-    <style>
-        .error {
-            color: red;
-            font-size: 12px;
-        }
-    </style>
+    <link rel="stylesheet" href="style1.css">
 
     <script>
         function validateForm() {
@@ -38,14 +33,22 @@
 </head>
 
 <body>
+    <!-- Logo Section -->
+    <div class="logo-container">
+        <img src="../DMP logo.png" alt="Logo">
+    </div>
+
+    <!-- Forgot Password Form -->
     <h2>Forgot Password</h2>
     <form action="send_otp.php" method="post" onsubmit="return validateForm();">
-        <label for="email">Enter your email address:</label><br>
-        <input type="text" name="email" id="email"><br>
+        <label for="email">Enter your email address:</label>
+        <input type="text" name="email" id="email">
         <span class="error" id="emailError"></span>
         <br><br>
-        <input type="submit" value="submit">
+        <input type="submit" value="Submit">
     </form>
 </body>
+
+</html>
 
 </html>
