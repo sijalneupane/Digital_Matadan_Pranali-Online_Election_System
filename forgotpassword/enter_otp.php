@@ -1,0 +1,53 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['email'])) {
+    header("Location: forgot_password.php");
+    exit();
+}
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Enter OTP</title>
+
+    <script>
+        
+function validateForm() {
+  const otp = document.getElementById('otp').value.trim();
+
+  const otpError = document.getElementById('otpError');
+
+  let isValid = true;
+
+  // Email validation
+  if (otp === "") {
+    otpError.textContent = "OTP should not be empty";
+    isValid = false;
+  } else {
+    emailError.textContent = "";
+  }
+
+  // Return whether the form is valid or not
+  return isValid;
+}
+    </script>
+    <style>
+        .error{
+            color: red;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Enter OTP</h2>
+    <form action="verify_otp.php" method="post" onsubmit="return validateForm();">
+        <label for="otp">Enter the OTP sent to <?php echo htmlspecialchars($_SESSION['email']); ?>:</label><br>
+        <input type="number" name="otp" id="otp"><br>
+        <span class="error" id="otpError"></span>
+        <br>
+        <button type="submit">Verify</button>
+    </form>
+</body>
+</html>

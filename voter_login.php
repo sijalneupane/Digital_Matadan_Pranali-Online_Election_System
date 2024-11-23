@@ -5,11 +5,11 @@ require 'dbconnection.php';
 // Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = $_POST['email'];
-    $citizenshipNumber = $_POST['citizenshipNumber'];
+    $voterId = $_POST['voterId'];
     $password = $_POST['password'];
 
     // Query to fetch user details based on email and voter_id
-    $sql = "SELECT * FROM voters WHERE email = '$email' AND citizenship_Number = '$citizenshipNumber' LIMIT 1";
+    $sql = "SELECT * FROM voters WHERE email = '$email' AND id = '$voterId' LIMIT 1";
     $result = mysqli_query($conn, $sql);
 
     // Check if user exists
@@ -40,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     } else {
         // No user found with that email and voter ID
-        echo "<script>alert('Incorrect email or citisenship Number.'); window.location.href='voter_login.html'</script>";
+        echo "<script>alert('Incorrect email or voter ID.'); window.location.href='voter_login.html'</script>";
     }
 }
 

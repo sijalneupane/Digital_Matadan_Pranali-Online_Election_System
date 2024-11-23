@@ -49,24 +49,6 @@ if (!isset($_SESSION["email"])) {
     margin: 0;
     padding: 0;
   }
-
-  .content {
-    border-top-left-radius: 20px;
-    border-bottom-left-radius: 20px;
-    margin-left: 16%;
-    padding: 20px;
-    background-color: #f4f4fc;
-    transition: all 0.5s ease-in-out;
-  }
-
-  @media (max-width: 768px) {
-    .content {
-      margin-left: 0;
-      width: 100vw;
-      border-radius: 0px;
-    }
-  }
-
   /* Profile Container */
   .profile-container {
     display: flex;
