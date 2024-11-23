@@ -24,7 +24,7 @@
             background: url('https://static.vecteezy.com/system/resources/previews/007/622/546/non_2x/banner-template-design-abstract-black-and-white-geometric-squares-overlapping-layer-on-clean-background-vector.jpg') no-repeat center center fixed;
             background-size: cover;
             color: #fff;
-            height: 100vh;
+            min-height: 100dvh;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -111,7 +111,7 @@
              font-size: 1.2rem;
             /* font-weight: bold; */ 
             /* transition:;? */
-            transition:background-color 0.1s ease-in-out, all 0.2s ease-in-out;
+            transition: all 0.1s ease-in-out;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -132,23 +132,21 @@
 
         .guidelines-link {
             display: block;
-            padding: 10px 16px;
-            width: 50%;
+            width: 55%;
             margin: 4% auto 0px;
-            background-color: whitesmoke;
+            color: white;
             text-decoration: none;
             padding: 16px 10px;
             border: none;
             border-radius: 5px;
-            transition: all ease-in-out 0.05s;
+            /* transition: all ease-in-out 0.05s; */
             text-align: center;
+            background-color: rgb(18, 50, 63);
         }
 
         .guidelines-link:hover {
-            background-color: rgb(18, 56, 71);
-            color: white;
-            box-shadow: 0 2px 5px 4px rgba(0255, 0255, 255, 0.45);
-            transform: scale(1.1);
+            background-color: rgb(39, 94, 116);
+            /* box-shadow: 0 2px 5px 4px rgba(0255, 0255, 255, 0.45); */
         }
 
         .voting-image {
@@ -178,16 +176,19 @@
             }
 
             .action-buttons a {
-                font-size: 1rem;
-                padding: 0.8rem 1.5rem;
+                font-size: 0.9rem;
             }
 
             .voting-image {
-                width: 70%;
+                margin-top: 40px;
+                width: 50%;
             }
 
             .arrow img {
-                width: 15%;
+                width: 10%;
+            }
+            .guidelines-link{
+                width: 85%;
             }
         }
 
