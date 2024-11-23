@@ -1,0 +1,169 @@
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.navbar {
+  top: 0;
+  height: 15%;
+  width: 100%;
+  position: sticky;
+  display: flex;
+  align-items: center;
+  padding: 6px 3%;
+  background-color: rgba(230, 230, 244, 0.9);
+  box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.4);
+}
+
+.logo img {
+  max-width: 105px;
+}
+
+.nav-links {   
+   flex: 1;
+  text-align: end;
+}
+
+.nav-links .admin-logout {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.2rem;
+  background-color: #ff6347;
+  padding: 0.5rem 1.5rem;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.nav-links .admin-logout:hover {
+  background-color: #ff4500;
+}
+
+/* Styling for Admin Panel and Dropdown */
+.admin-panel {
+  position: relative;
+  font-size: 1.8rem;
+  color: #00799e;
+  font-family: math;
+  margin-left: 3%;
+  cursor: pointer;
+  padding: 10px;
+  background-color: #f0f8ff;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
+}
+
+.admin-panel:hover {
+  background-color: #87ceeb;
+}
+
+.admin-panel .dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #87ceeb;
+  border-radius: 5px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  width: 200px;
+  text-align: left;
+  padding: 10px 0;
+  z-index: 10;
+}
+
+.admin-panel:hover .dropdown-menu {
+  display: block;
+}
+
+.dropdown-menu li {
+  list-style: none;
+}
+
+.dropdown-menu li a {
+  display: block;
+  padding: 10px;
+  color: #00799e;
+  text-decoration: none;
+  font-size: 1.2rem;
+  transition: background-color 0.3s;
+}
+
+.dropdown-menu li a:hover {
+  background-color: #4682b4;
+  color: #fff;
+}
+
+/* Arrow styling */
+.admin-panel .arrow {
+  font-size: 1rem;
+  margin-left: 10px;
+  transition: transform 0.3s;
+}
+
+.admin-panel:hover .arrow {
+  transform: rotate(180deg);
+}
+
+/* Responsive Design */
+
+/* Tablet-sized devices */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 6px 2%; /* Reduce padding to fit contents */
+  }
+
+  .logo img {
+    max-width: 80px; /* Reduce logo size */
+  }
+
+  .admin-panel {
+    font-size: 1.5rem; /* Reduce font size */
+    padding: 5px 10px; /* Reduce padding to fit */
+  }
+
+  .nav-links .admin-logout {
+    font-size: 1rem;
+    padding: 0.4rem 1.2rem;
+  }
+
+  .admin-panel .dropdown-menu {
+    width: 180px; /* Adjust dropdown width */
+  }
+
+  .dropdown-menu li a {
+    padding: 10px;
+    font-size: 1rem;
+  }
+}
+
+/* Mobile-sized devices */
+@media (max-width: 480px) {
+  .navbar {
+    padding: 5px 1%; /* Further reduce padding */
+  }
+
+  .logo img {
+    max-width: 60px; /* Further reduce logo size */
+  }
+
+  .admin-panel {
+    font-size: 1.2rem; /* Smaller font for mobile */
+    padding: 4px 8px; /* Adjust padding */
+  }
+
+  .nav-links .admin-logout {
+    font-size: 0.9rem;
+    padding: 0.3rem 1rem;
+  }
+
+  .admin-panel .dropdown-menu {
+    width: 100%; /* Full-width dropdown for mobile */
+  }
+
+  .dropdown-menu li a {
+    padding: 8px;
+    font-size: 0.9rem;
+  }
+}

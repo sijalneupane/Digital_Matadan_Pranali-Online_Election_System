@@ -42,7 +42,18 @@
   <script>
     function toggleSidebar() {
       document.querySelector('.sidebar').classList.toggle('active');
+    } // Close sidebar when clicking outside the sidebar on small screens
+  document.addEventListener('click', function(event) {
+    const sidebar = document.querySelector('.sidebar');
+    const toggleButton = document.querySelector('.toggle-sidebar-btn');
+    const content = document.querySelector('.content');
+    
+    if (window.innerWidth <= 768) {  // Only apply on small screens
+      if (content.contains(event.target)) {
+        sidebar.classList.remove('active');
+      }
     }
+  });
   </script>
 </body>
 
