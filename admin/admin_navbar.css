@@ -50,13 +50,14 @@
   padding: 10px;
   background-color: #f0f8ff;
   border-radius: 8px;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s,color 0.1s step-end;
   display: flex;
   align-items: center;
 }
 
 .admin-panel:hover {
-  background-color: #87ceeb;
+  background-color: #1f3741;
+  color: whitesmoke;
 }
 
 .admin-panel .dropdown-menu {
@@ -91,7 +92,7 @@
 }
 
 .dropdown-menu li a:hover {
-  background-color: #4682b4;
+  background-color: #376891;
   color: #fff;
 }
 
@@ -101,7 +102,12 @@
   margin-left: 10px;
   transition: transform 0.3s;
 }
-
+.page-title{
+  border-bottom: 1px solid lightblue;
+  margin-left: 5%;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
 .admin-panel:hover .arrow {
   transform: rotate(180deg);
 }

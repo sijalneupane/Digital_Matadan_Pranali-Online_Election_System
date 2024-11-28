@@ -1,3 +1,9 @@
+<?php
+session_start();
+$errorMessage = isset($_SESSION['error_message']) ? $_SESSION['error_message'] : '';
+unset($_SESSION['error_message']); // Clear the message
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +11,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="modal.css">
     <title>Glassmorphism Login</title>
 
     <script>
@@ -57,7 +63,7 @@
             return isValid;
         }
     </script>
-    <script src="togglepassword.js"></script>
+    <script src="../togglepassword.js"></script>
     <style>
         * {
             box-sizing: border-box;
@@ -144,7 +150,7 @@
         input[type="submit"]:hover {
             background: #a777e3;
         }
-        
+
         .register-direction {
             font-size: 1.1em;
             margin: 8px 0px;
@@ -168,11 +174,15 @@
             height: 20px;
             text-align: start;
         }
+
         @media (max-width: 768px) {
-            .glass-container{
+            .glass-container {
                 min-width: 320px;
             }
-            input[type="text"],input[type="number"],input[type="password"]{
+
+            input[type="text"],
+            input[type="number"],
+            input[type="password"] {
                 font-size: 0.9em;
             }
         }
@@ -180,9 +190,15 @@
 </head>
 
 <body>
+    <div id="modal1" class="modal-overlay1">
+        <div class="modal-content1">
+            <p id="modalMessage1"></p>
+            <button onclick="closeModal1()">Close</button>
+        </div>
+    </div>
     <div class="glass-container">
         <div class="left-box">
-            <img src="DMP logo.png" alt="Logo">
+            <img src="../images/DMP logo.png" alt="Logo">
             <h2>Voter Login ! ! !</h2>
             <form id="loginForm" method="POST" action="voter_login.php" onsubmit="return validateForm()">
                 <input type="text" id="email" name="email" placeholder="Email">
@@ -196,15 +212,32 @@
                     <i id="togglePasswordIcon" class="fas fa-eye toggle-password" onclick="togglePasswordVisibility()"></i>
                 </div>
                 <span id="passwordError" class="error"></span>
-                
+
                 <a href="forgotpassword/forgot_password.php" style="display:block;text-align: start;margin-bottom: 2px;">Forgot Password?</a>
                 <input type="submit" value="Login">
                 <div class="register-direction">
-                    <span>Haven't Registered till now? </span><a href="voter_register.html">Register Here</a>
+                    <span>Haven't Registered till now? </span><a href="voter_register_form.php">Register Here</a>
                 </div>
             </form>
         </div>
     </div>
+    <script>
+        // PHP Message passed to JavaScript
+        const errorMessage = <?= json_encode($errorMessage); ?>;
+
+        // Show modal if there is a message
+        if (errorMessage) {
+            const modal = document.getElementById('modal1');
+            const modalMessage = document.getElementById('modalMessage1');
+            modalMessage.textContent = errorMessage;
+            modal.style.display = 'flex';
+        }
+
+        // Function to close the modal
+        function closeModal1() {
+            document.getElementById('modal1').style.display = 'none';
+        }
+    </script>
 </body>
 
 </html>

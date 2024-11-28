@@ -17,7 +17,7 @@ body {
 }
 
 .container {
-  background-color: lightslategrey;
+  background-color: #b9b9b9;
   display: flex;
   width: 100vw;
   padding: 10px 6px 10px 0px;

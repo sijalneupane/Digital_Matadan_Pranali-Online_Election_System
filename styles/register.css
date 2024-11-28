@@ -36,7 +36,7 @@ body {
 
 .container {
  
-  margin-top: 30px;
+  margin-top: 20px;
   margin-bottom: 15px;
   display: flex;
   width: 85%;
@@ -100,7 +100,7 @@ body {
   /* top:50px; */
   /* font-size: 2.5rem; */
   text-align: center;
-  font-family: cursive;
+  font-family: arial;
   font-weight: bold;
 }
 
@@ -136,7 +136,7 @@ h2 {
   height: 18px;
 }
 input[type="text"],
-input[type="file"],select ,input[type="date"],input[type="password"]{
+input[type="file"],select ,input[type="date"],input[type="password"],input[type="number"]{
   width: 100%;
   padding: 10px;
   margin-top: 5px;
@@ -166,9 +166,13 @@ label {
   display: flex;
   column-gap:3%;
 }
+#district-and-region{
+  display: flex;
+  column-gap: 3%;
+}
 .register{
   margin-bottom: 0;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 .submit-button {
   width: 100%;
@@ -207,8 +211,6 @@ label {
 
 .citizenship {
   margin-bottom: 0px;
-  flex-direction: column;
-  gap: 0px;
   width: 50%;
 }
 
@@ -231,7 +233,7 @@ input:focus{
 .toggle-password {
   position: absolute;
   right: 10px;
-  top: 40%;
+  top: 30%;
   transform: translateY(-50%);
   cursor: pointer;
 }
@@ -278,4 +280,13 @@ input:focus{
   .two-columns input {
     width: 100%;
   }
+  .citizenship{
+    width: 100%;
+  }
+  
+}
+@media (max-width: 1015px){
+  .address-selection{
+    flex-direction: column;
+   }
 }

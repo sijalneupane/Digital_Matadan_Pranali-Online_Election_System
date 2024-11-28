@@ -15,7 +15,7 @@
   <button class="toggle-sidebar-btn" onclick="toggleSidebar()">☰ Menu</button>
   <div class="sidebar">
     <div class="logo">
-      <img src="DMP logo.png" alt="Logo" />
+      <img src="images/DMP logo.png" alt="Logo" />
     </div>
 <!-- -->
     <div class="left-lower-box">
@@ -28,7 +28,7 @@
       </ul>
         <a href="user_profile.php" class="profile-section">
           <button class="profile-btn">
-          <img src="vote2.jpg" alt="">
+          <img src=<?php echo "uploads/".$_SESSION['userPhoto']?> alt="">
           <p>
             <?php
             echo $_SESSION["name"];

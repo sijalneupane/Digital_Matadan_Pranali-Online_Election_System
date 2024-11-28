@@ -3,7 +3,8 @@
 require 'PHPMailer-master/src/Exception.php';
 require 'PHPMailer-master/src/PHPMailer.php';
 require 'PHPMailer-master/src/SMTP.php';
-
+function sendMail($recieverEmail, $recieverName,$subject,$body){
+    
 // Create a new PHPMailer instance
 $mail = new PHPMailer\PHPMailer\PHPMailer();
 
@@ -19,16 +20,18 @@ $mail->Port = 587;                       // TLS port is 587
 // Email content
 $mail->setFrom('sijalneupane5@gmail.com', 'sjnp.tech');
 // $mail->addAddress($_POST['email'], $_POST['name']); // User's email and name
-$mail->addAddress('neupaneboss180@gmail.com', 'Rammm ji');
+$mail->addAddress($recieverEmail, $recieverName);
 
 $mail->isHTML(true);
-$mail->Subject = 'Registration Successful';
-$mail->Body = 'Hello ' . htmlspecialchars('Rammm ji') . ',<br><br>Thank you for registering on our website.<br><br>Best Regards,<br>Your Website Team';
+$mail->Subject = '<strong>'.$subject.'</strong>';
+$mail->Body = 'Dear '. htmlspecialchars($recieverName).'</strong>'. $body;
 
 // Send the email and check for errors
 if ($mail->send()) {
-    echo "Registration successful! A confirmation email has been sent.";
+    echo $subject . "email is sent";
 } else {
-    echo "Registration successful! However, email sending failed. Error: " . $mail->ErrorInfo;
+    echo "Email sending failed. Error: " . $mail->ErrorInfo;
 }
+}
+sendMail('neupaneboss5@gmail.com', "isjal", "Voter registration successfull", "You account is verified ");
 ?>
