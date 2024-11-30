@@ -18,7 +18,7 @@ $mail->SMTPSecure = 'tls';               // Enable TLS encryption
 $mail->Port = 587;                       // TLS port is 587
 
 // Email content
-$mail->setFrom('sijalneupane5@gmail.com', 'sjnp.tech');
+$mail->setFrom('sijalneupane5@gmail.com', 'Digital Matadan Pranali');
 // $mail->addAddress($_POST['email'], $_POST['name']); // User's email and name
 $mail->addAddress($recieverEmail, $recieverName);
 

@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $district = $_POST['district'];
     $election_region = $_POST['regionNo'];
     $local_address = $_POST['local_address'];
-    $citizenshipNumber = $_POST['citizenshipNumber'];
+    $citizenshipNumber = $_POST['citizenshipNumber'];   
     $dateOfBirth = date('Y-m-d', strtotime($_POST['dateOfBirth']));
 
     $emailParts = explode('@', $email);
@@ -44,18 +44,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sql1 = "SELECT email, citizenshipNumber FROM voters WHERE email = '$email' OR citizenshipNumber = '$citizenshipNumber'";
     $result1 = mysqli_query($conn, $sql1);
 
+    $sql2 = "SELECT email, citizenshipNumber FROM pendingstatus WHERE email = '$email' OR citizenshipNumber = '$citizenshipNumber'";
+    $result2 = mysqli_query($conn, $sql2);
+
     if (mysqli_num_rows($result1) > 0) {
-        $row = mysqli_fetch_assoc($result1);
-        if ($email == $row['email']) {
+        $row1 = mysqli_fetch_assoc($result1);
+        if ($email == $row1['email'] && $citizenshipNumber==$row1['citizenshipNumber']) {
+            // echo "This email is already registered.";
+            $_SESSION['error_message'] = 'Email and Citizenship already used';
+            header('Location: voter_register_form.php');
+        }else if ($email == $row1['email']) {
             // echo "This email is already registered.";
             $_SESSION['error_message'] = 'This email is already registered.';
             header('Location: voter_register_form.php');
-        } elseif ($citizenshipNumber == $row['citizenshipNumber']) {
+        } elseif ($citizenshipNumber == $row1['citizenshipNumber']) {
             // echo "This citizenship number is already registered.";
             $_SESSION['error_message'] = 'This citizenship number is already registered.';
             header('Location: voter_register_form.php');
         }
-    } else {
+    } else if(mysqli_num_rows($result2) > 0){
+        $row2 = mysqli_fetch_assoc($result2);
+        if ($email == $row2['email'] && $citizenshipNumber==$row2['citizenshipNumber']) {
+            // echo "This email is already registered.";
+            $_SESSION['error_message'] = 'Email and Citizenship already used and is in pending status';
+            header('Location: voter_register_form.php');
+        }else if ($email == $row2['email']) {
+            // echo "This email is already registered.";
+            $_SESSION['error_message'] = 'Email already used and is in pending status';
+            header('Location: voter_register_form.php');
+        } elseif ($citizenshipNumber == $row2['citizenshipNumber']) {
+            // echo "This citizenship number is already registered.";
+            $_SESSION['error_message'] = 'Citizenship already used and is in pending status';
+            header('Location: voter_register_form.php');
+        }
+    }else {
         // Step 1: Retrieve the dId from the district table
         $d_query = "SELECT dId FROM district WHERE district = '$district' AND regionNo = '$election_region'";
         $d_result = mysqli_query($conn, $d_query);
@@ -78,8 +100,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if (mysqli_query($conn, $local_query)) {
                     $addressID = mysqli_insert_id($conn);
                 } else {
-                    // echo "Error inserting local address: " . mysqli_error($conn);
-                    $_SESSION['error_message'] = "Local address is not valid for the District and RegionNo combination ! ! !";
+                    $_SESSION['error_message'] = "Error inserting local address: " . mysqli_error($conn);
+                    // $_SESSION['error_message'] = "Local address is not valid for the District and RegionNo combination ! ! !";
                     header('Location: voter_register_form.php');
                     exit();  // Stop execution if there's an error
                 }

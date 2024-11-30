@@ -15,9 +15,9 @@
   <div class="admin-panel">
     Admin Panel <span class="arrow">▼</span>
     <ul class="dropdown-menu">
+    <li><a href="admin_home.php">Option 3</a></li>
       <li><a href="verify_voters.php">verify_voters</a></li>
       <li><a href="add_candidates.php">Add Candidates</a></li>
-      <li><a href="#">Option 3</a></li>
       <li><a href="#">Option 4</a></li>
     </ul>
   </div>

@@ -153,12 +153,14 @@ unset($_SESSION['errorMessage']);
       let isValid = true;
 
       // Get field values
-      const username = document.getElementById("username").value.trim();
-      const password = document.getElementById("password").value.trim();
+      let username = document.getElementById("username").value.trim();
+      let password = document.getElementById("password").value.trim();
 
       // Get error message spans
-      const usernameError = document.getElementById("usernameError");
-      const passwordError = document.getElementById("passwordError");
+      let usernameError = document.getElementById("usernameError");
+      let passwordError = document.getElementById("passwordError");
+      
+      let passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/;
 
       // Clear previous error messages
       usernameError.textContent = "";
@@ -174,8 +176,8 @@ unset($_SESSION['errorMessage']);
       if (password === "") {
         passwordError.textContent = "Password is required.";
         isValid = false;
-      } else if (password.length < 8) {
-        passwordError.textContent = "Password should be atleast 8 characters";
+      } else if (!passwordRegex.test(password)) {
+        passwordError.textContent = "Password must include 6-20 characters, uppercase, lowercase, digit, and special character";
         isValid = false;
       }
 

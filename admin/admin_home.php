@@ -3,6 +3,7 @@ session_start();
 if(!isset($_SESSION['loggedin'])){
 header('Location: admin_login.php');
 }
+$_SESSION['pageName']="Admin-Dashboard"
 ?><!DOCTYPE html>
 <html lang="en">
 <head>

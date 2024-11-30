@@ -160,7 +160,7 @@ $conn = mysqli_connect('localhost', 'root', '', 'online_election');
                                     <option value="Makwanpur">Makwanpur</option>
                                     <option value="Dhading">Dhading</option>
                                     <option value="Nuwakot">Nuwakot</option>
-                                    <option value="Sindhupalchoke">Sindhupalchoke</option>
+                                    <option value="Sindhupalchok">Sindhupalchoke</option>
                                     <option value="Dolakha">Dolakha</option>
                                     <option value="Sindhuli">Sindhuli</option>
                                 </select>
