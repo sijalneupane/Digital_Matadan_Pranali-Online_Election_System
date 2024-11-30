@@ -2,11 +2,7 @@
 session_start();
 require "../email_send.php";
 // Database connection
-$conn = mysqli_connect("localhost", "root", "", "online_election");
-
-if (!$conn) {
-  die("Connection failed: " . mysqli_connect_error());
-}
+require '../dbconnection.php';
 
 // Check if ID and message are provided
 if (isset($_GET['id'])) {
