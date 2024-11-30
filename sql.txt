@@ -19,7 +19,17 @@ CREATE TABLE pendingstatus (
 
 
 //district table
-
+create table district(
+    dId int AUTO_INCREMENT PRIMARY KEY,
+    district varchar(100) not NULL,
+    regionNo varchar(255) not null
+)
 
 
 //localaddress table
+CREATE TABLE localaddress (
+    lid INT AUTO_INCREMENT PRIMARY KEY,
+    dId INT NOT NULL,
+    local_address VARCHAR(255) NOT NULL,
+    FOREIGN KEY (dId) REFERENCES district(dId) ON DELETE CASCADE
+);
