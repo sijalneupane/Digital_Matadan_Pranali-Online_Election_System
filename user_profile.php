@@ -3,6 +3,8 @@ session_start();
 if (!isset($_SESSION["email"])) {
     header('Location: index.php');
 }
+$errorMessage = isset($_SESSION['error_message']) ? $_SESSION['error_message'] : '';
+unset($_SESSION['error_message']); // Clear the message
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -13,6 +15,7 @@ if (!isset($_SESSION["email"])) {
     <title>User Profile</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles/register.css">
+    <link rel="stylesheet" href="register_and_login/modal.css">
     <style>
         /* General Styles */
         body {
@@ -65,11 +68,14 @@ if (!isset($_SESSION["email"])) {
         }
 
         .image-table img {
-            width: 45%;
+            width: 50%;
+            object-fit: contain;
+            aspect-ratio: 1 / 1;
+            border: 1px solid white;
             border-radius: 10px;
             cursor: pointer;
             transition: transform 0.3s ease;
-            background-color: white;
+            /* background-color: white; */
         }
 
         .image-table img:hover {
@@ -123,15 +129,19 @@ if (!isset($_SESSION["email"])) {
         }
 
         .modal-content {
-            background-color: white;
+            background-color: lightgray;
             position: relative;
             padding: 2%;
-            max-width: 80%;
+            overflow: auto;
+            text-align: center;
+            max-width: 70%;
             max-height: 100%;
         }
 
         .modal-content img {
-            width: 100%;
+            width: 50%;
+            object-fit: contain;
+            aspect-ratio: 1 / 1;
             height: auto;
             border-radius: 10px;
         }
@@ -145,7 +155,7 @@ if (!isset($_SESSION["email"])) {
             cursor: pointer;
         }
 
-        .modal-content1 {
+        .modal-content2 {
             background-color: white;
             position: relative;
             padding: 20px;
@@ -156,7 +166,7 @@ if (!isset($_SESSION["email"])) {
             border-radius: 10px;
         }
 
-        .close-modal1 {
+        .close-modal2 {
             position: absolute;
             top: 10px;
             right: 10px;
@@ -165,30 +175,29 @@ if (!isset($_SESSION["email"])) {
             cursor: pointer;
         }
 
-        .modal-content1 form div {
+        .modal-content2 form div {
             margin-bottom: 5px;
         }
 
-        .modal-content1 form label {
+        .modal-content2 form label {
             display: block;
             font-weight: bold;
             margin-bottom: 5px;
         }
 
-        .modal-content1 form input {
+        .modal-content2 form input {
             width: 100%;
             padding: 8px;
             border: 1px solid #ccc;
             border-radius: 5px;
         }
     </style>
-        <script src="../js/update_validation.js"></script>
+    <script src="js/update_validation.js"></script>
 </head>
 
 <body>
     <div class="container" style="background-color: #b9b9b9;">
         <?php include 'sidebar.php'; ?>
-
         <div class="content" style="padding: 0;">
             <div class="profile-card">
                 <h3><i class="fas fa-user-circle"></i> <?php echo $_SESSION['name']; ?></h3>
@@ -212,6 +221,10 @@ if (!isset($_SESSION["email"])) {
                         <td>User Photo</td>
                         <td>Citizenship Image 1</td>
                         <td>Citizenship Image 2</td>
+                    </tr><tr>
+                        <td>User Photo</td>
+                        <td>Citizenship Image 1</td>
+                        <td>Citizenship Image 2</td>
                     </tr>
                 </table>
 
@@ -224,6 +237,12 @@ if (!isset($_SESSION["email"])) {
         </div>
     </div>
 
+    <div id="modal1" class="modal-overlay1">
+        <div class="modal-content1">
+            <p id="modalMessage1"></p>
+            <button onclick="closeModal1()">Close</button>
+        </div>
+    </div>
     <!-- Modal -->
     <div id="imageModal" class="modal">
         <span class="close-modal" onclick="closeModal()">&times;</span>
@@ -234,9 +253,9 @@ if (!isset($_SESSION["email"])) {
 
     <!-- Edit Profile Modal -->
     <div id="editModal" class="modal">
-        <div class="modal-content1">
-            <span class="close-modal1" onclick="closeEditModal()">&times;</span>
-            <form action="update.php?id=<?php echo $_SESSION['voterId']; ?>" method="POST" onsubmit="return validateForm();">
+        <div class="modal-content2">
+            <span class="close-modal2" onclick="closeEditModal()">&times;</span>
+            <form action="user_profile_update.php" method="POST" onsubmit="return validateForm();">
                 <h3>Edit Profile</h3>
                 <div class="form-group two-columns">
                     <div class="field-error-groups">
@@ -292,7 +311,7 @@ if (!isset($_SESSION["email"])) {
             </form>
         </div>
     </div>
-    
+
     <!-- JavaScript -->
     <script>
         // Image Modal
@@ -302,7 +321,7 @@ if (!isset($_SESSION["email"])) {
         }
 
         function closeModal() {
-            document.getElementById('imageModal').style.display = 'none';
+            document.getElementById('imageModal').style.zIndex = '-1';
         }
 
         // Edit Profile Modal
@@ -311,11 +330,26 @@ if (!isset($_SESSION["email"])) {
         }
 
         function closeEditModal() {
-            document.getElementById('editModal').style.display = 'none';
+            document.getElementById('editModal').style.zIndex = '-1';
+        }
+        // PHP Message passed to JavaScript
+        const errorMessage = <?= json_encode($errorMessage); ?>;
+
+        // Show modal if there is a message
+        if (errorMessage) {
+            const modal = document.getElementById('modal1');
+            const modalMessage = document.getElementById('modalMessage1');
+            modalMessage.textContent = errorMessage;
+            modal.style.display = 'flex';
+        }
+
+        // Function to close the modal
+        function closeModal1() {
+            document.getElementById('modal1').style.display = 'none';
         }
     </script>
-    
-   
+
+
 </body>
 
 </html>

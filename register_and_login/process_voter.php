@@ -6,7 +6,6 @@ require '../dbconnection.php';
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
   $voterId = $_POST['voterId'];
   $email=$_SESSION['email'];
-  $password=$_SESSION['password'];
   // unset($_SESSION['password']);
   // Query to fetch user details based on email 
   $sql = "SELECT * FROM voters WHERE id='$voterId' and email='$email' LIMIT 1";
@@ -15,8 +14,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   if (mysqli_num_rows($result) > 0) {
     // Fetch the user's data
     $row2 = mysqli_fetch_assoc($result);
-    // Check if the password matches (assuming passwords are not hashed)
-    // No need for password_verify here since we aren't hashing
     $joinSql = "SELECT * 
                             FROM voters V 
                             INNER JOIN localaddress la ON V.addressId = la.lid
@@ -26,6 +23,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (mysqli_num_rows($result) > 0) {
       $row1 = mysqli_fetch_assoc($result);
       // Set session variables for successful login
+      $_SESSION['districtId'] = $row1['did'];
+      $_SESSION['addressId'] = $row1['addressId'];
       $_SESSION['election_region'] = $row1['regionNo'];
       $_SESSION['voterId'] = $row1['id'];
       $_SESSION['name'] = $row1['name'];

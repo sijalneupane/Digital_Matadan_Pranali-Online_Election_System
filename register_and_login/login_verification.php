@@ -123,7 +123,6 @@ unset($_SESSION['idErrorMsg']); // Clear the message
     <h2>Enter Voter ID to Proceed</h2>
     <form action="process_voter.php" method="POST" onsubmit="return validateForm();">
       <input type="hidden" name="email" value="<?= $_SESSION['email'] ?>">
-      <input type="hidden" name="password" value="<?= $_SESSION['password'] ?>">
       <input type="text" name="voterId" id="voterId" placeholder="Enter Voter ID">
       <span id="voterIdError" class="error"></span><br>
       <input type="submit" value="Proceed" class="button">

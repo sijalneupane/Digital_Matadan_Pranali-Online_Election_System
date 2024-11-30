@@ -6,23 +6,33 @@ if (!isset($_SESSION['email'])) {
     exit();
 }
 require '../dbconnection.php';
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Fetch new password from the form
     $new_password = $_POST['password'];
     $email = $_SESSION['email'];
 
-    // Directly run the update query
-    $sql = "UPDATE voters SET password = '$new_password' WHERE email = '$email'";
-    $result = mysqli_query($conn, $sql);
+    // Hash the new password
+    $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
 
+    // Update query with the hashed password
+    $sql1= "UPDATE pendingstatus SET password = '$hashed_password' WHERE email = '$email'";
+    $sql2 = "UPDATE voters SET password = '$hashed_password' WHERE email = '$email'";
+    
+    $result =isset($_SESSION['pending'])? mysqli_query($conn, $sql1): mysqli_query($conn, $sql2);
+unset($_SESSION['pending']);
     if ($result) {
-        echo "<script>alert('Password has been reset successfully.')</script>";
+        // Notify the user of successful password reset
+        $_SESSION['error_message'] = "Password has been reset successfully.";
         unset($_SESSION['email']); // Clear session
         header("Location: ../register_and_login/voter_login_form.php");
         exit();
     } else {
+        // Handle update error
         echo "Error updating password: " . mysqli_error($conn);
     }
+
+    // Close the connection
+    mysqli_close($conn);
 }
 ?>
 

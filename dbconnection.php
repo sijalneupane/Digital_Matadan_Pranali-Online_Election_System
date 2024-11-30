@@ -2,11 +2,11 @@
 // Database connection details
 $servername = "localhost";  // Replace with your database server details
 $username = "root";         // Replace with your MySQL username
-$password = "";             // Replace with your MySQL password
+$pass = "";             // Replace with your MySQL password
 $dbname = "online_election"; // Your database name
 
 // Create connection (procedural style)
-$conn = mysqli_connect($servername, $username, $password, $dbname);
+$conn = mysqli_connect($servername, $username, $pass, $dbname);
 
 // Check connection
 if (!$conn) {
