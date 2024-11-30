@@ -199,7 +199,7 @@ unset($_SESSION['error_message']); // Clear the message
     </div>
     <div class="glass-container">
         <div class="left-box">
-            <img src="../images/DMP logo.png" alt="Logo">
+            <a href="../index.php"><img src="../images/DMP logo.png" alt="Logo"></a>
             <h2>Voter Login ! ! !</h2>
             <form id="loginForm" method="POST" action="voter_login.php" onsubmit="return validateForm()">
                 <input type="text" id="email" name="email" placeholder="Email">
@@ -216,7 +216,7 @@ unset($_SESSION['error_message']); // Clear the message
                 </div>
                 <span id="passwordError" class="error"></span>
 
-                <a href="../forgotpassword/forgot_password.php" style="display:block;text-align: start;margin-bottom: 2px;">Forgot Password?</a>
+                <a href="../forgotpassword/forgot_password.php" style="display:block;text-align: start;margin: 8px 0px;">Forgot Password?</a>
                 <input type="submit" value="Login">
                 <div class="register-direction">
                     <span>Haven't Registered till now? </span><a href="voter_register_form.php">Register Here</a>

@@ -1,5 +1,8 @@
-<?php
+<?php 
 session_start();
+if(!isset($_SESSION['loggedin'])){
+header('Location: admin_login.php');
+}
 $errorMessage = isset($_SESSION['errorMsg']) ? $_SESSION['errorMsg'] : '';
 unset($_SESSION['errorMsg']); 
 $_SESSION['pageName']="Verify Voters" ;// Clear the message

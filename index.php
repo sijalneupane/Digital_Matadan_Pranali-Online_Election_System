@@ -225,7 +225,7 @@
             <img src="images/DMP logo.png" alt="Election Logo">
         </div>
         <div class="election-time">
-            
+            <p style="color: red;">Election time: 2024-11-01 (6am - 6pm) </p>
         </div>
         <div class="nav-links">
             <a href="admin/admin_login.php" class="admin-login">Admin Login</a>

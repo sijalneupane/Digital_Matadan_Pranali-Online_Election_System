@@ -194,7 +194,7 @@ unset($_SESSION['errorMessage']);
     </div>
   </div>
   <div class="logo-container">
-    <img src="../images/DMP logo.png" alt="Logo">
+    <a href="../index.php"><img src="../images/DMP logo.png" alt="Logo"></a>
   </div>
   <div class="container">
     <div class="logo-text">Admin Panel</div>

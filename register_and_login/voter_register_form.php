@@ -66,9 +66,7 @@ $conn = mysqli_connect('localhost', 'root', '', 'online_election');
             align-items: center;
             min-height: 100vh;
         }
-
         .container {
-
             margin-top: 20px;
             margin-bottom: 15px;
             display: flex;
@@ -118,7 +116,7 @@ $conn = mysqli_connect('localhost', 'root', '', 'online_election');
     </div>
     <div class="container">
         <div class="left">
-            <img src="../images/DMP logo.png" alt="Logo" class="logo">
+            <a href="../index.php"><img src="../images/DMP logo.png" alt="Logo" class="logo"></a>
             <img src="../images/vote2.jpg" alt="Center Image" class="center-image">
             <div class="left-2">
                 <h1>Register Yourself as a Voter</h1>
