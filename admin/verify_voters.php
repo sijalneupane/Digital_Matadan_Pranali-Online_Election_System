@@ -2,7 +2,7 @@
 session_start();
 $errorMessage = isset($_SESSION['errorMsg']) ? $_SESSION['errorMsg'] : '';
 unset($_SESSION['errorMsg']); 
-session_destroy();// Clear the message
+$_SESSION['pageName']="Verify Voters" ;// Clear the message
 ?>
 
 <!DOCTYPE html>
@@ -202,7 +202,7 @@ session_destroy();// Clear the message
         </div>
     </div>
     <div class="container">
-        <h3><?php echo $_SESSION['errorMsg'] ??''?></h3>
+        <!-- <h3></h3> -->
         <table>
             <thead>
                 <tr>

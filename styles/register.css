@@ -24,33 +24,7 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #2d7dac; 
 }
-body {
-  background-color: #473c75;
 
-  ;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-}
-
-.container {
- 
-  margin-top: 20px;
-  margin-bottom: 15px;
-  display: flex;
-  width: 85%;
-  max-width: 1100px;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
-  background: rgba( 0255, 0255, 255, 0.45 );
-  /* box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 ); */
-  backdrop-filter: blur( 6px );
-  -webkit-backdrop-filter: blur( 6px );
-  border-radius: 10px;
-  border: 1px solid rgba( 255, 255, 255, 0.18 );
-}
 
 .left {
   position: relative;
@@ -73,14 +47,6 @@ body {
   border-bottom-right-radius: 10px;
 }
 
-.logo {
-  position: absolute;
-  top: 6px;
-  left: 6px;
-  width: 90px;
-  height: auto;
- 
-}
 
 .center-image {
   width: 55%; /* Allow the image to take the full width of its container */
@@ -96,9 +62,6 @@ body {
 
 
 .left .left-2 h1 {
-  /* position: relative; */
-  /* top:50px; */
-  /* font-size: 2.5rem; */
   text-align: center;
   font-family: arial;
   font-weight: bold;

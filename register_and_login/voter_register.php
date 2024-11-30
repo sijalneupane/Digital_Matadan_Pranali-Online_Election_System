@@ -1,4 +1,5 @@
 <?php
+require "../email_send.php";
 session_start();
 // Database connection
 $conn = mysqli_connect('localhost', 'root', '', 'online_election');

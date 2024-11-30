@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,7 +21,7 @@
       <li><a href="#">Option 4</a></li>
     </ul>
   </div>
-  <div class="page-title"><?php echo $_SESSION['pageName']??'' ?></div>
+  <div class="page-title"><?php echo $_SESSION['pageName'] ?? '' ?></div>
   <div class="nav-links">
     <a href="#" class="admin-logout">Logout</a>
   </div>

@@ -1,6 +1,7 @@
 <?php
 session_start();
-$errorMessage= isset($_SESSION['errorMessage'])?$_SESSION['errorMessage']:'';
+$errorMessage = isset($_SESSION['errorMessage']) ? $_SESSION['errorMessage'] : '';
+unset($_SESSION['errorMessage']);
 ?>
 
 <!DOCTYPE html>
@@ -11,9 +12,9 @@ $errorMessage= isset($_SESSION['errorMessage'])?$_SESSION['errorMessage']:'';
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Login</title>
 
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../register_and_login/modal.css">
   <style>
-    /* Reset Styles */
     /* Reset Styles */
     * {
       box-sizing: border-box;
@@ -87,7 +88,18 @@ $errorMessage= isset($_SESSION['errorMessage'])?$_SESSION['errorMessage']:'';
       text-align: left;
       position: relative;
     }
-
+    .input-container {
+  position: relative;
+  /* width: 100%; */
+  /* margin-bottom: 5px; */
+}
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
     .form-group label {
       display: block;
       margin-bottom: 5px;
@@ -162,6 +174,9 @@ $errorMessage= isset($_SESSION['errorMessage'])?$_SESSION['errorMessage']:'';
       if (password === "") {
         passwordError.textContent = "Password is required.";
         isValid = false;
+      } else if (password.length < 8) {
+        passwordError.textContent = "Password should be atleast 8 characters";
+        isValid = false;
       }
 
       return isValid;
@@ -192,15 +207,18 @@ $errorMessage= isset($_SESSION['errorMessage'])?$_SESSION['errorMessage']:'';
         </div>
         <div class="form-group">
           <label for="password">Password:</label>
-          <input type="password" id="password" name="password"><br>
-          <span id="passwordError" class="error-message"></span>
+          <div class="input-container">
+          <input type="password" id="password" name="password"><i id="togglePasswordIcon" class="fas fa-eye toggle-password"
+          onclick="togglePasswordVisibility()"></i>
+          </div>
+          <span id="passwordError" class="error-message"></span><br>
         </div>
         <input type="submit" class="btn" value="Login">
       </form>
     </div>
   </div>
 
- 
+
 </body>
 <script>
   // PHP Message passed to JavaScript
@@ -219,5 +237,5 @@ $errorMessage= isset($_SESSION['errorMessage'])?$_SESSION['errorMessage']:'';
     document.getElementById('modal1').style.display = 'none';
   }
 </script>
-
+<script src="../togglepassword.js"></script>
 </html>

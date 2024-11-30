@@ -1,5 +1,8 @@
 <?php 
 session_start();
+if(!isset($_SESSION['loggedin'])){
+header('Location: admin_login.php');
+}
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
