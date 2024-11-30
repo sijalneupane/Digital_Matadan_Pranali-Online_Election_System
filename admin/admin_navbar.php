@@ -23,7 +23,7 @@
   </div>
   <div class="page-title"><?php echo $_SESSION['pageName'] ?? '' ?></div>
   <div class="nav-links">
-    <a href="#" class="admin-logout">Logout</a>
+    <a href="admin_logout.php" class="admin-logout">Logout</a>
   </div>
 </nav>
 

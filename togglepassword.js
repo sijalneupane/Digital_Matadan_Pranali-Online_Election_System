@@ -8,5 +8,4 @@ function togglePasswordVisibility() {
       passwordInput.type = 'password';
       toggleIcon.className = 'fas fa-eye toggle-password';
   }
-  
 }

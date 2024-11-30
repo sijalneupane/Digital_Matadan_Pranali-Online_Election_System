@@ -228,7 +228,7 @@
             
         </div>
         <div class="nav-links">
-            <a href="#" class="admin-login">Admin Login</a>
+            <a href="admin/admin_login.php" class="admin-login">Admin Login</a>
         </div>
     </nav>
 
