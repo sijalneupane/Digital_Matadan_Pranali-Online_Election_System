@@ -35,7 +35,7 @@
 <body>
     <!-- Logo Section -->
     <div class="logo-container">
-        <img src="../DMP logo.png" alt="Logo">
+        <img src="../images/DMP logo.png" alt="Logo">
     </div>
 
     <!-- Forgot Password Form -->

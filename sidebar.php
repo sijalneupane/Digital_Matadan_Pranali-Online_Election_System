@@ -25,6 +25,7 @@
         <!-- <li><a href="guidelines.php"><i class="fas fa-file-alt"></i> Election Guidelines</a></li> -->
         <li><a href="voting.php"><i class="fas fa-vote-yea"></i> Voting</a></li>
         <li><a href="results.php"><i class="fas fa-chart-pie"></i> Results</a></li>
+        <li><a href="contact_us.php"><i class="fas fa-message"></i> Contact Us</a></li>
       </ul>
         <a href="user_profile.php" class="profile-section">
           <button class="profile-btn">

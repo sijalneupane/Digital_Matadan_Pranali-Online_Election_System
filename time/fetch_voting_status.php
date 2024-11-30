@@ -16,7 +16,8 @@ $current_time = date('Y-m-d H:i:s');
 $sql = "SELECT voting_start, voting_end FROM voting_time ORDER BY id DESC LIMIT 1";
 $result = mysqli_query($conn, $sql);
 
-if ($row = mysqli_fetch_assoc($result)) {
+if (mysqli_num_rows($result)>0) {
+    $row = mysqli_fetch_assoc($result);
     $voting_start = $row['voting_start'];
     $voting_end = $row['voting_end'];
 

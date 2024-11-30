@@ -23,8 +23,8 @@ $mail->setFrom('sijalneupane5@gmail.com', 'sjnp.tech');
 $mail->addAddress($recieverEmail, $recieverName);
 
 $mail->isHTML(true);
-$mail->Subject = '<strong>'.$subject.'</strong>';
-$mail->Body = 'Dear '. htmlspecialchars($recieverName).'</strong>'. $body;
+$mail->Subject = $subject;
+$mail->Body = 'Dear '. htmlspecialchars($recieverName). $body;
 
 // Send the email and check for errors
 if ($mail->send()) {
@@ -33,5 +33,4 @@ if ($mail->send()) {
     echo "Email sending failed. Error: " . $mail->ErrorInfo;
 }
 }
-sendMail('neupaneboss5@gmail.com', "isjal", "Voter registration successfull", "You account is verified ");
 ?>

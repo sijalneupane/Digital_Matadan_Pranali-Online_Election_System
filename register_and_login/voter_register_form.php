@@ -4,48 +4,48 @@ $errorMessage = isset($_SESSION['error_message']) ? $_SESSION['error_message'] :
 unset($_SESSION['error_message']); // Clear the message
 $conn = mysqli_connect('localhost', 'root', '', 'online_election');
 
-$id = isset($_REQUEST['id']) ? (int)$_REQUEST['id'] : 0;
-$name = "";
-$email = "";
-$password = "";
-$dateOfBirth = "";
-$citizenshipNumber = "";
-$gender = "";
-$addressid = "";
-$citizenshipFrontPhoto = "";
-$citizenshipBackPhoto = "";
-$userPhoto = "";
-$district = "";
-$regionNo = "";
-$local_address = "";
+// $id = isset($_REQUEST['id']) ? (int)$_REQUEST['id'] : 0;
+// $name = "";
+// $email = "";
+// $password = "";
+// $dateOfBirth = "";
+// $citizenshipNumber = "";
+// $gender = "";
+// $addressid = "";
+// $citizenshipFrontPhoto = "";
+// $citizenshipBackPhoto = "";
+// $userPhoto = "";
+// $district = "";
+// $regionNo = "";
+// $local_address = "";
 
-if ($id != 0) {
-    $sql = "SELECT * 
-            FROM voters V 
-            INNER JOIN localaddress la ON V.addressId = la.lid
-            INNER JOIN district D ON D.dId = la.dId
-            WHERE id = '$id';
-        ";
-    $results = $conn->query($sql);
-    if ($results->num_rows > 0) {
-        $data = mysqli_fetch_assoc($results);
-        $name = $data['name'];
-        $email = $data['email'];
-        $password = $data['password'];
-        $dateOfBirth = $data['dateOfBirth'];
-        $district = $data['district'];
-        $local_address = $data['local_address'];
-        $election_region = $data['regionNo'];
-        $citizenshipNumber = $data['citizenshipNumber'];
-        $gender = $data['gender'];
-        $citizenshipFrontPhoto = $data['citizenshipFrontPhoto'];
-        $citizenshipBackPhoto = $data['citizenshipBackPhoto'];
-        $userPhoto = $data['userPhoto'];
-    } else {
-        echo "No record found with ID: $id";
-    }
-}
-?>
+// if ($id != 0) {
+//     $sql = "SELECT * 
+//             FROM voters V 
+//             INNER JOIN localaddress la ON V.addressId = la.lid
+//             INNER JOIN district D ON D.dId = la.dId
+//             WHERE id = '$id';
+//         ";
+//     $results = $conn->query($sql);
+//     if ($results->num_rows > 0) {
+//         $data = mysqli_fetch_assoc($results);
+//         $name = $data['name'];
+//         $email = $data['email'];
+//         $password = $data['password'];
+//         $dateOfBirth = $data['dateOfBirth'];
+//         $district = $data['district'];
+//         $local_address = $data['local_address'];
+//         $election_region = $data['regionNo'];
+//         $citizenshipNumber = $data['citizenshipNumber'];
+//         $gender = $data['gender'];
+//         $citizenshipFrontPhoto = $data['citizenshipFrontPhoto'];
+//         $citizenshipBackPhoto = $data['citizenshipBackPhoto'];
+//         $userPhoto = $data['userPhoto'];
+//     } else {
+//         echo "No record found with ID: $id";
+//     }
+// }
+// ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -257,100 +257,3 @@ if ($id != 0) {
 
 </html>
 <?php
-/*<div class="right">
-    <form name="voterForm" action="voter_register.php" method="post" enctype="multipart/form-data" onsubmit="return validateForm();">
-        <h2>Create Voter ID</h2>
-        <div class="form-group two-columns">
-            <div class="field-error-groups">
-                <input type="text" name="name" placeholder="Full Name" value="<?= htmlspecialchars($name); ?>">
-                <span id="nameError" class="error"></span>
-            </div>
-            <div class="field-error-groups">
-                <select name="gender" id="gender">
-                    <option value="default" <?= $gender === "" ? 'selected' : ''; ?>>-- Select Gender --</option>
-                    <option value="male" <?= $gender === "male" ? 'selected' : ''; ?>>Male</option>
-                    <option value="female" <?= $gender === "female" ? 'selected' : ''; ?>>Female</option>
-                    <option value="others" <?= $gender === "others" ? 'selected' : ''; ?>>Others</option>
-                </select>
-                <span id="genderError" class="error"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="address-selection">
-                <div id="district-and-region" style="flex:1.5 ;">
-                    <div id="district" style="flex:1.75">
-                        <label>District</label>
-                        <select name="district" id="district">
-                            <?php
-                            $districts = ["Kathmandu", "Lalitpur", "Bhaktapur", "Chitwan", "Rasuwa", "Kavrepalanchok", "Ramechhap", "Makwanpur", "Dhading", "Nuwakot", "Sindhupalchoke", "Dolakha", "Sindhuli"];
-                            foreach ($districts as $dist) {
-                                $selected = $district === $dist ? 'selected' : '';
-                                echo "<option value='$dist' $selected>$dist</option>";
-                            }
-                            ?>
-                        </select>
-                    </div>
-                    <div id="constituentNo" style="flex: 1.4;">
-                        <label>Constituent No.</label>
-                        <input type="number" name="regionNo" id="regionNo" placeholder="eg:1" value="<?= htmlspecialchars($regionNo); ?>">
-                        <span id="regionNoError" class="error"></span>
-                    </div>
-                </div>
-                <div id="localAddress" style="flex:1;">
-                    <label>Local Address</label>
-                    <input type="text" name="local_address" placeholder="eg:Banepa-8, Tindobato" value="<?= htmlspecialchars($local_address); ?>">
-                    <span id="addressError" class="error"></span>
-                </div>
-            </div>
-        </div>
-        <div class="form-group two-columns">
-            <div class="field-error-groups">
-                <input type="text" name="email" placeholder="Email" value="<?= htmlspecialchars($email); ?>">
-                <span id="emailError" class="error"></span>
-            </div>
-            <div class="field-error-groups input-container">
-                <input type="password" id="password" name="password" placeholder="Password" value="<?= htmlspecialchars($password); ?>">
-                <i id="togglePasswordIcon" class="fas fa-eye toggle-password" onclick="togglePasswordVisibility()"></i>
-                <span id="passwordError" class="error" style="margin-bottom: 8px;"></span>
-            </div>
-        </div>
-        <div class="form-group two-columns">
-            <div class="field-error-groups">
-                <label for="" style="text-wrap: nowrap;">Date of Birth:</label>
-                <input type="date" name="dateOfBirth" value="<?= htmlspecialchars($dateOfBirth); ?>">
-                <span id="dobError" class="error"></span>
-            </div>
-            <div class="field-error-groups">
-                <label for="">Citizenship Number</label>
-                <input type="text" name="citizenshipNumber" placeholder="Citizenship Number" value="<?= htmlspecialchars($citizenshipNumber); ?>">
-                <span id="citizenshipError" class="error"></span>
-            </div>
-        </div>
-        <div class="form-group two-columns">
-            <div class="citizenship">
-                <label for="">Citizenship Front Photo</label>
-                <input type="file" name="citizenshipFrontPhoto" id="citizenshipFront" accept="image/*" onchange="previewImage(this, 'frontPreview')">
-                <img id="frontPreview" src="../uploads/<?= htmlspecialchars($citizenshipFrontPhoto); ?>" alt="Citizenship Front Preview">
-                <span id="citizenshipFrontError" class="error"></span>
-            </div>
-            <div class="citizenship">
-                <label for="">Citizenship Back Photo</label>
-                <input type="file" name="citizenshipBackPhoto" id="citizenshipBack" accept="image/*" onchange="previewImage(this, 'backPreview')">
-                <img id="backPreview" src="../uploads/<?= htmlspecialchars($citizenshipBackPhoto); ?>" alt="Citizenship Back Preview">
-                <span id="citizenshipBackError" class="error"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label>User Photo</label>
-            <input type="file" name="userPhoto" id="userPhoto" accept="image/*" onchange="previewImage(this, 'userPhotoPreview')">
-            <img id="userPhotoPreview" src="../uploads/<?= htmlspecialchars($userPhoto); ?>" alt="User Photo Preview">
-            <span id="userPhotoError" class="error"></span>
-        </div>
-        <div class="form-group register">
-            <input class="submit-button" type="submit" value="Register">
-        </div>
-        <div class="login-direction">Already a Voter?<a href="voter_login_form.php">Login</a></div>
-    </form>
-</div>
-*/
-?>

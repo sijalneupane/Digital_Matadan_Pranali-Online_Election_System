@@ -16,9 +16,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $result = mysqli_query($conn, $sql);
 
     if ($result) {
-        echo "Password has been reset successfully.";
+        echo "<script>alert('Password has been reset successfully.')</script>";
         unset($_SESSION['email']); // Clear session
-        header("Location: ../voter_login.html");
+        header("Location: ../register_and_login/voter_login_form.php");
         exit();
     } else {
         echo "Error updating password: " . mysqli_error($conn);
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         function validateForm() {
             const password = document.getElementById('password').value.trim();
             const passwordError = document.getElementById('passwordError');
-            const passwordRegex = /^.{8,}$/;
+            let passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/;
 
             let isValid = true;
 
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 passwordError.textContent = "Password should not be empty";
                 isValid = false;
             } else if (!passwordRegex.test(password)) {
-                passwordError.textContent = "Password must be at least 8 characters";
+                passwordError.textContent = "Password must include 6-20 characters, uppercase, lowercase, digit, and special character";
                 isValid = false;
             } else {
                 passwordError.textContent = "";
@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <!-- Logo Section -->
     <div class="logo-container">
-        <img src="../DMP logo.png" alt="Logo">
+        <img src="../images/DMP logo.png" alt="Logo">
     </div>
 
     <h2>Reset Password</h2>

@@ -17,15 +17,15 @@ unset($_SESSION['error_message']); // Clear the message
     <script>
         function validateForm() {
             const email = document.getElementById('email').value.trim();
-            const voterId = document.getElementById('voterId').value.trim();
+            const citizenshipNumber = document.getElementById('citizenshipNumber').value.trim();
             const password = document.getElementById('password').value.trim();
 
             const emailError = document.getElementById('emailError');
-            const voterIdError = document.getElementById('voterIdError');
+            const citizenshipError = document.getElementById('citizenshipError');
             const passwordError = document.getElementById('passwordError');
 
             const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-            const passwordRegex = /^.{8,}$/;
+            let passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/;
 
             let isValid = true;
 
@@ -40,12 +40,13 @@ unset($_SESSION['error_message']); // Clear the message
                 emailError.textContent = "";
             }
 
-            // voterId validation
-            if (voterId === "") {
-                voterIdError.textContent = "Voter Id number should not be empty";
+
+
+            if (citizenshipNumber === "") {
+                citizenshipError.textContent = "Voter Id number should not be empty";
                 isValid = false;
             } else {
-                voterIdError.textContent = "";
+                citizenshipError.textContent = "";
             }
 
             // Password validation
@@ -53,7 +54,7 @@ unset($_SESSION['error_message']); // Clear the message
                 passwordError.textContent = "Password should not be empty";
                 isValid = false;
             } else if (!passwordRegex.test(password)) {
-                passwordError.textContent = "Password must be at least 8 characters";
+                passwordError.textContent = "Password must include 6-20 characters, uppercase, lowercase, digit, and special character";
                 isValid = false;
             } else {
                 passwordError.textContent = "";
@@ -204,8 +205,10 @@ unset($_SESSION['error_message']); // Clear the message
                 <input type="text" id="email" name="email" placeholder="Email">
                 <span id="emailError" class="error"></span>
 
-                <input type="text" id="voterId" name="voterId" placeholder="Voter Id Number">
-                <span id="voterIdError" class="error"></span>
+                <!-- <input type="text" id="voterId" name="voterId" placeholder="Voter Id Number">
+                <span id="voterIdError" class="error"></span> -->
+                <input type="text" id="citizenshipNumber" name="citizenshipNumber" placeholder="CitizenshipNumber">
+                <span id="citizenshipError" class="error"></span>
 
                 <div class="input-container">
                     <input type="password" id="password" name="password" placeholder="Password">
@@ -213,7 +216,7 @@ unset($_SESSION['error_message']); // Clear the message
                 </div>
                 <span id="passwordError" class="error"></span>
 
-                <a href="forgotpassword/forgot_password.php" style="display:block;text-align: start;margin-bottom: 2px;">Forgot Password?</a>
+                <a href="../forgotpassword/forgot_password.php" style="display:block;text-align: start;margin-bottom: 2px;">Forgot Password?</a>
                 <input type="submit" value="Login">
                 <div class="register-direction">
                     <span>Haven't Registered till now? </span><a href="voter_register_form.php">Register Here</a>

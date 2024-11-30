@@ -5,11 +5,11 @@ require '../dbconnection.php';
 // Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = $_POST['email'];
-    $voterId = $_POST['voterId'];
+    $citizenshipNumber = $_POST['citizenshipNumber'];
     $password = $_POST['password'];
 
-    // Query to fetch user details based on email and voter_id
-    $sql = "SELECT * FROM pendingstatus WHERE email = '$email' LIMIT 1";
+    // Query to fetch user details based on email 
+    $sql = "SELECT * FROM pendingstatus WHERE email = '$email' and citizenshipNumber='$citizenshipNumber' LIMIT 1" ;
     $result = mysqli_query($conn, $sql);
 
     // Check if user exists
@@ -27,50 +27,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     } else {
         // No user found with that email and voter ID in pending
-        $sql2 = "SELECT * FROM voters WHERE email = '$email' AND id = '$voterId' LIMIT 1";
+        $sql2 = "SELECT * FROM voters WHERE email = '$email' AND citizenshipNumber = '$citizenshipNumber' LIMIT 1";
         $result2 = mysqli_query($conn, $sql2);
 
         // Check if user exists
         if (mysqli_num_rows($result2) > 0) {
-            // Fetch the user's data
-            $row2 = mysqli_fetch_assoc($result2);
-            // Check if the password matches (assuming passwords are not hashed)
-            if ($password === $row2['password']) {  // No need for password_verify here since we aren't hashing
-                $joinSql = "SELECT * 
-                            FROM voters V 
-                            INNER JOIN localaddress la ON V.addressId = la.lid
-                            INNER JOIN district D ON D.dId = la.dId
-                            WHERE V.email='$email'";
-                $result2 = mysqli_query($conn, $joinSql);
-                if (mysqli_num_rows($result2) > 0) {
-                    $row1 = mysqli_fetch_assoc($result2);
-                    // Set session variables for successful login
-                    $_SESSION['email'] = $row1['email'];
-                    $_SESSION['election_region'] = $row1['regionNo'];
-                    $_SESSION['voterId'] = $row1['id'];
-                    $_SESSION['name'] = $row1['name'];
-                    $_SESSION['district'] = $row1['district'];
-                    $_SESSION['local_address'] = $row1['local_address'];
-                    $_SESSION['citizenshipNumber'] = $row1['citizenshipNumber'];
-                    $_SESSION['birthDate'] = $row1['dateOfBirth'];
-                    $_SESSION['gender'] = $row1['gender'];
-                    $_SESSION['userPhoto'] = $row1['userPhoto'];
-                    $_SESSION['citizenshipFrontPhoto'] = $row1['citizenshipFrontPhoto'];
-                    $_SESSION['citizenshipBackPhoto'] = $row1['citizenshipBackPhoto'];
-
-                    header('Location: ../home.php');         // Redirect to the dashboard or homepage after successful login
-                } else {
-                    $_SESSION['error_message'] = 'Unexpected error occured, please try again';
-                    header('Location: voter_login_form.php');
-                }
+            //fetch password and check wiht user entered password
+            $row2=mysqli_fetch_assoc($result2);
+            if ($row2['password']===$password) {
+                $_SESSION['email']=$email;
+                $_SESSION['password']=$password;
+                header("Location: login_verification.php");
             } else {
-                // No user found with that email and voter ID
-                $_SESSION['error_message'] = 'Incorrect password for registered account';
+                $_SESSION['error_message'] = 'Incorrect password for verified user';
                 header('Location: voter_login_form.php');
             }
         } else {
             // No user found with that email and voter ID
-            $_SESSION['error_message'] = 'Incorrect details';
+            $_SESSION['error_message'] = 'Incorrect details. No user found with entered detail';
             header('Location: voter_login_form.php');
         }
     }

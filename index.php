@@ -132,7 +132,7 @@
 
         .guidelines-link {
             display: block;
-            width: 55%;
+            width: 40%;
             margin: 4% auto 0px;
             color: white;
             text-decoration: none;
@@ -188,7 +188,8 @@
                 width: 10%;
             }
             .guidelines-link{
-                width: 85%;
+                width: 70%;
+                font-size:0.8rem ;
             }
         }
 
@@ -222,6 +223,9 @@
     <nav class="navbar">
         <div class="logo">
             <img src="images/DMP logo.png" alt="Election Logo">
+        </div>
+        <div class="election-time">
+            
         </div>
         <div class="nav-links">
             <a href="#" class="admin-login">Admin Login</a>
