@@ -274,10 +274,12 @@ unset($_SESSION['error_message']); // Clear the message
                     <div class="field-error-groups">
                         <label for="district">District:</label>
                         <input type="text" id="district" name="district" value="<?php echo $_SESSION['district']; ?>">
+                        <span id="districtError" class="error"></span>
                     </div>
                     <div class="field-error-groups">
-                        <label for="election_region">Election Region:</label>
+                        <label for="regionNO">Election Region:</label>
                         <input type="text" id="regionNo" name="regionNo" value="<?php echo $_SESSION['election_region']; ?>">
+                        <span id="regionNoError" class="error"></span>
                     </div>
                 </div>
                 <div class="form-group two-columns">
@@ -288,7 +290,7 @@ unset($_SESSION['error_message']); // Clear the message
                     </div>
                     <div class="field-error-groups">
                         <label for="email">Email:</label>
-                        <input type="text" id="email" name="email" value="<?php echo $_SESSION['email']; ?>" required>
+                        <input type="text" id="email" name="email" value="<?php echo $_SESSION['email']; ?>">
                         <span id="emailError" class="error"></span>
                     </div>
                 </div>
