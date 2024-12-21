@@ -1,6 +1,6 @@
 <?php
 session_start();
-require '../dbconnection.php';
+require '../register_and_login/dbconnection.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $_session['email'] = $email;
@@ -19,11 +19,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         sendOtp($message, $email);
     } else {
         $_SESSION['error_message'] = "Email not resgistered";
-        header('Location: ../register_and_login/voter_login_form.php');
+        header('Location: ../forgotpassword/forgot_password.php');
     }
     
 } else {
-    header("Location: forgot_password.php");
+    header("Location: ../forgotpassword/forgot_password.php");
     exit();
 }
 function sendOtp($body, $email)
@@ -63,7 +63,7 @@ function sendOtp($body, $email)
 
         // Send the email and check for errors
         if ($mail->send()) {
-            header("Location: enter_otp.php");
+            header("Location: ../forgotpassword/enter_otp.php");
         } else {
             echo "However, email sending failed. Error: " . $mail->ErrorInfo;
         }

@@ -1,8 +1,8 @@
 <?php
 session_start();
-require '../email_send.php';
+require '../home/email_send.php';
 // Database connection
-require '../dbconnection.php';
+require '../register_and_login/dbconnection.php';
 
 // Check if ID and message are provided
 if (isset($_GET['id']) && isset($_GET['message']) && isset($_GET['email']) && isset($_GET['name'])) {
@@ -36,18 +36,18 @@ if (isset($_GET['id']) && isset($_GET['message']) && isset($_GET['email']) && is
       sendMail($email, $name, "Accound verification failed", "Your account has failed to ber verified by us. <br>The reason is" . $message);
 
       $_SESSION['errorMsg'] = "Declined the application and rejection email sent successfully";
-      header('Location: verify_voters.php');
+      header('Location: ../admin/verify_voters.php');
     } else {
       $_SESSION['errorMsg'] = mysqli_error($conn);
-      header('Location: verify_voters.php');
+      header('Location: ../admin/verify_voters.php');
     }
   } else {
     $_SESSION['errorMsg'] = "No images are founds";
-    header('Location: verify_voters.php');
+    header('Location: ../admin/verify_voters.php');
   }
 } else {
 
   $_SESSION['errorMsg'] = "Invalid request";
-  header('Location: verify_voters.php');
+  header('Location: ../admin/verify_voters.php');
 }
 mysqli_close($conn);

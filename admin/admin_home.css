@@ -13,6 +13,10 @@ body {
 
 .dashboard-container {
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .dashboard-header {
@@ -57,11 +61,12 @@ body {
   flex-wrap: wrap;
   gap: 20px;
   justify-content: center;
+  align-items: center;
 }
 
 .overview-item {
-  flex: 1 1 calc(25% - 20px); /* Adjust for 4 items per row */
-  max-width: calc(25% - 20px);
+  flex: 1 1 calc(20% - 20px); /* Adjust for 4 items per row */
+  max-width: calc(20% - 20px);
   text-align: center;
   background-color: #f9f9f9;
   padding: 15px;
@@ -81,11 +86,11 @@ body {
 }
 
 .action-card {
-  flex: 1 1 calc(33% - 20px); /* Adjust for 4 items per row */
-  max-width: calc(33% - 20px);
+  flex: 1 1 calc(20% - 20px); /* Adjust for 4 items per row */
+  max-width: calc(20% - 20px);
   text-align: center;
   padding: 20px;
-  background-color: #007BFF;
+  background-color: var(--primary-color);
   color: white;
   border-radius: 8px;
   text-decoration: none;
@@ -95,7 +100,7 @@ body {
 }
 
 .action-card:hover {
-  background-color: #0056b3;
+  background-color: var(--actions-hover-color);
   transform: translateY(-5px);
 }
 

@@ -11,21 +11,21 @@ function showError(elementId, message) {
     clearErrors();
   
     // Get form values
-    let name = document.getElementById("name").value;
-    let gender = document.getElementById("gender").value;
-    let local_address = document.getElementById("local_address").value;
-    let district = document.getElementById("district").value;
-    let citizenship = document.getElementById("citizenshipNumber").value;
-    let dob = document.getElementById("dateOfBirth").value;
-    let regionNo = document.getElementById("regionNo").value;
-    let email = document.getElementById("email").value;
+    let name = document.getElementById("name").value.trim();
+    let gender = document.getElementById("gender").value.trim();
+    let local_address = document.getElementById("local_address").value.trim();
+    let district = document.getElementById("district").value.trim();
+    let citizenship = document.getElementById("citizenshipNumber").value.trim();
+    let dob = document.getElementById("dateOfBirth").value.trim();
+    let regionNo = document.getElementById("regionNo").value.trim();
+    let email = document.getElementById("email").value.trim();
   
     // Regular expressions for validation
     let emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
   
     let isValid = true;
   
-    if (name.trim() === "") {
+    if (name === "") {
       showError("nameError", "Full Name is required");
       isValid = false;
     }
@@ -35,17 +35,17 @@ function showError(elementId, message) {
       isValid = false;
     }
   
-    if (local_address.trim() === "") {
+    if (local_address === "") {
       showError("addressError", "Local Address is required");
       isValid = false;
     }
   
-    if (district.trim() === "") {
-      showError("districtError", "District is required");
+    if (district === ""|| district === "default") {
+      showError("districtError", "PLease select district");
       isValid = false;
     }
   
-    if (email.trim() === "") {
+    if (email=== "") {
       showError("emailError", "Email is required");
       isValid = false;
     } else if (!emailPattern.test(email)) {
@@ -53,18 +53,18 @@ function showError(elementId, message) {
       isValid = false;
     }
   
-    if (citizenship.trim() === "" || isNaN(citizenship)) {
+    if (citizenship === "" || isNaN(citizenship)) {
       showError("citizenshipError", "Please enter a valid Citizenship Number");
       isValid = false;
     }
   
-    if (regionNo.trim() === "") {
-      showError("regionNoError", "Enter Constituent No");
+    if (regionNo === ""|| regionNo === "default") {
+      showError("regionNoError", "PLease select Constituent No");
       isValid = false;
     }
   
     // Validate Date of Birth
-    if (dob.trim() === "") {
+    if (dob === "") {
       showError("dobError", "Date of Birth is required");
       isValid = false;
     } else {

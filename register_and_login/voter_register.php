@@ -1,29 +1,34 @@
 <?php
-require "../email_send.php";
+require "../home/email_send.php";
 session_start();
 // Database connection
-require '../dbconnection.php';
+require '../register_and_login/dbconnection.php';
 
 // Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get data from form
-    $name = $_POST['name'];
-    $gender = $_POST['gender'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    $hashed_password = password_hash($password, PASSWORD_DEFAULT); // Hash the password
-    $district = $_POST['district'];
-    $election_region = $_POST['regionNo'];
-    $local_address = $_POST['local_address'];
-    $citizenshipNumber = $_POST['citizenshipNumber'];   
-    $dateOfBirth = date('Y-m-d', strtotime($_POST['dateOfBirth']));
+    // Capture POST fields
+    $name = isset($_POST['name']) ? trim($_POST['name']) : '';
+    $gender = isset($_POST['gender']) ? trim($_POST['gender']) : '';
+    $email = isset($_POST['email']) ? trim($_POST['email']) : '';
+    $password = isset($_POST['password']) ? trim($_POST['password']) : '';
+    $district = isset($_POST['district']) ? trim($_POST['district']) : '';
+    $election_region = isset($_POST['regionNo']) ? trim($_POST['regionNo']) : '';
+    $local_address = isset($_POST['local_address']) ? trim($_POST['local_address']) : '';
+    $citizenshipNumber = isset($_POST['citizenshipNumber']) ? trim($_POST['citizenshipNumber']) : '';
+    $dateOfBirth = isset($_POST['dateOfBirth']) ? trim($_POST['dateOfBirth']) : '';
 
+    // Hash the password
+    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+    //get the name only from the email to uniquely identify images
     $emailParts = explode('@', $email);
     $username = $emailParts[0];
+
     // Image uploads handling
-    $citizenshipFrontPhoto = $_FILES['citizenshipFrontPhoto']['name'];
-    $citizenshipBackPhoto = $_FILES['citizenshipBackPhoto']['name'];
-    $userPhoto = $_FILES['userPhoto']['name'];
+    $citizenshipFrontPhoto = isset($_FILES['citizenshipFrontPhoto']['name']) ? $_FILES['citizenshipFrontPhoto']['name'] : '';
+    $citizenshipBackPhoto = isset($_FILES['citizenshipBackPhoto']['name']) ? $_FILES['citizenshipBackPhoto']['name'] : '';
+    $userPhoto = isset($_FILES['userPhoto']['name']) ? $_FILES['userPhoto']['name'] : '';
 
     // Directory where images will be stored
     $target_dir = "../uploads/";
@@ -37,84 +42,126 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $newCitizenshipBackPhoto = $username . "CitizenshipBackPhoto." . $citizenshipBackExt;
     $newUserPhoto = $username . "UserPhoto." . $userPhotoExt;
 
-    // Check if email or citizenship number already exists
-    $sql1 = "SELECT email, citizenshipNumber FROM voters WHERE email = '$email' OR citizenshipNumber = '$citizenshipNumber'";
-    $result1 = mysqli_query($conn, $sql1);
+// Initialize a flag to check for empty values
+$isEmpty = false;
 
-    $sql2 = "SELECT email, citizenshipNumber FROM pendingstatus WHERE email = '$email' OR citizenshipNumber = '$citizenshipNumber'";
-    $result2 = mysqli_query($conn, $sql2);
+// Check POST values
+$postFields = [
+    'Name' => $name,
+    'Gender' => $gender,
+    'Email' => $email,
+    'Password' => $password,
+    'District' => $district,
+    'Election Region' => $election_region,
+    'Local Address' => $local_address,
+    'Citizenship Number' => $citizenshipNumber,
+    'Date of Birth' => $dateOfBirth
+];
 
-    if (mysqli_num_rows($result1) > 0) {
-        $row1 = mysqli_fetch_assoc($result1);
-        if ($email == $row1['email'] && $citizenshipNumber == $row1['citizenshipNumber']) {
-            $_SESSION['error_message'] = 'Email and Citizenship already used';
-            header('Location: voter_register_form.php');
-        } else if ($email == $row1['email']) {
-            $_SESSION['error_message'] = 'This email is already registered.';
-            header('Location: voter_register_form.php');
-        } elseif ($citizenshipNumber == $row1['citizenshipNumber']) {
-            $_SESSION['error_message'] = 'This citizenship number is already registered.';
-            header('Location: voter_register_form.php');
-        }
-    } else if (mysqli_num_rows($result2) > 0) {
-        $row2 = mysqli_fetch_assoc($result2);
-        if ($email == $row2['email'] && $citizenshipNumber == $row2['citizenshipNumber']) {
-            $_SESSION['error_message'] = 'Email and Citizenship already used and is in pending status';
-            header('Location: voter_register_form.php');
-        } else if ($email == $row2['email']) {
-            $_SESSION['error_message'] = 'Email already used and is in pending status';
-            header('Location: voter_register_form.php');
-        } elseif ($citizenshipNumber == $row2['citizenshipNumber']) {
-            $_SESSION['error_message'] = 'Citizenship already used and is in pending status';
-            header('Location: voter_register_form.php');
-        }
-    } else {
-        // Step 1: Retrieve the dId from the district table
-        $d_query = "SELECT dId FROM district WHERE district = '$district' AND regionNo = '$election_region'";
-        $d_result = mysqli_query($conn, $d_query);
+foreach ($postFields as $key => $value) {
+    if (empty($value)) {
+        $isEmpty = true;
+    }
+}
 
-        if (mysqli_num_rows($d_result) > 0) {
-            $row = mysqli_fetch_assoc($d_result);
-            $dId = $row['dId'];
-            // Step 2: Check if the local_address already exists
-            $check_query = "SELECT lid FROM localaddress WHERE dId = '$dId' AND local_address = '$local_address'";
-            $check_result = mysqli_query($conn, $check_query);
+// Check FILES values
+$fileFields = [
+    'Citizenship Front Photo' => $citizenshipFrontPhoto,
+    'Citizenship Back Photo' => $citizenshipBackPhoto,
+    'User Photo' => $userPhoto
+];
 
-            if (mysqli_num_rows($check_result) > 0) {
-                $row = mysqli_fetch_assoc($check_result);
-                $addressID = $row['lid'];
-            } else {
-                // Address doesn't exist, insert it
-                $local_query = "INSERT INTO localaddress (dId, local_address) VALUES ('$dId', '$local_address')";
-                if (mysqli_query($conn, $local_query)) {
-                    $addressID = mysqli_insert_id($conn);
-                } else {
-                    $_SESSION['error_message'] = "Error inserting local address: " . mysqli_error($conn);
-                    header('Location: voter_register_form.php');
-                    exit();
-                }
+foreach ($fileFields as $key => $value) {
+    if (empty($value)) {
+        $isEmpty = true;
+    }
+}
+
+// Final output
+if (!$isEmpty) {
+        // Check if email or citizenship number already exists for registered voters
+        $sql1 = "SELECT email, citizenshipNumber FROM voters WHERE email = '$email' OR citizenshipNumber = '$citizenshipNumber'";
+        $result1 = mysqli_query($conn, $sql1);
+    
+        // Check if email or citizenship number already exists for pending account
+        $sql2 = "SELECT email, citizenshipNumber FROM pendingstatus WHERE email = '$email' OR citizenshipNumber = '$citizenshipNumber'";
+        $result2 = mysqli_query($conn, $sql2);
+    
+        if (mysqli_num_rows($result1) > 0) {
+            $row1 = mysqli_fetch_assoc($result1);
+            if ($email == $row1['email'] && $citizenshipNumber == $row1['citizenshipNumber']) {
+                $_SESSION['error_message'] = 'Email and Citizenship already used';
+                header('Location: ../register_and_login/voter_register_form.php');
+            } else if ($email == $row1['email']) {
+                $_SESSION['error_message'] = 'This email is already registered.';
+                header('Location: ../register_and_login/voter_register_form.php');
+            } elseif ($citizenshipNumber == $row1['citizenshipNumber']) {
+                $_SESSION['error_message'] = 'This citizenship number is already registered.';
+                header('Location: ../register_and_login/voter_register_form.php');
             }
-
-            // Step 3: Insert voter information into pendingstatus table
-            $voter_query = "INSERT INTO pendingstatus (name, email, password, dateOfBirth, citizenshipNumber, gender, addressid, citizenshipFrontPhoto, citizenshipBackPhoto, userPhoto)
-                            VALUES ('$name', '$email', '$hashed_password', '$dateOfBirth', '$citizenshipNumber', '$gender', '$addressID', '$newCitizenshipFrontPhoto', '$newCitizenshipBackPhoto', '$newUserPhoto')";
-
-            if (mysqli_query($conn, $voter_query)) {
-                move_uploaded_file($_FILES['citizenshipFrontPhoto']['tmp_name'], $target_dir . $newCitizenshipFrontPhoto);
-                move_uploaded_file($_FILES['citizenshipBackPhoto']['tmp_name'], $target_dir . $newCitizenshipBackPhoto);
-                move_uploaded_file($_FILES['userPhoto']['tmp_name'], $target_dir . $newUserPhoto);
-                sendMail($email, $name, "Voter registration successful", "Wait for the ID and account verification");
-                $_SESSION['error_message'] = 'Application successfully received! Wait for verification.';
-                header('Location: voter_login_form.php');
-            } else {
-                $_SESSION['error_message'] = "Error inserting voter data: " . mysqli_error($conn);
-                header('Location: voter_register_form.php');
+        } else if (mysqli_num_rows($result2) > 0) {
+            $row2 = mysqli_fetch_assoc($result2);
+            if ($email == $row2['email'] && $citizenshipNumber == $row2['citizenshipNumber']) {
+                $_SESSION['error_message'] = 'Email and Citizenship already used and is in pending status';
+                header('Location: ../register_and_login/voter_register_form.php');
+            } else if ($email == $row2['email']) {
+                $_SESSION['error_message'] = 'Email already used and is in pending status';
+                header('Location: ../register_and_login/voter_register_form.php');
+            } elseif ($citizenshipNumber == $row2['citizenshipNumber']) {
+                $_SESSION['error_message'] = 'Citizenship already used and is in pending status';
+                header('Location: ../register_and_login/voter_register_form.php');
             }
         } else {
-            $_SESSION['error_message'] = 'District or region not found! Please re-fill the form carefully.';
-            header('Location: voter_register_form.php');
+            // Step 1: Retrieve the dId from the district table
+            $d_query = "SELECT dId FROM district WHERE district = '$district' AND regionNo = '$election_region'";
+            $d_result = mysqli_query($conn, $d_query);
+    
+            if (mysqli_num_rows($d_result) > 0) {
+                $row = mysqli_fetch_assoc($d_result);
+                $dId = $row['dId'];
+                // Step 2: Check if the local_address already exists
+                $check_query = "SELECT lid FROM localaddress WHERE dId = '$dId' AND local_address = '$local_address'";
+                $check_result = mysqli_query($conn, $check_query);
+    
+                if (mysqli_num_rows($check_result) > 0) {
+                    $row = mysqli_fetch_assoc($check_result);
+                    $addressID = $row['lid'];
+                } else {
+                    // Address doesn't exist, insert it
+                    $local_query = "INSERT INTO localaddress (dId, local_address) VALUES ('$dId', '$local_address')";
+                    if (mysqli_query($conn, $local_query)) {
+                        $addressID = mysqli_insert_id($conn);
+                    } else {
+                        $_SESSION['error_message'] = "Error inserting local address: " . mysqli_error($conn);
+                        header('Location: ../register_and_login/voter_register_form.php');
+                        exit();
+                    }
+                }
+    
+                // Step 3: Insert voter information into pendingstatus table
+                $voter_query = "INSERT INTO pendingstatus (name, email, password, dateOfBirth, citizenshipNumber, gender, addressid, citizenshipFrontPhoto, citizenshipBackPhoto, userPhoto)
+                                VALUES ('$name', '$email', '$hashed_password', '$dateOfBirth', '$citizenshipNumber', '$gender', '$addressID', '$newCitizenshipFrontPhoto', '$newCitizenshipBackPhoto', '$newUserPhoto')";
+    
+                if (mysqli_query($conn, $voter_query)) {
+                    move_uploaded_file($_FILES['citizenshipFrontPhoto']['tmp_name'], $target_dir . $newCitizenshipFrontPhoto);
+                    move_uploaded_file($_FILES['citizenshipBackPhoto']['tmp_name'], $target_dir . $newCitizenshipBackPhoto);
+                    move_uploaded_file($_FILES['userPhoto']['tmp_name'], $target_dir . $newUserPhoto);
+                    sendMail($email, $name, "Voter registration successful", "Wait for the ID and account verification");
+                    $_SESSION['error_message'] = 'Application successfully received! Wait for verification.';
+                    header('Location: ../register_and_login/voter_login_form.php');
+                } else {
+                    $_SESSION['error_message'] = "Error inserting voter data: " . mysqli_error($conn);
+                    header('Location: ../register_and_login/voter_register_form.php');
+                }
+            } else {
+                $_SESSION['error_message'] = 'District or region not found! Please re-fill the form carefully.';
+                header('Location: ../register_and_login/voter_register_form.php');
+            }
         }
-    }
+}else{
+    $_SESSION['error_message'] = 'All form fields are not filled, please check the fields';
+    header('Location: ../register_and_login/voter_register_form.php');
+}
 }
 
 // Close connection

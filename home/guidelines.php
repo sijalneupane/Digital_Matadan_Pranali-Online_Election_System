@@ -196,7 +196,7 @@
   </div>
 
   <!-- Back Button -->
-  <a href="index.php" class="back-button">	&larr; Back to Home</a>
+  <a href="../home/index.php" class="back-button">	&larr; Back to Home</a>
 </body>
 
 </html>

@@ -10,10 +10,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $password = $_POST['password'];
 
   if ($username === $admin_username && $password === $admin_password) {
+    $_SESSION['fromLogIn'] = true;
     $_SESSION['loggedin'] = true;
-    header('Location: admin_home.php');
+    header('Location: ../admin/admin_home.php');
   } else {
-    $_SESSION['errorMessage'] = "Incorrect passwor or username";
-    header('Location: admin_login.php');
+    $_SESSION['errorMsg'] = "Incorrect password or username";
+    header('Location: ../admin/admin_login.php');
   }
 }

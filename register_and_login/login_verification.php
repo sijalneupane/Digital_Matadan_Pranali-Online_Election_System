@@ -15,7 +15,7 @@ unset($_SESSION['idErrorMsg']); // Clear the message
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="modal.css">
+  <link rel="stylesheet" href="../styles/modal1.css">
   <title>Enter Voter ID</title>
   <style>
     * {
@@ -58,7 +58,7 @@ unset($_SESSION['idErrorMsg']); // Clear the message
       font-size: 28px;
     }
 
-    input[type="text"] {
+    input[type="number"] {
       width: 100%;
       margin-bottom: 5px;
       padding: 12px;
@@ -123,28 +123,16 @@ unset($_SESSION['idErrorMsg']); // Clear the message
     <h2>Enter Voter ID to Proceed</h2>
     <form action="process_voter.php" method="POST" onsubmit="return validateForm();">
       <input type="hidden" name="email" value="<?= $_SESSION['email'] ?>">
-      <input type="text" name="voterId" id="voterId" placeholder="Enter Voter ID">
+      <input type="number" name="voterId" id="voterId" placeholder="Enter Voter ID" min="1">
       <span id="voterIdError" class="error"></span><br>
       <input type="submit" value="Proceed" class="button">
     </form>
   </div>
+  <script src="../js/errorMessage_modal1.js"></script>
   <script>
-        // PHP Message passed to JavaScript
-        const errorMessage = <?= json_encode($errorMessage); ?>;
-
-        // Show modal if there is a message
-        if (errorMessage) {
-            const modal = document.getElementById('modal1');
-            const modalMessage = document.getElementById('modalMessage1');
-            modalMessage.textContent = errorMessage;
-            modal.style.display = 'flex';
-        }
-
-        // Function to close the modal
-        function closeModal1() {
-            document.getElementById('modal1').style.display = 'none';
-        }
-    </script>
+    const errorMessage = <?= json_encode($errorMessage); ?>;
+    showErrorModal(errorMessage); // Pass PHP error to JS function
+  </script>
 </body>
 
 </html>

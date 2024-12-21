@@ -11,7 +11,7 @@ unset($_SESSION['error_message']); // Clear the message
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="modal.css">
+    <link rel="stylesheet" href="../styles/modal1.css">
     <title>Glassmorphism Login</title>
 
     <script>
@@ -64,7 +64,7 @@ unset($_SESSION['error_message']); // Clear the message
             return isValid;
         }
     </script>
-    <script src="../togglepassword.js"></script>
+    <script src="../js/togglepassword.js"></script>
     <style>
         * {
             box-sizing: border-box;
@@ -199,7 +199,7 @@ unset($_SESSION['error_message']); // Clear the message
     </div>
     <div class="glass-container">
         <div class="left-box">
-            <a href="../index.php"><img src="../images/DMP logo.png" alt="Logo"></a>
+            <a href="../home/index.php"><img src="../images/DMP logo.png" alt="Logo"></a>
             <h2>Voter Login ! ! !</h2>
             <form id="loginForm" method="POST" action="voter_login.php" onsubmit="return validateForm()">
                 <input type="text" id="email" name="email" placeholder="Email">
@@ -219,27 +219,15 @@ unset($_SESSION['error_message']); // Clear the message
                 <a href="../forgotpassword/forgot_password.php" style="display:block;text-align: start;margin: 8px 0px;">Forgot Password?</a>
                 <input type="submit" value="Login">
                 <div class="register-direction">
-                    <span>Haven't Registered till now? </span><a href="voter_register_form.php">Register Here</a>
+                    <span>Haven't Registered till now? </span><a href="../register_and_login/voter_register_form.php">Register Here</a>
                 </div>
             </form>
         </div>
     </div>
+    <script src="../js/errorMessage_modal1.js"></script>
     <script>
-        // PHP Message passed to JavaScript
         const errorMessage = <?= json_encode($errorMessage); ?>;
-
-        // Show modal if there is a message
-        if (errorMessage) {
-            const modal = document.getElementById('modal1');
-            const modalMessage = document.getElementById('modalMessage1');
-            modalMessage.textContent = errorMessage;
-            modal.style.display = 'flex';
-        }
-
-        // Function to close the modal
-        function closeModal1() {
-            document.getElementById('modal1').style.display = 'none';
-        }
+        showErrorModal(errorMessage); // Pass PHP error to JS function
     </script>
 </body>
 

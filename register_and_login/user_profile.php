@@ -1,10 +1,12 @@
 <?php
 session_start();
 if (!isset($_SESSION["email"])) {
-    header('Location: index.php');
+    header('Location: ../home/index.php');
 }
+$_SESSION['allow_logout'] = true;
 $errorMessage = isset($_SESSION['error_message']) ? $_SESSION['error_message'] : '';
 unset($_SESSION['error_message']); // Clear the message
+require_once '../php_for_ajax/districtRegionSelect.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,15 +16,13 @@ unset($_SESSION['error_message']); // Clear the message
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles/register.css">
-    <link rel="stylesheet" href="register_and_login/modal.css">
+    <link rel="stylesheet" href="../styles/confirm_modal.css">
+    <link rel="stylesheet" href="../styles/modal1.css">
     <style>
         /* General Styles */
         body {
             font-family: Arial, sans-serif;
             background-color: #f5f5f5;
-            margin: 0;
-            padding: 0;
         }
 
         .container {
@@ -161,7 +161,7 @@ unset($_SESSION['error_message']); // Clear the message
             padding: 20px;
             /* max-width: 80%; */
             min-width: 60%;
-            max-height: 80%;
+            max-height: 83%;
             overflow: auto;
             border-radius: 10px;
         }
@@ -180,48 +180,111 @@ unset($_SESSION['error_message']); // Clear the message
         }
 
         .modal-content2 form label {
-            display: block;
             font-weight: bold;
-            margin-bottom: 5px;
+            color: #555;
         }
 
-        .modal-content2 form input {
+        .two-columns {
+            display: flex;
+            column-gap: 20px;
+        }
+
+        .field-error-groups {
+            flex: 1;
+        }
+
+        .two-columns input {
+            width: calc(50% - 10px);
+        }
+
+        .field-error-groups input {
             width: 100%;
-            padding: 8px;
+        }
+
+        .modal-content2 form input:not([type="submit"]),
+        .modal-content2 form select {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
             border: 1px solid #ccc;
             border-radius: 5px;
+            font-size: 16px;
+            color: #333;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+            background-color: #f9f9f9;
+            transition: all 0.3s ease;
+        }
+
+        .modal-content2 form input:not([type="submit"]):focus,
+        .modal-content2 form select:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            background-color: #ffffff;
+        }
+
+        .modal-content2 form select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="gray" class="bi bi-chevron-down" viewBox="0 0 16 16"%3e%3cpath fill-rule="evenodd" d="M1.646 5.646a.5.5 0 0 1 .708 0L8 11.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/%3e%3c/svg%3e') no-repeat right 10px center;
+            background-size: 16px;
+            padding-right: 30px;
+        }
+
+        .modal-content2 form input[type="submit"] {
+            width: 80%;
+            margin: 0;
+        }
+        .error {
+            color: rgb(175, 0, 0);
+            font-size: 12px;
+            display: block;
+            padding: 3px 0px 3px 6px;
+            height: 18px;
         }
     </style>
-    <script src="js/update_validation.js"></script>
+    <script src="../js/update_validation.js"></script>
+    <script src="../js/getRegion_ajax.js" defer></script>
 </head>
 
 <body>
     <div class="container" style="background-color: #b9b9b9;">
-        <?php include 'sidebar.php'; ?>
+        <?php include '../home/sidebar.php'; ?>
         <div class="content" style="padding: 0;">
             <div class="profile-card">
                 <h3><i class="fas fa-user-circle"></i> <?php echo $_SESSION['name']; ?></h3>
                 <p><i class="fas fa-envelope"></i> <strong>Email:</strong> <?php echo $_SESSION['email']; ?></p>
                 <p><i class="fas fa-id-card"></i> <strong>Voter ID:</strong> <?php echo $_SESSION['voterId']; ?></p>
-                <p><i class="fas fa-map-marker-alt"></i> <strong>District:</strong> <?php echo $_SESSION['district']; ?></p>
-                <p><i class="fas fa-map-signs"></i> <strong>Election Region:</strong> <?php echo $_SESSION['election_region']; ?></p>
-                <p><i class="fas fa-home"></i> <strong>Local Address:</strong> <?php echo $_SESSION['local_address']; ?></p>
-                <p><i class="fas fa-birthday-cake"></i> <strong>Birth Date:</strong> <?php echo $_SESSION['birthDate']; ?></p>
-                <p><i class="fa-duotone fa-solid fa-person-half-dress"></i> <strong>Gender:</strong> <?php echo $_SESSION['gender']; ?></p>
-                <p><i class="fas fa-passport"></i> <strong>Citizenship Number:</strong> <?php echo $_SESSION['citizenshipNumber']; ?></p>
+                <p><i class="fas fa-map-marker-alt"></i> <strong>District:</strong> <?php echo $_SESSION['district']; ?>
+                </p>
+                <p><i class="fas fa-map-signs"></i> <strong>Election Region:</strong>
+                    <?php echo $_SESSION['election_region']; ?></p>
+                <p><i class="fas fa-home"></i> <strong>Local Address:</strong> <?php echo $_SESSION['local_address']; ?>
+                </p>
+                <p><i class="fas fa-birthday-cake"></i> <strong>Birth Date:</strong>
+                    <?php echo $_SESSION['birthDate']; ?></p>
+                <p><i class="fa-duotone fa-solid fa-person-half-dress"></i> <strong>Gender:</strong>
+                    <?php echo $_SESSION['gender']; ?></p>
+                <p><i class="fas fa-passport"></i> <strong>Citizenship Number:</strong>
+                    <?php echo $_SESSION['citizenshipNumber']; ?></p>
 
                 <!-- Table of Images -->
                 <table class="image-table">
                     <tr>
-                        <td><img src="uploads/<?php echo $_SESSION['userPhoto']; ?>" alt="User Photo" onclick="openModal(this.src)"></td>
-                        <td><img src="uploads/<?php echo $_SESSION['citizenshipFrontPhoto']; ?>" alt="Citizenship Image 1" onclick="openModal(this.src)"></td>
-                        <td><img src="uploads/<?php echo $_SESSION['citizenshipBackPhoto']; ?>" alt="Citizenship Image 2" onclick="openModal(this.src)"></td>
+                        <td><img src="../uploads/<?php echo $_SESSION['userPhoto']; ?>" alt="User Photo"
+                                onclick="openModal(this.src)"></td>
+                        <td><img src="../uploads/<?php echo $_SESSION['citizenshipFrontPhoto']; ?>"
+                                alt="Citizenship Image 1" onclick="openModal(this.src)"></td>
+                        <td><img src="../uploads/<?php echo $_SESSION['citizenshipBackPhoto']; ?>"
+                                alt="Citizenship Image 2" onclick="openModal(this.src)"></td>
                     </tr>
                     <tr>
                         <td>User Photo</td>
                         <td>Citizenship Image 1</td>
                         <td>Citizenship Image 2</td>
-                    </tr><tr>
+                    </tr>
+                    <tr>
                         <td>User Photo</td>
                         <td>Citizenship Image 1</td>
                         <td>Citizenship Image 2</td>
@@ -230,32 +293,42 @@ unset($_SESSION['error_message']); // Clear the message
 
                 <!-- Buttons -->
                 <div class="button-container">
-                    <a href="register_and_login/voter_logout.php" class="button logout-button"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    <button class="button logout-button" id="logoutBtn"><i class="fas fa-sign-out-alt"></i>
+                        Logout</button>
                     <button class="button" onclick="openEditModal()"><i class="fas fa-edit"></i> Edit Profile</button>
                 </div>
             </div>
         </div>
     </div>
-
+    <!-- Error modal-->
     <div id="modal1" class="modal-overlay1">
         <div class="modal-content1">
             <p id="modalMessage1"></p>
             <button onclick="closeModal1()">Close</button>
         </div>
     </div>
-    <!-- Modal -->
+    <!--Image Modal -->
     <div id="imageModal" class="modal">
         <span class="close-modal" onclick="closeModal()">&times;</span>
         <div class="modal-content">
             <img id="modalImage" src="" alt="Image">
         </div>
     </div>
-
+    <!-- Confirm Modal -->
+    <!-- Modal -->
+    <div id="confirmModal">
+        <div>
+            <p>Confirm Logout?</p>
+            <button onclick="confirmLogout()">Yes</button>
+            <button onclick="closeConfirmModal()">No</button>
+        </div>
+    </div>
     <!-- Edit Profile Modal -->
     <div id="editModal" class="modal">
         <div class="modal-content2">
             <span class="close-modal2" onclick="closeEditModal()">&times;</span>
-            <form action="user_profile_update.php" method="POST" onsubmit="return validateForm();">
+            <form action="../register_and_login/user_profile_update.php" method="POST"
+                onsubmit="return validateForm();">
                 <h3>Edit Profile</h3>
                 <div class="form-group two-columns">
                     <div class="field-error-groups">
@@ -265,7 +338,14 @@ unset($_SESSION['error_message']); // Clear the message
                     </div>
                     <div class="field-error-groups">
                         <label for="gender">Gender:</label>
-                        <input type="text" id="gender" name="gender" value="<?php echo $_SESSION['gender']; ?>">
+                        <select id="gender" name="gender">
+                            <option value="male" <?php echo ($_SESSION['gender'] == 'male') ? 'selected' : ''; ?>>Male
+                            </option>
+                            <option value="female" <?php echo ($_SESSION['gender'] == 'female') ? 'selected' : ''; ?>>
+                                Female</option>
+                            <option value="other" <?php echo ($_SESSION['gender'] == 'other') ? 'selected' : ''; ?>>Other
+                            </option>
+                        </select>
                         <span id="genderError" class="error"></span>
                     </div>
                 </div>
@@ -273,19 +353,20 @@ unset($_SESSION['error_message']); // Clear the message
                 <div class="form-group two-columns">
                     <div class="field-error-groups">
                         <label for="district">District:</label>
-                        <input type="text" id="district" name="district" value="<?php echo $_SESSION['district']; ?>">
+                        <?php district($_SESSION['district']); ?>
                         <span id="districtError" class="error"></span>
                     </div>
                     <div class="field-error-groups">
-                        <label for="regionNO">Election Region:</label>
-                        <input type="text" id="regionNo" name="regionNo" value="<?php echo $_SESSION['election_region']; ?>">
+                        <label for="regionNo">Election Region:</label>
+                        <?php regionNo($_SESSION['election_region']); ?>
                         <span id="regionNoError" class="error"></span>
                     </div>
                 </div>
                 <div class="form-group two-columns">
                     <div class="field-error-groups">
                         <label for="local_address">Local Address:</label>
-                        <input type="text" id="local_address" name="local_address" value="<?php echo $_SESSION['local_address']; ?>">
+                        <input type="text" id="local_address" name="local_address"
+                            value="<?php echo $_SESSION['local_address']; ?>">
                         <span id="addressError" class="error"></span>
                     </div>
                     <div class="field-error-groups">
@@ -298,12 +379,14 @@ unset($_SESSION['error_message']); // Clear the message
                 <div class="form-group two-columns">
                     <div class="field-error-groups">
                         <label for="dateOfBirth">Birth Date:</label>
-                        <input type="date" id="dateOfBirth" name="dateOfBirth" value="<?php echo $_SESSION['birthDate']; ?>">
+                        <input type="date" id="dateOfBirth" name="dateOfBirth"
+                            value="<?php echo $_SESSION['birthDate']; ?>">
                         <span id="dobError" class="error"></span>
                     </div>
                     <div class="field-error-groups">
                         <label for="citizenshipNumber">Citizenship Number:</label>
-                        <input type="text" id="citizenshipNumber" name="citizenshipNumber" value="<?php echo $_SESSION['citizenshipNumber']; ?>">
+                        <input type="text" id="citizenshipNumber" name="citizenshipNumber"
+                            value="<?php echo $_SESSION['citizenshipNumber']; ?>">
                         <span id="citizenshipError" class="error"></span>
                     </div>
                 </div>
@@ -326,13 +409,39 @@ unset($_SESSION['error_message']); // Clear the message
             document.getElementById('imageModal').style.zIndex = '-1';
         }
 
+        // Store the initial values from session variables
+        const initialFormValues = {
+            name: "<?php echo $_SESSION['name']; ?>",
+            gender: "<?php echo $_SESSION['gender']; ?>",
+            district: "<?php echo $_SESSION['district']; ?>",
+            election_region: "<?php echo $_SESSION['election_region']; ?>",
+            local_address: "<?php echo $_SESSION['local_address']; ?>",
+            email: "<?php echo $_SESSION['email']; ?>",
+            birthDate: "<?php echo $_SESSION['birthDate']; ?>",
+            citizenshipNumber: "<?php echo $_SESSION['citizenshipNumber']; ?>"
+        };
+
+        // Function to populate form with initial values
+        function resetFormValues() {
+            document.getElementById('name').value = initialFormValues.name;
+            document.getElementById('gender').value = initialFormValues.gender;
+            document.getElementById('district').value = initialFormValues.district;
+            document.getElementById('regionNo').value = initialFormValues.election_region;
+            document.getElementById('local_address').value = initialFormValues.local_address;
+            document.getElementById('email').value = initialFormValues.email;
+            document.getElementById('dateOfBirth').value = initialFormValues.birthDate;
+            document.getElementById('citizenshipNumber').value = initialFormValues.citizenshipNumber;
+        }
+
         // Edit Profile Modal
         function openEditModal() {
             document.getElementById('editModal').style.zIndex = '1';
+            resetFormValues(); // Populate form with current session values
+            clearErrors();
         }
-
         function closeEditModal() {
             document.getElementById('editModal').style.zIndex = '-1';
+            resetFormValues(); // Reset form fields to initial values
         }
         // PHP Message passed to JavaScript
         const errorMessage = <?= json_encode($errorMessage); ?>;
@@ -351,7 +460,24 @@ unset($_SESSION['error_message']); // Clear the message
         }
     </script>
 
+    <!-- Script for login confirm modal and unique key creation-->
+    <script>
+        // Show confirmation modal
+        document.getElementById("logoutBtn").onclick = function () {
+            document.getElementById("confirmModal").style.display = "flex";
+        };
 
+        // Close modal
+        function closeConfirmModal() {
+            document.getElementById("confirmModal").style.display = "none";
+        }
+
+        // Handle confirmation and redirect
+        function confirmLogout() {
+            var uniqueKey = 'key_' + Math.random().toString(36).substring(2, 12) + '_' + new Date().getMilliseconds();
+            window.location.href = '../register_and_login/voter_logout.php?logout_key=' + uniqueKey;
+        }
+    </script>
 </body>
 
 </html>

@@ -2,7 +2,7 @@
 <?php
 session_start();
 if (!isset($_SESSION["email"])) {
-  header('Location: index.php');
+  header('Location: ../home/index.php');
 }
 ?>
 <!DOCTYPE html>
@@ -15,22 +15,18 @@ if (!isset($_SESSION["email"])) {
 <body>
   <div class="container">
     <!-- Include sidebar -->
-    <?php include 'sidebar.php'; ?>
+    <?php include '../home/sidebar.php'; ?>
 
     <!-- Add 'active' class to Candidates link -->
     <script>
-      document.querySelector('a[href="candidates.php"]').classList.add('active');
+      document.querySelector('a[href="../home/contact_us.php"]').classList.add('active');
     </script>
 
     <div class="content">
-    <h1>Candidates</h1>
-    <div id="candidates-list">
-        <h2>Candidate 1</h2>
-        <p>Biography and agenda.</p>
-        <h2>Candidate 2</h2>
-        <p>Biography and agenda.</p>
-        <!-- You can dynamically fetch candidates using PHP from a database -->
-    </div>
+      <label for="">
+      Feel free to give suggestion or state your problems Here
+    </label>
+    <textarea name="" id="" cols="30"></textarea>
     </div>
   </div>
 </body>

@@ -1,6 +1,6 @@
 <?php
 session_start(); // Start the session to store session variables
-require '../dbconnection.php';
+require '../register_and_login/dbconnection.php';
 
 // Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -20,10 +20,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         // Verify the password using password_verify
         if (password_verify($password, $row['password'])) {
             $_SESSION['error_message'] = 'Your account is pending. Wait until verification! We will send an email once the verification is done.';
-            header('Location: voter_login_form.php');
+            header('Location: ../register_and_login/voter_login_form.php');
         } else {
             $_SESSION['error_message'] = 'Incorrect password for pending account';
-            header('Location: voter_login_form.php');
+            header('Location: ../register_and_login/voter_login_form.php');
         }
     } else {
         // No user found in pendingstatus, check the voters table
@@ -38,15 +38,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             // Verify the password using password_verify
             if (password_verify($password, $row2['password'])) {
                 $_SESSION['email'] = $email;
-                header("Location: login_verification.php");
+                header("Location: ../register_and_login/login_verification.php");
             } else {
                 $_SESSION['error_message'] = 'Incorrect password for verified user';
-                header('Location: voter_login_form.php');
+                header('Location:../register_and_login/voter_login_form.php');
             }
         } else {
             // No user found with that email and voter ID in both tables
             $_SESSION['error_message'] = 'Incorrect details. No user found with entered details.';
-            header('Location: voter_login_form.php');
+            header('Location: ../register_and_login/voter_login_form.php');
         }
     }
 }

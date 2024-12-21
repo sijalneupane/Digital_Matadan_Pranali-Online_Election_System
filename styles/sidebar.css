@@ -1,8 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
-
+:root{
+  --primary-background-color:#5a4dad;
+  --sidebar-hover-color: #3a2a9b;
+}
 * {
-  box-sizing: border-box;
-  /* Ensure padding and border are included in width/height calculations */
+  box-sizing: border-box;/* Ensure padding and border are included in width/height calculations */
 }
 
 html,
@@ -106,7 +108,7 @@ body {
 
 .sidebar ul li a:hover,
 .sidebar ul li a.active {
-  background-color: #3a2a9b;
+  background-color:var(--sidebar-hover-color);
   /* Darker background for active or hover */
   border-radius: 4px;
 }
@@ -220,7 +222,7 @@ h1 {
     position: absolute;
     top: 5px;
     left: 5px;
-    background-color: #594cad;
+    background-color: var(--primary-background-color);
     color: white;
     border: none;
     padding: 8px;

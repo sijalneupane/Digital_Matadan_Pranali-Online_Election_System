@@ -1,11 +1,11 @@
-<?php 
+<?php
 session_start();
-if(!isset($_SESSION['loggedin'])){
-header('Location: admin_login.php');
+if (!isset($_SESSION['loggedin'])) {
+    header('Location: ../admin/admin_login.php');
 }
 $errorMessage = isset($_SESSION['errorMsg']) ? $_SESSION['errorMsg'] : '';
-unset($_SESSION['errorMsg']); 
-$_SESSION['pageName']="Verify Voters" ;// Clear the message
+unset($_SESSION['errorMsg']);
+$_SESSION['pageName'] = "Verify Voters";// Clear the message
 ?>
 
 <!DOCTYPE html>
@@ -15,8 +15,8 @@ $_SESSION['pageName']="Verify Voters" ;// Clear the message
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verify Voters</title>
-    <link rel="stylesheet" href="admin_home.css">
-    <link rel="stylesheet" href="../register_and_login/modal.css">
+    <link rel="stylesheet" href="../admin/admin_home.css">
+    <link rel="stylesheet" href="../styles/modal1.css">
     <style>
         /* General Styling */
         body {
@@ -52,26 +52,25 @@ $_SESSION['pageName']="Verify Voters" ;// Clear the message
             text-align: center;
             border: 1px solid #ddd;
         }
-        
-        table td:nth-child(2)
-        {
+
+        table td:nth-child(2) {
             text-align: left;
             width: 40%;
-            min-width:270px ;
+            min-width: 270px;
         }
-        table td:nth-child(5)
-        {
+
+        table td:nth-child(5) {
             text-align: left;
             width: 35%;
-            min-width:150px ;
+            min-width: 150px;
         }
+
         table thead:nth-child(6),
         table thead:nth-child(7),
-        table thead:nth-child(8)
-        {
+        table thead:nth-child(8) {
             /* text-align: left; */
             width: 25%;
-            min-width:50px ;
+            min-width: 50px;
         }
 
         table tbody tr:nth-child(even) {
@@ -134,12 +133,13 @@ $_SESSION['pageName']="Verify Voters" ;// Clear the message
             border: none;
         }
 
-        .buttons{
+        .buttons {
             display: flex;
             flex-direction: column;
             gap: 20px;
             align-items: center;
         }
+
         .action-btn {
             padding: 8px 15px;
             font-size: 0.9rem;
@@ -197,7 +197,7 @@ $_SESSION['pageName']="Verify Voters" ;// Clear the message
 </head>
 
 <body>
-    <?php require 'admin_navbar.php'; ?>
+    <?php require '../admin/admin_navbar.php'; ?>
     <div id="modal1" class="modal-overlay1">
         <div class="modal-content1">
             <p id="modalMessage1"></p>
@@ -223,12 +223,7 @@ $_SESSION['pageName']="Verify Voters" ;// Clear the message
             <tbody>
                 <?php
                 // Database connection
-                $conn = new mysqli("localhost", "root", "", "online_election");
-
-                if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);
-                }
-
+                require '../register_and_login/dbconnection.php';
                 // SQL Query
                 $query = "SELECT * 
                     FROM pendingstatus P 
@@ -247,13 +242,13 @@ $_SESSION['pageName']="Verify Voters" ;// Clear the message
                         $dateOfBirth = htmlspecialchars($row['dateOfBirth']);
                         $citizenshipNumber = htmlspecialchars($row['citizenshipNumber']);
                         $gender = htmlspecialchars($row['gender']);
-                        $localAddress = htmlspecialchars($row['local_address']) ;
-                         $district= htmlspecialchars($row['district']) ;
-                         $regionNo= htmlspecialchars($row['regionNo']);
+                        $localAddress = htmlspecialchars($row['local_address']);
+                        $district = htmlspecialchars($row['district']);
+                        $regionNo = htmlspecialchars($row['regionNo']);
                         $frontPhoto = htmlspecialchars($row['citizenshipFrontPhoto']);
                         $backPhoto = htmlspecialchars($row['citizenshipBackPhoto']);
                         $userPhoto = htmlspecialchars($row['userPhoto']);
-                ?>
+                        ?>
                         <tr>
                             <td><?= $id ?></td>
                             <td>
@@ -264,18 +259,22 @@ $_SESSION['pageName']="Verify Voters" ;// Clear the message
                             <td><?= $dateOfBirth ?></td>
                             <td><?= $gender ?></td>
                             <td>
-                            <strong>District:</strong> <?= $district ?><br>
+                                <strong>District:</strong> <?= $district ?><br>
                                 <strong>Region No:</strong> <?= $regionNo ?><br>
                                 <strong>Local Address:</strong> <?= $localAddress ?><br>
                             </td>
-                            <td><img src="../uploads/<?= $frontPhoto ?>" onclick="openModal(<?= $id ?>,'<?= $frontPhoto ?>')"></td>
-                            <td><img src="../uploads/<?= $backPhoto ?>" onclick="openModal(<?= $id ?>,'<?= $backPhoto ?>')"></td>
-                            <td><img src="../uploads/<?= $userPhoto ?>" onclick="openModal(<?= $id ?>,'<?= $userPhoto ?>')"></td>
+                            <td><img src="../uploads/<?= $frontPhoto ?>" onclick="openModal(<?= $id ?>,'<?= $frontPhoto ?>')">
+                            </td>
+                            <td><img src="../uploads/<?= $backPhoto ?>" onclick="openModal(<?= $id ?>,'<?= $backPhoto ?>')">
+                            </td>
+                            <td><img src="../uploads/<?= $userPhoto ?>" onclick="openModal(<?= $id ?>,'<?= $userPhoto ?>')">
+                            </td>
                             <!-- <td>
                                 <button class="action-btn accept-btn">Accept</button>
                                 <button class="action-btn decline-btn">Decline</button>
                             </td> -->
-                            <td><button class="action-btn accept-btn" onclick="openActionModal(<?= $id ?>)">Actions</button></td>
+                            <td><button class="action-btn accept-btn" onclick="openActionModal(<?= $id ?>)">Actions</button>
+                            </td>
                         </tr>
                         <div id="modal-<?= $id ?>" class="modal">
                             <button class="close-modal" onclick="closeModal(<?= $id ?>)">&times;</button>
@@ -291,8 +290,10 @@ $_SESSION['pageName']="Verify Voters" ;// Clear the message
                                 <div class="buttons">
                                     <button class="action-btn accept-btn" onclick="handleAccept(<?= $id ?>)">Accept</button>
                                     <div style="display:flex;align-items:center;border-top:1px solid black; padding-top:12px">
-                                        <textarea id="decline-message-<?= $id ?>" rows="3" placeholder="Enter reason for rejection..." style="width: 100%;"></textarea>
-                                        <button class="action-btn decline-btn" onclick="handleDecline(<?= $id ?>,'<?= $email ?>','<?= $name ?>')">Decline</button>
+                                        <textarea id="decline-message-<?= $id ?>" rows="3"
+                                            placeholder="Enter reason for rejection..." style="width: 100%;"></textarea>
+                                        <button class="action-btn decline-btn"
+                                            onclick="handleDecline(<?= $id ?>,'<?= $email ?>','<?= $name ?>')">Decline</button>
                                     </div>
                                 </div>
                                 <button class="close-modal" onclick="closeActionModal(<?= $id ?>)">&times;</button>
@@ -300,14 +301,14 @@ $_SESSION['pageName']="Verify Voters" ;// Clear the message
                         </div>
 
 
-                    <?php
+                        <?php
                     }
                 } else {
                     ?>
                     <tr>
                         <td colspan="12">No pending voters to verify.</td>
                     </tr>
-                <?php
+                    <?php
                 }
                 $conn->close();
                 ?>
@@ -352,10 +353,10 @@ $_SESSION['pageName']="Verify Voters" ;// Clear the message
 
         function handleAccept(id) {
             // Redirect to acceptvoters.php with voter ID
-            window.location.href = 'acceptvoters.php?id=' + id;
+            window.location.href = '../admin/acceptvoters.php?id=' + id;
         }
 
-        function handleDecline(id,email,name) {
+        function handleDecline(id, email, name) {
             // Get the decline message
             const message = document.getElementById('decline-message-' + id).value.trim();
 
@@ -366,7 +367,7 @@ $_SESSION['pageName']="Verify Voters" ;// Clear the message
 
             // Redirect to declinevoters.php with voter ID and message
             const encodedMessage = encodeURIComponent(message);
-            window.location.href = `declinevoters.php?id=${id}&message=${encodedMessage}&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`;
+            window.location.href = `../admin/declinevoters.php?id=${id}&message=${encodedMessage}&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`;
         }
     </script>
     <script>

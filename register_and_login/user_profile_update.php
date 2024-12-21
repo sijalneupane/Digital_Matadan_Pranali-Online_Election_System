@@ -1,7 +1,7 @@
 <?php
 session_start();
 // Database connection
-require 'dbconnection.php';
+require '../register_and_login/dbconnection.php';
 
 // Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -27,25 +27,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $row1 = mysqli_fetch_assoc($result1);
     if ($email == $row1['email'] && $citizenshipNumber == $row1['citizenshipNumber']) {
       $_SESSION['error_message'] = 'Email and Citizenship already used';
-      header('Location:  user_profile.php');
+      header('Location:  ../register_and_login/user_profile.php');
     } else if ($email == $row1['email']) {
       $_SESSION['error_message'] = 'This email is already registered.';
-      header('Location:  user_profile.php');
+      header('Location:  ../register_and_login/user_profile.php');
     } elseif ($citizenshipNumber == $row1['citizenshipNumber']) {
       $_SESSION['error_message'] = 'This citizenship number is already registered.';
-      header('Location:  user_profile.php');
+      header('Location:  ../register_and_login/user_profile.php');
     }
   } else if (mysqli_num_rows($result2) > 0) {
     $row2 = mysqli_fetch_assoc($result2);
     if ($email == $row2['email'] && $citizenshipNumber == $row2['citizenshipNumber']) {
       $_SESSION['error_message'] = 'Email and Citizenship already used and is in pending status';
-      header('Location:  user_profile.php');
+      header('Location:  ../register_and_login/user_profile.php');
     } else if ($email == $row2['email']) {
       $_SESSION['error_message'] = 'Email already used and is in pending status';
-      header('Location:  user_profile.php');
+      header('Location:  ../register_and_login/user_profile.php');
     } elseif ($citizenshipNumber == $row2['citizenshipNumber']) {
       $_SESSION['error_message'] = 'Citizenship already used and is in pending status';
-      header('Location:  user_profile.php');
+      header('Location:  ../register_and_login/user_profile.php');
     }
   } else {
     $d_query = "SELECT dId FROM district WHERE district = '$district' AND regionNo = '$election_region'";
@@ -68,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           $addressID = mysqli_insert_id($conn);
         } else {
           $_SESSION['error_message'] = "Error inserting local address: " . mysqli_error($conn);
-          header('Location:  user_profile.php');
+          header('Location:  ../register_and_login/user_profile.php');
           exit();
         }
       }
@@ -107,19 +107,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           $_SESSION['gender'] = $row1['gender'];
 
           $_SESSION['error_message'] = "Profile updated successfully!";
-          header('Location: user_profile.php');         // Redirect to the dashboard or homepage after successful login
+          header('Location: ../register_and_login/user_profile.php');         // Redirect to the dashboard or homepage after successful login
         } else {
           $_SESSION['error_message'] = 'Unexpected error occured, please try again';
-          header('Location: user_profile.php');
+          header('Location: ../register_and_login/user_profile.php');
         }
        
       } else {
         $_SESSION['error_message'] = "Error updating profile: " . mysqli_error($conn);
-        header('Location: user_profile.php');
+        header('Location: ../register_and_login/user_profile.php');
       }
     } else {
       $_SESSION['error_message'] = 'District or region not found! Please re-fill the form carefully.';
-      header('Location:  user_profile.php');
+      header('Location:  ../register_and_login/user_profile.php');
     }
   }
 }

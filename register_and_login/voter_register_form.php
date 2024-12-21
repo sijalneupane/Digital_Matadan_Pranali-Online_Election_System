@@ -3,49 +3,8 @@ session_start();
 $errorMessage = isset($_SESSION['error_message']) ? $_SESSION['error_message'] : '';
 unset($_SESSION['error_message']); // Clear the message
 $conn = mysqli_connect('localhost', 'root', '', 'online_election');
-
-// $id = isset($_REQUEST['id']) ? (int)$_REQUEST['id'] : 0;
-// $name = "";
-// $email = "";
-// $password = "";
-// $dateOfBirth = "";
-// $citizenshipNumber = "";
-// $gender = "";
-// $addressid = "";
-// $citizenshipFrontPhoto = "";
-// $citizenshipBackPhoto = "";
-// $userPhoto = "";
-// $district = "";
-// $regionNo = "";
-// $local_address = "";
-
-// if ($id != 0) {
-//     $sql = "SELECT * 
-//             FROM voters V 
-//             INNER JOIN localaddress la ON V.addressId = la.lid
-//             INNER JOIN district D ON D.dId = la.dId
-//             WHERE id = '$id';
-//         ";
-//     $results = $conn->query($sql);
-//     if ($results->num_rows > 0) {
-//         $data = mysqli_fetch_assoc($results);
-//         $name = $data['name'];
-//         $email = $data['email'];
-//         $password = $data['password'];
-//         $dateOfBirth = $data['dateOfBirth'];
-//         $district = $data['district'];
-//         $local_address = $data['local_address'];
-//         $election_region = $data['regionNo'];
-//         $citizenshipNumber = $data['citizenshipNumber'];
-//         $gender = $data['gender'];
-//         $citizenshipFrontPhoto = $data['citizenshipFrontPhoto'];
-//         $citizenshipBackPhoto = $data['citizenshipBackPhoto'];
-//         $userPhoto = $data['userPhoto'];
-//     } else {
-//         echo "No record found with ID: $id";
-//     }
-// }
-// ?>
+require_once '../php_for_ajax/districtRegionSelect.php';
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -56,8 +15,7 @@ $conn = mysqli_connect('localhost', 'root', '', 'online_election');
     <title>Register Voter</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../styles/register.css">
-
-    <link rel="stylesheet" href="modal.css">
+    <link rel="stylesheet" href="../styles/modal1.css">
     <style>
         body {
             background-color: #473c75;
@@ -103,8 +61,9 @@ $conn = mysqli_connect('localhost', 'root', '', 'online_election');
             margin-top: 10px;
         }
     </style>
-    <script src="register_validation.js"></script>
-    <script src="../togglepassword.js"></script>
+    <script src="../js/register_validation.js"></script>
+    <script src="../js/togglepassword.js"></script>
+    <script src="../js/getRegion_ajax.js" defer></script>
 </head>
 
 <body>
@@ -116,7 +75,7 @@ $conn = mysqli_connect('localhost', 'root', '', 'online_election');
     </div>
     <div class="container">
         <div class="left">
-            <a href="../index.php"><img src="../images/DMP logo.png" alt="Logo" class="logo"></a>
+            <a href="../home/index.php"><img src="../images/DMP logo.png" alt="Logo" class="logo"></a>
             <img src="../images/vote2.jpg" alt="Center Image" class="center-image">
             <div class="left-2">
                 <h1>Register Yourself as a Voter</h1>
@@ -124,7 +83,7 @@ $conn = mysqli_connect('localhost', 'root', '', 'online_election');
             </div>
         </div>
         <div class="right">
-            <form name="voterForm" action="voter_register.php" method="post" enctype="multipart/form-data"
+            <form name="voterForm" action="../register_and_login/voter_register.php" method="post" enctype="multipart/form-data"
                 onsubmit="return validateForm();">
                 <h2>Create Voter ID</h2>
                 <div class="form-group two-columns">
@@ -135,9 +94,9 @@ $conn = mysqli_connect('localhost', 'root', '', 'online_election');
                     <div class="field-error-groups">
                         <select name="gender" id="gender">
                             <option value="default">-- Select Gender --</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                            <option value="others">others</option>
+                            <option value="male">male</option>
+                            <option value="female">female</option>
+                            <option value="other">other</option>
                         </select>
                         <span id="genderError" class="error"></span>
                     </div>
@@ -145,27 +104,14 @@ $conn = mysqli_connect('localhost', 'root', '', 'online_election');
                 <div class="form-group">
                     <div class="address-selection">
                         <div id="district-and-region" style="flex:1.5 ;">
-                            <div id="district" style="flex:1.75">
+                            <div id="district-box" style="flex:1.75">
                                 <label>District</label>
-                                <select name="district" id="district">
-                                    <option value="Kathmandu">Kathmandu</option>
-                                    <option value="Lalitpur">Lalitpur</option>
-                                    <option value="Bhaktapur">Bhaktapur</option>
-                                    <option value="Chitwan">Chitwan</option>
-                                    <option value="Rasuwa">Rasuwa</option>
-                                    <option value="Kavrepalanchok">Kavrepalanchok</option>
-                                    <option value="Ramechhap">Ramechhap</option>
-                                    <option value="Makwanpur">Makwanpur</option>
-                                    <option value="Dhading">Dhading</option>
-                                    <option value="Nuwakot">Nuwakot</option>
-                                    <option value="Sindhupalchok">Sindhupalchoke</option>
-                                    <option value="Dolakha">Dolakha</option>
-                                    <option value="Sindhuli">Sindhuli</option>
-                                </select>
+                                <?php district();?>
+                                <span id="districtError" class="error"></span>
                             </div>
                             <div id="constituentNo" style="flex: 1.4;">
                                 <label>Constituent No.</label>
-                                <input type="number" name="regionNo" id="regionNo" placeholder="eg:1">
+                                <?php regionNo();?>
                                 <span id="regionNoError" class="error"></span>
                             </div>
                         </div>
@@ -229,26 +175,14 @@ $conn = mysqli_connect('localhost', 'root', '', 'online_election');
                 <div class="form-group register">
                     <input class="submit-button" type="submit" value="Register">
                 </div>
-                <div class="login-direction">Already a Voter?<a href="voter_login_form.php">Login</a> </div>
+                <div class="login-direction">Already a Voter?<a href="../register_and_login/voter_login_form.php">Login</a> </div>
             </form>
         </div>
     </div>
+    <script src="../js/errorMessage_modal1.js"></script>
     <script>
-        // PHP Message passed to JavaScript
         const errorMessage = <?= json_encode($errorMessage); ?>;
-
-        // Show modal if there is a message
-        if (errorMessage) {
-            const modal = document.getElementById('modal1');
-            const modalMessage = document.getElementById('modalMessage1');
-            modalMessage.textContent = errorMessage;
-            modal.style.display = 'flex';
-        }
-
-        // Function to close the modal
-        function closeModal1() {
-            document.getElementById('modal1').style.display = 'none';
-        }
+        showErrorModal(errorMessage); // Pass PHP error to JS function
     </script>
     
 </body>

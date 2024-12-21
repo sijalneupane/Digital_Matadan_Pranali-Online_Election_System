@@ -16,7 +16,9 @@ CREATE TABLE pendingstatus (
     FOREIGN KEY (addressId) REFERENCES localaddress(lid) ON DELETE CASCADE
 );
 
-
+//in voter add:
+ALTER TABLE voters
+ADD votingStatus ENUM('notVoted', 'voted') DEFAULT 'notVoted';
 
 //district table
 create table district(
@@ -32,4 +34,24 @@ CREATE TABLE localaddress (
     dId INT NOT NULL,
     local_address VARCHAR(255) NOT NULL,
     FOREIGN KEY (dId) REFERENCES district(dId) ON DELETE CASCADE
+);
+
+//candidates table
+CREATE TABLE candidates (
+    candidate_id INT AUTO_INCREMENT PRIMARY KEY,  -- Unique ID for each candidate
+    name VARCHAR(255) NOT NULL,              -- Candidate's full name
+    dob DATE NOT NULL,                            -- Candidate's date of birth
+    gender ENUM('male', 'female', 'other') NOT NULL, -- Candidate's gender
+    contact_number VARCHAR(15) NOT NULL,          -- Candidate's contact number
+    education_level VARCHAR(100),         -- Candidate's highest education level
+    manifesto TEXT,                               -- Candidate's manifesto or campaign description
+    partyId INT NOT NULL,                        -- Foreign key linking to parties table
+    dId INT NOT NULL,            -- Foreign key linking to districts table
+    candidate_photo VARCHAR(255),                  -- Path to candidate's profile photo
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Timestamp of when the record was created
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Last update time
+
+    -- Foreign Key Constraints
+    CONSTRAINT fk_candidate_party FOREIGN KEY (partyId) REFERENCES parties(partyId),
+    CONSTRAINT fk_candidate_district FOREIGN KEY (dId) REFERENCES districts(dId)
 );

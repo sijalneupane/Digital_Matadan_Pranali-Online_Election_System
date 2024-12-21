@@ -2,7 +2,7 @@
 <?php
 session_start();
 if (!isset($_SESSION["email"])) {
-  header('Location: index.php');
+  header('Location: ../home/index.php');
 }
 ?>
 <!DOCTYPE html>
@@ -14,9 +14,9 @@ if (!isset($_SESSION["email"])) {
 </head>
 <body>
   <div class="container">
-    <?php include 'sidebar.php'; ?>
+    <?php include '../home/sidebar.php'; ?>
     <script>
-      document.querySelector('a[href="home.php"]').classList.add('active');
+      document.querySelector('a[href="../home/home.php"]').classList.add('active');
     </script>
 
     <div class="content">

@@ -1,7 +1,7 @@
 <?php
 session_start(); // Start the session to store session variables
 
-require '../dbconnection.php';
+require '../register_and_login/dbconnection.php';
 // Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
   $voterId = $_POST['voterId'];
@@ -37,14 +37,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
       $_SESSION['citizenshipFrontPhoto'] = $row1['citizenshipFrontPhoto'];
       $_SESSION['citizenshipBackPhoto'] = $row1['citizenshipBackPhoto'];
 
-      header('Location: ../home.php');         // Redirect to the dashboard or homepage after successful login
+      header('Location: ../home/home.php');         // Redirect to the dashboard or homepage after successful login
     } else {
       $_SESSION['error_message'] = 'Unexpected error occured, please try again';
-      header('Location: voter_login_form.php');
+      header('Location: ../register_and_login/voter_login_form.php');
     }
   }else {
     $_SESSION['idErrorMsg']= 'Voter id didnot match';
-    header('Location: login_verification.php');
+    header('Location: ../register_and_login/login_verification.php');
     
 }
 }

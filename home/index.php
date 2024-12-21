@@ -21,7 +21,7 @@
 
         body {
             font-family: Arial, sans-serif;
-            background: url('https://static.vecteezy.com/system/resources/previews/007/622/546/non_2x/banner-template-design-abstract-black-and-white-geometric-squares-overlapping-layer-on-clean-background-vector.jpg') no-repeat center center fixed;
+            /* background: url('https://static.vecteezy.com/system/resources/previews/007/622/546/non_2x/banner-template-design-abstract-black-and-white-geometric-squares-overlapping-layer-on-clean-background-vector.jpg') no-repeat center center fixed; */
             background-size: cover;
             color: #fff;
             min-height: 100dvh;
@@ -222,13 +222,13 @@
     <!-- Navbar -->
     <nav class="navbar">
         <div class="logo">
-            <img src="images/DMP logo.png" alt="Election Logo">
+            <img src="../images/DMP logo.png" alt="Election Logo">
         </div>
         <div class="election-time">
             <p style="color: red;">Election time: 2024-11-01 (6am - 6pm) </p>
         </div>
         <div class="nav-links">
-            <a href="admin/admin_login.php" class="admin-login">Admin Login</a>
+            <a href="../admin/admin_login.php" class="admin-login">Admin Login</a>
         </div>
     </nav>
 
@@ -238,10 +238,10 @@
             <h1>Welcome to the Online Election System</h1>
             <p>Participate in a fair and transparent voting system. Your vote matters.</p>
             <div class="action-buttons">
-                <a href="register_and_login/voter_login_form.php" class="voter-login">Voter Login <span>&rarr;</span></a>
-                <a href="register_and_login/voter_register_form.php" class="voter-register">Voter Register<span>&rarr;</span></a>
+                <a href="../register_and_login/voter_login_form.php" class="voter-login">Voter Login <span>&rarr;</span></a>
+                <a href="../register_and_login/voter_register_form.php" class="voter-register">Voter Register<span>&rarr;</span></a>
             </div>
-            <a href="guidelines.php" class="guidelines-link">Need Some Guidelines? Click here</a>
+            <a href="../home/guidelines.php" class="guidelines-link">Need Some Guidelines? Click here</a>
         </div>
         <div class="image-section">
             <img src="https://media.istockphoto.com/id/1258633187/vector/online-vote.jpg?s=612x612&w=0&k=20&c=7eOLMUx6_EKkXPjMrElvFYkz2x0rdShD8DNAlrff6-E="

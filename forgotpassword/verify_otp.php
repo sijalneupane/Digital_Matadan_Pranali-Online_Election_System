@@ -12,16 +12,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($entered_otp == $stored_otp) {
             // OTP matches
             setcookie("otp", "", time() - 3600, "/"); // Clear OTP cookie
-            header("Location: reset_password.php");
+            header("Location: ../forgotpassword/reset_password.php");
             exit();
         } else {
             echo "<script>alert('Invalid OTP. Please try again.')</script>";
-            header('Location: verify_otp.php');
+            header('Location: ../forgotpassword/verify_otp.php');
         }
     } else {
         echo "OTP has expired. Please request a new one.";
     }
 } else {
-    header("Location: forgot_password.php");
+    header("Location: ../forgotpassword/forgot_password.php");
     exit();
 }

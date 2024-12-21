@@ -1,7 +1,7 @@
 <?php
 session_start();
-$errorMessage = isset($_SESSION['errorMessage']) ? $_SESSION['errorMessage'] : '';
-unset($_SESSION['errorMessage']);
+$errorMessage = isset($_SESSION['errorMsg']) ? $_SESSION['errorMsg'] : '';
+unset($_SESSION['errorMsg']);
 ?>
 
 <!DOCTYPE html>
@@ -13,7 +13,8 @@ unset($_SESSION['errorMessage']);
   <title>Admin Login</title>
 
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="../register_and_login/modal.css">
+  <link rel="stylesheet" href="../styles/modal1.css">
+  <script src="../js/togglepassword.js"></script>
   <style>
     /* Reset Styles */
     * {
@@ -88,18 +89,21 @@ unset($_SESSION['errorMessage']);
       text-align: left;
       position: relative;
     }
+
     .input-container {
-  position: relative;
-  /* width: 100%; */
-  /* margin-bottom: 5px; */
-}
-.toggle-password {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
-}
+      position: relative;
+      /* width: 100%; */
+      /* margin-bottom: 5px; */
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+    }
+
     .form-group label {
       display: block;
       margin-bottom: 5px;
@@ -159,7 +163,7 @@ unset($_SESSION['errorMessage']);
       // Get error message spans
       let usernameError = document.getElementById("usernameError");
       let passwordError = document.getElementById("passwordError");
-      
+
       let passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/;
 
       // Clear previous error messages
@@ -194,13 +198,13 @@ unset($_SESSION['errorMessage']);
     </div>
   </div>
   <div class="logo-container">
-    <a href="../index.php"><img src="../images/DMP logo.png" alt="Logo"></a>
+    <a href="../home/index.php"><img src="../images/DMP logo.png" alt="Logo"></a>
   </div>
   <div class="container">
     <div class="logo-text">Admin Panel</div>
     <div class="login-box">
       <div class="greeting">Welcome, Admin! Please log in to continue.</div>
-      <form method="POST" action="admin_login_controller.php" onsubmit="return validateForm();">
+      <form method="POST" action="../admin/admin_login_controller.php" onsubmit="return validateForm();">
 
         <div class="form-group">
           <label for="username">Username:</label>
@@ -210,8 +214,8 @@ unset($_SESSION['errorMessage']);
         <div class="form-group">
           <label for="password">Password:</label>
           <div class="input-container">
-          <input type="password" id="password" name="password"><i id="togglePasswordIcon" class="fas fa-eye toggle-password"
-          onclick="togglePasswordVisibility()"></i>
+            <input type="password" id="password" name="password"><i id="togglePasswordIcon"
+              class="fas fa-eye toggle-password" onclick="togglePasswordVisibility()"></i>
           </div>
           <span id="passwordError" class="error-message"></span><br>
         </div>
@@ -219,25 +223,11 @@ unset($_SESSION['errorMessage']);
       </form>
     </div>
   </div>
-
-
 </body>
+<script src="../js/errorMessage_modal1.js"></script>
 <script>
-  // PHP Message passed to JavaScript
   const errorMessage = <?= json_encode($errorMessage); ?>;
-
-  // Show modal if there is a message
-  if (errorMessage) {
-    const modal = document.getElementById('modal1');
-    const modalMessage = document.getElementById('modalMessage1');
-    modalMessage.textContent = errorMessage;
-    modal.style.display = 'flex';
-  }
-
-  // Function to close the modal
-  function closeModal1() {
-    document.getElementById('modal1').style.display = 'none';
-  }
+  showErrorModal(errorMessage); // Pass PHP error to JS function
 </script>
-<script src="../togglepassword.js"></script>
+
 </html>
