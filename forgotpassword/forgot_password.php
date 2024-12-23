@@ -37,7 +37,8 @@ unset($_SESSION['error_message']); // Clear the message
     </script>
 </head>
 
-<body>   <div id="modal1" class="modal-overlay1">
+<body>
+    <div id="modal1" class="modal-overlay1">
         <div class="modal-content1">
             <p id="modalMessage1"></p>
             <button onclick="closeModal1()">Close</button>
@@ -54,15 +55,15 @@ unset($_SESSION['error_message']); // Clear the message
         <label for="email">Enter your email address:</label>
         <input type="text" name="email" id="email">
         <span class="error" id="emailError"></span>
-        
+
         <input type="submit" value="Submit">
         <a href="../register_and_login/voter_login_form.php">Back to Login</a>
     </form>
     <script src="../js/errorMessage_modal1.js"></script>
     <script>
-    const errorMessage = <?= json_encode($errorMessage); ?>;
-    showErrorModal(errorMessage); // Pass PHP error to JS function
-  </script>
+        const errorMessage = <?= json_encode($errorMessage); ?>;
+        showErrorModal(errorMessage); // Pass PHP error to JS function
+    </script>
 </body>
 
 </html>

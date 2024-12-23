@@ -1,0 +1,107 @@
+/* Modal Background Overlay */
+#logoutModal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    /* Dark background overlay */
+    z-index: 1000;
+    /* Ensure modal is on top */
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* Modal Box */
+#logoutModal div {
+    position: relative;
+    background: #fff;
+    padding: 45px 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    width: 400px;
+    /* Fixed width for the modal */
+    max-width: 90%;
+    /* Ensures the modal doesn't exceed screen width */
+    text-align: center;
+    animation: fadeIn 0.3s ease-in-out;
+    /* Smooth fade-in animation */
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Modal Title/Text */
+#logoutModal p {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+/* Button Styles */
+#logoutModal button {
+    padding: 12px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s;
+    min-width: 80px;
+    margin: 0 15px;
+    font-weight: 500;
+    /* background-color: #28a745; */
+    color: white;
+}
+
+
+/* No Button */
+#logoutModal #no-btn {
+    background-color: #dc3545;
+    /* Red */
+}
+
+/* Yes Button */
+#logoutModal #yes-btn {
+    background-color: #28a745;
+    /* Green */
+}
+
+/* Hover effects for buttons */
+#logoutModal button:hover {
+    opacity: 0.9;
+}
+
+.error {
+    color: rgb(175, 0, 0);
+    font-size: 12px;
+    display: block;
+    padding: 3px 0px 3px 6px;
+    height: 18px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 500px) {
+    #logoutModal div {
+        width: 80%;
+        padding: 20px;
+    }
+
+    #logoutModal button {
+        padding: 10px 15px;
+
+        font-size: 14px;
+    }
+}

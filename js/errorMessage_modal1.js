@@ -1,3 +1,4 @@
+
 // Function to show the modal with error messages
 function showErrorModal(errorMessage) {
   if (errorMessage) {

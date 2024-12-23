@@ -1,20 +1,579 @@
-<?php 
+<?php
 session_start();
 if (!isset($_SESSION['loggedin'])) {
-    header('Location: admin_login.php');
+    header('Location: ../admin/admin_login.php');
     exit;
 }
 $_SESSION['pageName'] = "Add Candidates";
+require_once "../php_for_ajax/districtRegionSelect.php";
+require_once "../home/logout_modals_html.php";
+require_once "../register_and_login/dbconnection.php";
+
+$errorMessage = isset($_SESSION['errorMsg']) ? $_SESSION['errorMsg'] : '';
+unset($_SESSION['errorMsg']); // Clear the message
+$candidateId = $name = $dob = $gender = $citizenshipNumber = $educationLevel = $manifesto = $partyName = $district = $regionNo = $candidatePhoto = "";
+
+if (isset($_GET['id'])) {
+    $candidateId = $_GET['id'];
+    $sql = "SELECT candidates.*, parties.partyName, district.district, district.regionNo 
+            FROM candidates 
+            JOIN parties ON candidates.partyId = parties.partyId 
+            JOIN district ON candidates.dId = district.dId
+            WHERE candidateId = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $candidateId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($row = $result->fetch_assoc()) {
+        $name = htmlspecialchars($row['name']);
+        $dob = htmlspecialchars($row['dob']);
+        $gender = htmlspecialchars($row['gender']);
+        $citizenshipNumber = htmlspecialchars($row['citizenship_number']);
+        $educationLevel = htmlspecialchars($row['education_level']);
+        $manifesto = htmlspecialchars($row['manifesto']);
+        $partyName = htmlspecialchars($row['partyName']);
+        $district = htmlspecialchars($row['district']);
+        $regionNo = htmlspecialchars($row['regionNo']);
+        $candidatePhoto = htmlspecialchars($row['candidate_photo']);
+    }
+    $stmt->close();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Online Voting System</title>
-    <link rel="stylesheet" href="admin_home.css">
+    <link rel="stylesheet" href="../styles/modal1.css">
+    <link rel="stylesheet" href="../admin/left_right_party_candidate.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Form Layout */
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 10px;
+        }
+
+        .form-group {
+            flex: 1;
+            position: relative;
+            margin-bottom: 0;
+        }
+
+        .form-group.full-width {
+            flex: 0 0 100%;
+        }
+
+        /* Icon Positioning Fix */
+        .form-group .input-container {
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .form-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #7f8c8d;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px 12px 45px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+            outline: none;
+        }
+
+
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .form-group {
+                margin-bottom: 25px;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {}
+    </style>
+    <script src="../js/errorMessage_modal1.js"></script>
 </head>
+
 <body>
-    <?php require 'admin_navbar.php'; ?>
+    <?php require_once 'admin_navbar.php'; ?>
+
+    <div class="content">
+        <?php require_once '../home/logout_modals_html.php';
+        logoutModalPhp("admin"); ?>
+        <div id="modal1" class="modal-overlay1">
+            <div class="modal-content1">
+                <p id="modalMessage1"></p>
+                <button onclick="closeModal1()">Close</button>
+            </div>
+        </div>
+
+        <div class="main-container">
+            <div class="left">
+                <button id="addBtn" onclick="showForm()">Add Candidates </button>
+                <button id="viewBtn" onclick="showData()">View Candidates </button>
+            </div>
+            <div class="right">
+                <div id="right1" class="right-content">
+                    <form id="addCandidateForm"
+                        action="add_candidates_controller.php<?= isset($candidateId) ? '?id=' . $candidateId : '' ?>"
+                        method="POST" enctype="multipart/form-data" onsubmit="return validateForm();">
+                        <h2 id="formTitle"><?= $candidateId != '' ? 'Update Candidate' : 'Add Candidates' ?></h2>
+                        <input type="hidden" name="candidateId" id="candidateId" value="<?= $candidateId ?>">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <div class="input-container">
+                                    <i class="fas fa-user"></i>
+                                    <input type="text" id="name" name="name" value="<?= $name ?>">
+                                </div>
+                                <span id="nameError"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="dob">Date of Birth</label>
+                                <div class="input-container">
+                                    <i class="fas fa-calendar"></i>
+                                    <input type="date" id="dob" name="dob" value="<?= $dob ?>">
+                                </div>
+                                <span id="dobError"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="gender">Gender</label>
+                                <div class="input-container">
+                                    <i class="fas fa-venus-mars"></i>
+                                    <select id="gender" name="gender">
+                                        <option value="default">--Select Gender--</option>
+                                        <option value="Male" <?= $gender == 'male' ? 'selected' : '' ?>>Male</option>
+                                        <option value="Female" <?= $gender == 'female' ? 'selected' : '' ?>>Female</option>
+                                        <option value="Other" <?= $gender == 'other' ? 'selected' : '' ?>>Other</option>
+                                    </select>
+                                </div>
+                                <span id="genderError"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="citizenship_number">Citizenship Number</label>
+                                <div class="input-container">
+                                    <i class="fas fa-phone"></i>
+                                    <input type="text" id="citizenship_number" name="citizenship_number"
+                                        value="<?= $citizenshipNumber ?>">
+                                </div>
+                                <span id="citizenshipNumberError"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="education_level">Education Level</label>
+                                <div class="input-container">
+                                    <i class="fas fa-graduation-cap"></i>
+                                    <input type="text" id="education_level" name="education_level"
+                                        value="<?= $educationLevel ?>">
+                                </div>
+                                <span id="educationLevelError"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="partyName">Party Name</label>
+                                <div class="input-container">
+                                    <i class="fas fa-flag"></i>
+                                    <select id="partyName" name="partyName">
+                                        <option value="default">-- Select Party --</option>
+                                        <?php
+                                        // Fetch party names
+                                        $sql = "SELECT partyName FROM parties";
+                                        $result = mysqli_query($conn, $sql);
+
+                                        if (mysqli_num_rows($result) > 0) {
+                                            while ($row = mysqli_fetch_assoc($result)) {
+                                                echo '<option value="' . $row['partyName'] . '"' . ($partyName == $row['partyName'] ? ' selected' : '') . '>' . htmlspecialchars($row['partyName']) . '</option>';
+                                            }
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                                <span id="partyNameError"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="district">District</label>
+                                <div class="input-container">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <?= $district == '' ? district() : district($district) ?>
+                                </div>
+                                <span id="districtError"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="region">Region</label>
+                                <div class="input-container">
+                                    <i class="fas fa-globe"></i>
+                                    <?= $regionNo == '' ? regionNo() : regionNo($regionNo) ?>
+                                </div>
+                                <span id="regionError"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group full-width">
+                                <label for="manifesto">Manifesto</label>
+                                <div class="input-container">
+                                    <i class="fas fa-file-alt"></i>
+                                    <textarea id="manifesto" name="manifesto" rows="4"><?= $manifesto ?></textarea>
+                                </div>
+                                <span id="manifestoError"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group full-width">
+                                <label for="candidate_photo">Candidate Photo</label>
+                                <div class="input-container">
+                                    <i class="fas fa-camera"></i>
+                                    <input type="file" id="candidate_photo" name="candidate_photo" accept="image/*">
+                                </div>
+                                <div class="photo-preview" id="photoPreview">
+                                    <?php if ($candidatePhoto != ''): ?>
+                                        <img src="../uploads/<?= $candidatePhoto ?>" alt="Preview">
+                                    <?php else: ?>
+                                        <i class="fas fa-user-circle fa-3x"></i>
+                                    <?php endif; ?>
+                                </div>
+                                <span id="candidatePhotoError"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit"
+                                id="submitButton"><?= $candidateId != '' ? 'Update Candidate' : 'Add Candidate' ?></button>
+                        </div>
+                    </form>
+                </div>
+                <div id="right2" class="right-content">
+                    <h2>View Candidates</h2>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Date of Birth</th>
+                                    <th>Gender</th>
+                                    <th>Citizenship Number</th>
+                                    <th>Education Level</th>
+                                    <th>Party Name</th>
+                                    <th>District</th>
+                                    <th>Region</th>
+                                    <th>Photo</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $sql2 = "SELECT candidates.*, parties.partyName, district.district, district.regionNo 
+                                         FROM candidates 
+                                         JOIN parties ON candidates.partyId = parties.partyId 
+                                         JOIN district ON candidates.dId = district.dId";
+                                $result2 = mysqli_query($conn, $sql2);
+                                if (mysqli_num_rows($result2) > 0) {
+                                    while ($row = mysqli_fetch_assoc($result2)) {
+
+                                        ?>
+                                        <tr>
+                                            <td> <?= htmlspecialchars($row['name']) ?> </td>
+                                            <td> <?= htmlspecialchars($row['dob']) ?> </td>
+                                            <td> <?= htmlspecialchars($row['gender']) ?> </td>
+                                            <td> <?= htmlspecialchars($row['citizenship_number']) ?> </td>
+                                            <td> <?= htmlspecialchars($row['education_level']) ?> </td>
+                                            <td> <?= htmlspecialchars($row['partyName']) ?> </td>
+                                            <td> <?= htmlspecialchars($row['district']) ?> </td>
+                                            <td> <?= htmlspecialchars($row['regionNo']) ?> </td>
+                                            <td><img src="../uploads/<?= htmlspecialchars($row['candidate_photo']) ?>"
+                                                    onclick="openModal(<?= $row['candidateId'] ?>,'<?= htmlspecialchars($row['candidate_photo']) ?>')"
+                                                    alt='Candidate Photo' style='max-width: 100px;'></td>
+                                            <td>
+                                                <button class="delete-btn styled-btn"
+                                                    onclick="openDeleteModal(<?= $row['candidateId'] ?>)">Delete</button>
+                                                <button class="update-btn styled-btn"
+                                                    onclick="window.location.href='add_candidates.php?id=<?= $row['candidateId'] ?>'">Edit</button>
+                                            </td>
+                                        </tr>
+                                        <div id="delete-modal-<?= $row['candidateId'] ?>" class="delete-modal">
+                                            <div class="delete-modal-content">
+                                                <p>Are you sure you want to delete this candidate?</p>
+                                                <button class="delete-modal-btn confirm-btn"
+                                                    onclick="confirmDelete(<?= $row['candidateId'] ?>,'candidates')">Yes</button>
+                                                <button class="delete-modal-btn cancel-btn"
+                                                    onclick="closeDeleteModal(<?= $row['candidateId'] ?>)">No</button>
+                                            </div>
+                                        </div>
+                                        <div id="modal-<?= $row['candidateId'] ?>" class="modal">
+                                            <button class="close-modal"
+                                                onclick="closeModal(<?= $row['candidateId'] ?>)">&times;</button>
+                                            <div class="modal-content">
+                                                <h3 id="modal-title-<?= $row['candidateId'] ?>"
+                                                    style="color: Black; text-align: center;"></h3>
+                                                <img id="modal-img-<?= $row['candidateId'] ?>" src="" alt="Selected Image">
+                                            </div>
+                                        </div>
+                                    <?php }
+                                } else { ?>
+                                    <tr>
+                                        <td colspan='10'>No candidates found.</td>
+                                    </tr>
+                                <?php }
+                                mysqli_close($conn);
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>        // Show error modal if there's an error message
+        const errorMessage = <?= json_encode($errorMessage); ?>;
+        if (errorMessage) {
+            showErrorModal(errorMessage);
+        }
+
+        // Function to show the form (right1)
+        function showForm() {
+            window.location.href = '../admin/add_candidates.php';
+        }
+
+        // Function to show the data table (right2)
+        function showData() {
+            document.getElementById("right1").style.display = "none";  // Hide the form
+            document.getElementById("right2").style.display = "block"; // Show the table
+            document.querySelectorAll('.right-content').forEach(element => {
+                element.style.width = '95%';
+            });
+        }
+
+        // Initialize by hiding one of the sections (optional, depending on your default view)
+        window.onload = function () {
+            // document.getElementById("right1").style.display = "none"; // Initially hide the form
+            document.getElementById("right2").style.display = "none"; // Initially hide the table
+        };
+
+        // Add this to your existing JavaScript
+        document.getElementById('candidate_photo').addEventListener('change', function (e) {
+            const preview = document.getElementById('photoPreview');
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function validateForm() {
+            let valid = true;
+            // Clear previous errors
+            document.querySelectorAll('.form-group span').forEach(span => span.textContent = '');
+
+            // Validate Name
+            const name = document.getElementById('name').value;
+            if (name.trim() === '') {
+                document.getElementById('nameError').textContent = 'Name is required';
+                valid = false;
+            }
+
+            // Validate Date of Birth
+            const dob = document.getElementById('dob').value;
+            if (dob.trim() === '') {
+                document.getElementById('dobError').textContent = 'Date of Birth is required';
+                valid = false;
+            } else {
+                const dobDate = new Date(dob);
+                const today = new Date();
+                const age = today.getFullYear() - dobDate.getFullYear();
+                const monthDiff = today.getMonth() - dobDate.getMonth();
+                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dobDate.getDate())) {
+                    age--;
+                }
+                if (age < 25) {
+                    document.getElementById('dobError').textContent = 'Candidate must be at least 25 years old';
+                    valid = false;
+                }
+            }
+
+            // Validate Gender
+            const gender = document.getElementById('gender').value;
+            if (gender.trim() === '' || gender.trim() === 'default') {
+                document.getElementById('genderError').textContent = 'Gender is required';
+                valid = false;
+            }
+
+            // Validate Citizenship Number
+            const citizenshipNumber = document.getElementById('citizenship_number').value;
+            if (citizenshipNumber.trim() === '') {
+                document.getElementById('citizenshipNumberError').textContent = 'Citizenship Number is required';
+                valid = false;
+            }
+
+            // Validate Education Level
+            const educationLevel = document.getElementById('education_level').value;
+            if (educationLevel.trim() === '') {
+                document.getElementById('educationLevelError').textContent = 'Education Level is required';
+                valid = false;
+            }
+
+            // Validate Manifesto
+            const manifesto = document.getElementById('manifesto').value;
+            if (manifesto.trim() === '') {
+                document.getElementById('manifestoError').textContent = 'Manifesto is required';
+                valid = false;
+            }
+
+            // Validate Party Name
+            const partyName = document.getElementById('partyName').value;
+            if (partyName.trim() === '' || partyName.trim() === 'default') {
+                document.getElementById('partyNameError').textContent = 'Please select party';
+                valid = false;
+            }
+
+            // Validate District
+            const district = document.getElementById('district').value;
+            if (district.trim() === '' || district.trim() === 'default') {
+                document.getElementById('districtError').textContent = 'Please select district';
+                valid = false;
+            }
+
+            // Validate Region
+            const region = document.getElementById('regionNo').value;
+            if (region.trim() === '' || region.trim() === 'default') {
+                document.getElementById('regionError').textContent = 'Please Select region';
+                valid = false;
+            }
+
+            // Validate Candidate Photo
+            const allowedTypes = ['image/jpeg', 'image/png'];
+            const maxSize = 2 * 1024 * 1024;
+            const candidatePhoto = document.getElementById('candidate_photo').files[0];
+            if (!candidatePhoto) {
+                document.getElementById('candidatePhotoError').textContent = 'Candidate Photo is required';
+                valid = false;
+            }
+            if (candidatePhoto && !allowedTypes.includes(candidatePhoto.type)) {
+                document.getElementById('candidatePhotoError').textContent = 'Only JPG and PNG files are allowed';
+                valid = false;
+            }
+            if (candidatePhoto && candidatePhoto.size > maxSize) {
+                document.getElementById('candidatePhotoError').textContent = 'File size must be less than 2MB';
+                valid = false;
+            }
+
+
+
+            return valid;
+        }
+
+        //image modal
+        function openModal(id, title) {
+            const modal = document.getElementById('modal-' + id);
+            const modalImg = document.getElementById('modal-img-' + id);
+            const modalTitle = document.getElementById('modal-title-' + id);
+
+            // Determine the image to display
+            const imageSrc = event.target.src;
+
+            // Set modal content
+            modalImg.src = imageSrc;
+            modalTitle.innerText = title;
+
+            // Show modal
+            modal.style.display = 'flex';
+        }
+
+        function closeModal(id) {
+            const modal = document.getElementById('modal-' + id);
+            modal.style.display = 'none';
+
+            // Clear the modal content
+            const modalImg = document.getElementById('modal-img-' + id);
+            modalImg.src = '';
+        }
+        //delete comfirmation modal
+        function openDeleteModal(candidateId) {
+            var modal = document.getElementById('delete-modal-' + candidateId);
+            modal.style.display = 'flex';
+        }
+
+        function closeDeleteModal(candidateId) {
+            var modal = document.getElementById('delete-modal-' + candidateId);
+            modal.style.display = 'none';
+        }
+
+        // Close the modal when clicking outside of the modal content
+        window.onclick = function (event) {
+            var modals = document.getElementsByClassName('delete-modal');
+            for (var i = 0; i < modals.length; i++) {
+                if (event.target == modals[i]) {
+                    modals[i].style.display = 'none';
+                }
+            }
+        }
+        function confirmDelete(id, table) {
+            window.location.href = `delete_party_candidate.php?table=${table}&id=${id}`;
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            const id = document.getElementById('candidateId').value;
+            if (id) {
+                const candidatePhotoInput = document.getElementById("candidate_photo");
+                const candidatePhoto = `<?= $candidatePhoto ?>`;
+                const filePath = `../uploads/${candidatePhoto}`;
+                fetch(filePath)
+                    .then(response => response.blob())
+                    .then(blob => {
+                        const file = new File([blob], candidatePhoto, { type: blob.type });
+                        const dataTransfer = new DataTransfer();
+                        dataTransfer.items.add(file);
+                        candidatePhotoInput.files = dataTransfer.files;
+                    })
+                    .catch(error => console.error('Error fetching the file:', error));
+                document.getElementById("photoPreview").innerHTML = `<img src="../uploads/${candidatePhoto}" alt="Preview">`;
+            }
+        });
+    </script>
 </body>
+
 </html>

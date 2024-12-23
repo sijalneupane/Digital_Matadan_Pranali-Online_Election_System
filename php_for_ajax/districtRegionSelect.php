@@ -1,3 +1,4 @@
+<script src="../js/getRegion_ajax.js" defer></script>
 <?php
 function district($selectedDistrict = null)
 {
@@ -32,7 +33,7 @@ function regionNo($selectedRegionNo = null)
 {
     ?>
     <select id="regionNo" name="regionNo" data-selected="<?= htmlspecialchars($selectedRegionNo) ?>">
-        <option value="default">-- Select Region --</option>
+        <option value="default">-- Select Constituency --</option>
     </select>
     <?php
 }

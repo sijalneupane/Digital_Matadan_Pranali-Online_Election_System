@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (district && district !== "default") {
             loadRegions(district);
         } else {
-            regionNoSelect.innerHTML = '<option value="default">-- Select Region --</option>';
+            regionNoSelect.innerHTML = '<option value="default">-- Select Constituency --</option>';
         }
     });
 
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
         xhr.onload = function () {
             if (xhr.status === 200) {
                 const response = JSON.parse(xhr.responseText);
-                regionNoSelect.innerHTML = '<option value="default">-- Select Region --</option>';
+                regionNoSelect.innerHTML = '<option value="default">-- Select Constituency --</option>';
                 if (response.region_count) {
                     for (let i = 1; i <= response.region_count; i++) {
                         const option = document.createElement('option');

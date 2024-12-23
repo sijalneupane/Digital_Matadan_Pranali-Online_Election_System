@@ -245,7 +245,7 @@ require_once '../php_for_ajax/districtRegionSelect.php';
         }
     </style>
     <script src="../js/update_validation.js"></script>
-    <script src="../js/getRegion_ajax.js" defer></script>
+    <!-- <script src="../js/getRegion_ajax.js" defer></script> -->
 </head>
 
 <body>
@@ -293,7 +293,7 @@ require_once '../php_for_ajax/districtRegionSelect.php';
 
                 <!-- Buttons -->
                 <div class="button-container">
-                    <button class="button logout-button" id="logoutBtn"><i class="fas fa-sign-out-alt"></i>
+                    <button class="button logout-button" id="logoutBtn" onclick="openLogoutModal();"><i class="fas fa-sign-out-alt"></i>
                         Logout</button>
                     <button class="button" onclick="openEditModal()"><i class="fas fa-edit"></i> Edit Profile</button>
                 </div>
@@ -316,13 +316,8 @@ require_once '../php_for_ajax/districtRegionSelect.php';
     </div>
     <!-- Confirm Modal -->
     <!-- Modal -->
-    <div id="confirmModal">
-        <div>
-            <p>Confirm Logout?</p>
-            <button onclick="confirmLogout()">Yes</button>
-            <button onclick="closeConfirmModal()">No</button>
-        </div>
-    </div>
+    <?php require_once '../home/logout_modals_html.php';
+        logoutModalPhp("voter"); ?>
     <!-- Edit Profile Modal -->
     <div id="editModal" class="modal">
         <div class="modal-content2">
@@ -457,25 +452,6 @@ require_once '../php_for_ajax/districtRegionSelect.php';
         // Function to close the modal
         function closeModal1() {
             document.getElementById('modal1').style.display = 'none';
-        }
-    </script>
-
-    <!-- Script for login confirm modal and unique key creation-->
-    <script>
-        // Show confirmation modal
-        document.getElementById("logoutBtn").onclick = function () {
-            document.getElementById("confirmModal").style.display = "flex";
-        };
-
-        // Close modal
-        function closeConfirmModal() {
-            document.getElementById("confirmModal").style.display = "none";
-        }
-
-        // Handle confirmation and redirect
-        function confirmLogout() {
-            var uniqueKey = 'key_' + Math.random().toString(36).substring(2, 12) + '_' + new Date().getMilliseconds();
-            window.location.href = '../register_and_login/voter_logout.php?logout_key=' + uniqueKey;
         }
     </script>
 </body>

@@ -12,6 +12,7 @@ unset($_SESSION['fromLogIn']);
 $_SESSION['pageName'] = "Admin-Dashboard";
 require_once "../register_and_login/dbconnection.php";
 require_once "../admin/total_rows_sql.php";
+require_once "../home/logout_modals_html.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -74,7 +75,7 @@ require_once "../admin/total_rows_sql.php";
     
     ?>
     <div class="dashboard-container">
-        <?php confirmModalPhp(); ?>
+        <?php logoutModalPhp("admin"); ?>
         <div class="dashboard-content">
             <section class="overview">
                 <h2>Election Overview</h2>
@@ -107,6 +108,7 @@ require_once "../admin/total_rows_sql.php";
                 <div class="actions-flex">
                     <a href="../admin/add_candidates.php" class="action-card">Add candidates</a>
                     <a href="../admin/verify_voters.php" class="action-card">Verify Voters</a>
+                    <a href="../admin/manage_parties.php" class="action-card">Manage Parties</a>
                     <a href="#" class="action-card">View voters and Candidates</a>
                     <a href="#" class="action-card">View Results</a>
                     <a href="#" class="action-card">Manage Election Time</a>

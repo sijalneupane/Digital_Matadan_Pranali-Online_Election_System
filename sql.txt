@@ -52,6 +52,16 @@ CREATE TABLE candidates (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Last update time
 
     -- Foreign Key Constraints
-    CONSTRAINT fk_candidate_party FOREIGN KEY (partyId) REFERENCES parties(partyId),
-    CONSTRAINT fk_candidate_district FOREIGN KEY (dId) REFERENCES districts(dId)
+    CONSTRAINT fk_candidate_party FOREIGN KEY (partyId) REFERENCES parties(partyId) ON DELETE CASCADE,
+    CONSTRAINT fk_candidate_district FOREIGN KEY (dId) REFERENCES districts(dId) ON DELETE CASCADE
 );
+//parties table
+CREATE TABLE parties (
+    partyId INT AUTO_INCREMENT PRIMARY KEY,
+    partyName VARCHAR(255) NOT NULL UNIQUE,
+    partyLeader VARCHAR(255) NOT NULL UNIQUE,
+    partyLogo VARCHAR(255) NOT NULL UNIQUE
+);
+INSERT INTO parties (partyName, partyLeader, partyLogo) 
+VALUES 
+('Independent', 'No Leader', 'independent.png');

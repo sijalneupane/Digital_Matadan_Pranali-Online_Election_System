@@ -63,7 +63,8 @@ require_once '../php_for_ajax/districtRegionSelect.php';
     </style>
     <script src="../js/register_validation.js"></script>
     <script src="../js/togglepassword.js"></script>
-    <script src="../js/getRegion_ajax.js" defer></script>
+    <script src="../js/errorMessage_modal1.js"></script>
+    <!-- <script src="../js/getRegion_ajax.js" defer></script> -->
 </head>
 
 <body>
@@ -179,7 +180,6 @@ require_once '../php_for_ajax/districtRegionSelect.php';
             </form>
         </div>
     </div>
-    <script src="../js/errorMessage_modal1.js"></script>
     <script>
         const errorMessage = <?= json_encode($errorMessage); ?>;
         showErrorModal(errorMessage); // Pass PHP error to JS function

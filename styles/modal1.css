@@ -25,7 +25,7 @@
     color: red;
 }
 
-button {
+.modal-content1 button {
     margin-top: 10px;
     padding: 12px 16px;
     background-color: #007bff;
@@ -35,6 +35,6 @@ button {
     cursor: pointer;
 }
 
-button:hover {
+.modal-content1 button:hover {
     background-color: #0056b3;
 }
