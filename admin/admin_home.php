@@ -16,7 +16,6 @@ require_once "../home/logout_modals_html.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,13 +25,14 @@ require_once "../home/logout_modals_html.php";
     <style>
         .welcome-message {
             position: fixed;
-            top: -100px;
+            top: -200px;
             /* Hidden above the screen initially */
             left: 50%;
             transform: translateX(-50%);
             background-color: #4CAF50;
             /* Green background */
             color: white;
+            font-size: 1.2rem;
             /* White text */
             padding: 10px 20px;
             border-radius: 5px;
@@ -58,7 +58,7 @@ require_once "../home/logout_modals_html.php";
 <body>
     <!-- Welcome Message -->
     <div id="welcomeMessage" class="welcome-message">
-        Welcome back, Admin! Manage your elections effectively.
+        Welcome Admin! Manage your elections effectively.
         <button id="dismissButton"
             style="margin-left: 20px; background: white; color: #4CAF50; border: none; padding: 5px 10px; cursor: pointer; border-radius: 5px;">
             Dismiss
@@ -85,6 +85,10 @@ require_once "../home/logout_modals_html.php";
                         <p><?= getTotal($conn, "voters"); ?></p>
                     </div>
                     <div class="overview-item">
+                        <h3>Total Pending Voters</h3>
+                        <p><?= getTotal($conn, "pendingstatus"); ?></p>
+                    </div>
+                    <div class="overview-item">
                         <h3>Total candidates</h3>
                         <p><?= getTotal($conn, "candidates"); ?></p>
                     </div>
@@ -106,12 +110,12 @@ require_once "../home/logout_modals_html.php";
             <section class="admin-actions">
                 <h2>Admin Actions</h2>
                 <div class="actions-flex">
-                    <a href="../admin/add_candidates.php" class="action-card">Add candidates</a>
-                    <a href="../admin/verify_voters.php" class="action-card">Verify Voters</a>
+                    <a href="../admin/add_candidates.php" class="action-card">Manage candidates</a>
                     <a href="../admin/manage_parties.php" class="action-card">Manage Parties</a>
-                    <a href="#" class="action-card">View voters and Candidates</a>
+                    <a href="../admin/verify_voters.php" class="action-card">Verify Voters</a>
+                    <a href="#" class="action-card">View voters</a>
                     <a href="#" class="action-card">View Results</a>
-                    <a href="#" class="action-card">Manage Election Time</a>
+                    <!-- <a href="#" class="action-card">Manage Election Time</a> -->
                 </div>
             </section>
         </div>

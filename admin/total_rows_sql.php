@@ -10,8 +10,9 @@ function getTotal($conn, $table)
     // return $result;
     $data = mysqli_fetch_assoc($result);
     return $data["totalRows"];
-  }
-}
+  }else{
+    return 0;
+}}
 function totalVoteCasted($conn)
 {
   $data = [];

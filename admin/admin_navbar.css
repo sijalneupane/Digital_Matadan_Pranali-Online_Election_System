@@ -10,11 +10,12 @@
 body{
   min-height: 100vh;
   font-family: Arial, sans-serif;
-  background: linear-gradient(120deg, #f5f7fa 0%, #c3cfe2 33%,#bfd4f3 67%, #9cbaeb 100%);
+  background: linear-gradient(120deg, #dbe5f3 0%, #bbcdeb 33%,#aac7f1 67%, #85b4ff 100%);
 }
 .navbar {
   top: 0;
-  height: 15%;
+  height: 12%;
+  min-height: 76px;
   width: 100%;
   position: sticky;
   z-index: 1;
@@ -54,17 +55,19 @@ body{
 
 .nav-links .admin-logout:hover {
   background-color: #ff4500;
+  cursor: pointer;
 }
 
 /* Styling for Admin Panel and Dropdown */
 .admin-panel {
   position: relative;
-  font-size: 1.5rem;
+  font-size: 1.4em;
   color: #00799e;
   font-family: math;
   margin-left: auto;
   cursor: pointer;
   padding: 10px;
+  width: 232px;
   background-color: #f0f8ff;
   border-radius: 8px;
   transition: background-color 0.3s,color 0.1s step-end;
@@ -129,6 +132,7 @@ body{
 /* Tablet-sized devices */
 @media (max-width: 768px) {
   .navbar {
+    /* height: 20%; Increase height */
     padding: 6px 2%; /* Reduce padding to fit contents */
   }
 
@@ -137,7 +141,7 @@ body{
   }
 
   .admin-panel {
-    font-size: 1.5rem; /* Reduce font size */
+    font-size: 1.2rem; /* Reduce font size */
     padding: 5px 10px; /* Reduce padding to fit */
   }
 

@@ -33,6 +33,7 @@ body {
 .sidebar {
   background-color: #5a4dad;
   width: 15%;
+  z-index: 100;
   color: #fff;
   position: fixed;
   top: 0;
@@ -175,7 +176,7 @@ body {
   padding: 20px;
   flex-grow: 1;
   /* Content takes up the remaining available space */
-  background-color: #f0e7ff;
+  background-color: #e1e1e1;
   overflow-y: auto;
   transition: all 0.5s ease-in-out;
   /* height: 100vh; Full height of viewport */
@@ -229,6 +230,7 @@ h1 {
     cursor: pointer;
     border-radius: 6px;
     font-weight: bold;
+    z-index: 100;
   }
   .toggle-sidebar-btn:hover  {
     background-color: #007acc;

@@ -4,7 +4,7 @@
 <?php
 function logoutModalPhp($userType ) 
 { ?>
-  <div id="logoutModal">
+  <div id="logoutModal" class="all-modals">
     <div>
       <p>Confirm Logout?</p>
       <?php if ($userType == 'admin') { ?>

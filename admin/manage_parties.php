@@ -18,10 +18,12 @@ unset($_SESSION['errorMsg']); // Clear the message
 
     <link rel="stylesheet" href="../admin/left_right_party_candidate.css">
     <link rel="stylesheet" href="../styles/modal1.css">
+    <link rel="stylesheet" href="../styles/table_img.css">
     <style>
+        
         form {
             max-width: 600px;
-            /* margin: 20px auto; */
+            margin: 20px auto;
             padding: 20px;
             border: 1px solid #ccc;
             border-radius: 8px;
@@ -92,7 +94,7 @@ unset($_SESSION['errorMsg']); // Clear the message
     <div class="content">
         <?php require_once '../home/logout_modals_html.php';
         logoutModalPhp('admin'); ?>
-        <div id="modal1" class="modal-overlay1">
+        <div id="modal1" class="modal-overlay1 all-modals">
             <div class="modal-content1">
                 <p id="modalMessage1"></p>
                 <button onclick="closeModal1()">Close</button>
@@ -104,7 +106,7 @@ unset($_SESSION['errorMsg']); // Clear the message
                 <button id="viewBtn" onclick="showData()">View parties </button>
             </div>
             <div class="right">
-                <div id="right1" class="right-content">
+                <div id="right1" class="right-content" style="width: 75%;">
                     <form id="partyForm" action="../admin/manage_parties_add_controller.php" method="POST"
                         enctype="multipart/form-data" onsubmit="return validateForm()">
                         <h2 id="formTitle">Add Party</h2>
@@ -133,12 +135,14 @@ unset($_SESSION['errorMsg']); // Clear the message
                     </form>
                 </div>
 
-                <div id="right2" class="right-content">
+                <div id="right2" class="right-content" style="flex-direction: column;
+                    align-items:center;width: 75%;">
                     <h2>View Parties</h2>
-                    <div class="table-container">
+                    <div class="table-container" style="width: fit-content;" >
                         <table>
                             <thead>
                                 <tr>
+                                <th>Party Id</th>
                                     <th>Party Name</th>
                                     <th>Party Leader</th>
                                     <th>Party Logo</th>
@@ -153,6 +157,7 @@ unset($_SESSION['errorMsg']); // Clear the message
                                 if (mysqli_num_rows($result) > 0) {
                                     while ($row = mysqli_fetch_assoc($result)) { ?>
                                         <tr>
+                                        <td> <?= $row['partyId'] ?> </td>
                                             <td> <?= $row['partyName'] ?> </td>
                                             <td> <?= $row['partyLeader'] ?> </td>
                                             <td><img src="../uploads/<?= $row['partyLogo'] ?>"
@@ -164,18 +169,18 @@ unset($_SESSION['errorMsg']); // Clear the message
                                                 <button class="update-btn styled-btn" onclick="editParty(<?= $row['partyId'] ?>, '<?= $row['partyName'] ?>', '<?= $row['partyLeader'] ?>', '<?= $row['partyLogo'] ?>')">Edit</button>
                                             </td>
                                         </tr>
-                                        <div id="delete-modal-<?= $row['partyId'] ?>" class="delete-modal">
+                                        <div id="delete-modal-<?= $row['partyId'] ?>" class="delete-modal all-modals">
                                             <div class="delete-modal-content">
                                                 <p>Are you sure you want to delete this candidate?</p>
                                                 <button class="delete-modal-btn confirm-btn"
-                                                    onclick="confirmDelete(<?= $row['partyId'] ?>,'parties')">Yes</button>
+                                                    onclick="confirmDelete(<?= $row['partyId'] ?>,'parties','<?= $row['partyLogo']?>')">Yes</button>
                                                 <button class="delete-modal-btn cancel-btn"
                                                     onclick="closeDeleteModal(<?= $row['partyId'] ?>)">No</button>
                                             </div>
                                         </div>
-                                        <div id="modal-<?= $row['partyId'] ?>" class="modal">
+                                        <div id="modal-<?= $row['partyId'] ?>" class="modal all-modals">
                                             <button class="close-modal" onclick="closeModal(<?= $row['partyId']?>)">&times;</button>
-                                            <div class="modal-content">
+                                            <div class="modal-content img-modal">
                                                 <h3 id="modal-title-<?=$row['partyId'] ?>" style="color: Black; text-align: center;"></h3>
                                                 <img id="modal-img-<?= $row['partyId'] ?>" src="" alt="Selected Image">
                                             </div>
@@ -213,7 +218,7 @@ unset($_SESSION['errorMsg']); // Clear the message
         // Function to show the data table (right2)
         function showData() {
             document.getElementById("right1").style.display = "none";  // Hide the form
-            document.getElementById("right2").style.display = "block"; // Show the table
+            document.getElementById("right2").style.display = "flex"; // Show the table
         }
 
         // Initialize by hiding one of the sections (optional, depending on your default view)
@@ -312,15 +317,15 @@ unset($_SESSION['errorMsg']); // Clear the message
 
         // Close the modal when clicking outside of the modal content
         window.onclick = function (event) {
-            var modals = document.getElementsByClassName('delete-modal');
+            var modals = document.getElementsByClassName('all-modals');
             for (var i = 0; i < modals.length; i++) {
                 if (event.target == modals[i]) {
                     modals[i].style.display = 'none';
                 }
             }
         }
-        function confirmDelete(id, table) {
-            window.location.href = `delete_party_candidate.php?table=${table}&id=${id}`;
+        function confirmDelete(id, table,photoPath) {
+            window.location.href = `delete_party_candidate.php?table=${table}&id=${id}&photoPath=${photoPath}`;
         }
         function editParty(partyId, partyName, partyLeader, partyLogo) {
             showForm();

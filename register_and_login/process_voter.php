@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (mysqli_num_rows($result) > 0) {
       $row1 = mysqli_fetch_assoc($result);
       // Set session variables for successful login
-      $_SESSION['districtId'] = $row1['did'];
+      $_SESSION['dId'] = $row1['dId'];
       $_SESSION['addressId'] = $row1['addressId'];
       $_SESSION['election_region'] = $row1['regionNo'];
       $_SESSION['voterId'] = $row1['id'];
@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
       $_SESSION['userPhoto'] = $row1['userPhoto'];
       $_SESSION['citizenshipFrontPhoto'] = $row1['citizenshipFrontPhoto'];
       $_SESSION['citizenshipBackPhoto'] = $row1['citizenshipBackPhoto'];
-
+      $_SESSION['votingStatus'] =$row1['votingStatus']; 
       header('Location: ../home/home.php');         // Redirect to the dashboard or homepage after successful login
     } else {
       $_SESSION['error_message'] = 'Unexpected error occured, please try again';

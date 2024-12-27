@@ -4,7 +4,7 @@ if (!isset($_SESSION['loggedin'])) {
     header('Location: ../admin/admin_login.php');
     exit;
 }
-$_SESSION['pageName'] = "Add Candidates";
+$_SESSION['pageName'] = "Manage Candidates";
 require_once "../php_for_ajax/districtRegionSelect.php";
 require_once "../home/logout_modals_html.php";
 require_once "../register_and_login/dbconnection.php";
@@ -48,6 +48,7 @@ if (isset($_GET['id'])) {
     <title>Admin Dashboard - Online Voting System</title>
     <link rel="stylesheet" href="../styles/modal1.css">
     <link rel="stylesheet" href="../admin/left_right_party_candidate.css">
+    <link rel="stylesheet" href="../styles/table_img.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <style>
@@ -124,13 +125,14 @@ if (isset($_GET['id'])) {
     <script src="../js/errorMessage_modal1.js"></script>
 </head>
 
-<body>
+<body style="
+  font-family: 'Poppins', sans-serif;">
     <?php require_once 'admin_navbar.php'; ?>
 
     <div class="content">
         <?php require_once '../home/logout_modals_html.php';
         logoutModalPhp("admin"); ?>
-        <div id="modal1" class="modal-overlay1">
+        <div id="modal1" class="modal-overlay1 all-modals">
             <div class="modal-content1">
                 <p id="modalMessage1"></p>
                 <button onclick="closeModal1()">Close</button>
@@ -213,12 +215,14 @@ if (isset($_GET['id'])) {
                                     <select id="partyName" name="partyName">
                                         <option value="default">-- Select Party --</option>
                                         <?php
+                                        $data = [];
                                         // Fetch party names
                                         $sql = "SELECT partyName FROM parties";
                                         $result = mysqli_query($conn, $sql);
 
                                         if (mysqli_num_rows($result) > 0) {
                                             while ($row = mysqli_fetch_assoc($result)) {
+                                                $data[] = $row['partyName'];
                                                 echo '<option value="' . $row['partyName'] . '"' . ($partyName == $row['partyName'] ? ' selected' : '') . '>' . htmlspecialchars($row['partyName']) . '</option>';
                                             }
                                         }
@@ -283,13 +287,51 @@ if (isset($_GET['id'])) {
                                 id="submitButton"><?= $candidateId != '' ? 'Update Candidate' : 'Add Candidate' ?></button>
                         </div>
                     </form>
+
                 </div>
                 <div id="right2" class="right-content">
                     <h2>View Candidates</h2>
+                    <form onsubmit="event.preventDefault();" class="search-form">
+                        <div class="search-input-container">
+                            <input type="text" id="searchQuery" placeholder="Search by name" class="search-input">
+                            <i class="fas fa-search"
+                                style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%);"></i>
+                        </div>
+                        <select id="districtSearch" class="search-input">
+                            <option value="">Select District</option>
+                            <?php
+                            $districts = [
+                                "Bhaktapur",
+                                "Chitwan",
+                                "Dhading",
+                                "Dolakha",
+                                "Kathmandu",
+                                "Kavrepalanchok",
+                                "Lalitpur",
+                                "Makwanpur",
+                                "Nuwakot",
+                                "Ramechhap",
+                                "Rasuwa",
+                                "Sindhuli",
+                                "Sindhupalchok"
+                            ];
+                            foreach ($districts as $district) {
+                                echo '<option value="' . htmlspecialchars($district) . '">' . htmlspecialchars($district) . '</option>';
+                            }
+                            ?>
+                        </select>
+                        <select id="partySearch" class="search-input">
+                            <option value="">Select Party</option>
+                            <?php foreach ($data as $party): ?>
+                                <option value="<?= htmlspecialchars($party) ?>"><?= htmlspecialchars($party) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </form>
                     <div class="table-container">
-                        <table>
+                        <table border="1">
                             <thead>
                                 <tr>
+                                    <th>Id</th>
                                     <th>Name</th>
                                     <th>Date of Birth</th>
                                     <th>Gender</th>
@@ -302,8 +344,11 @@ if (isset($_GET['id'])) {
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="results">
+                            </tbody>
+                            <tbody id="pre-fetched-data">
                                 <?php
+                                require_once '../register_and_login/dbconnection.php';
                                 $sql2 = "SELECT candidates.*, parties.partyName, district.district, district.regionNo 
                                          FROM candidates 
                                          JOIN parties ON candidates.partyId = parties.partyId 
@@ -314,6 +359,7 @@ if (isset($_GET['id'])) {
 
                                         ?>
                                         <tr>
+                                            <td> <?= htmlspecialchars($row['candidateId']) ?> </td>
                                             <td> <?= htmlspecialchars($row['name']) ?> </td>
                                             <td> <?= htmlspecialchars($row['dob']) ?> </td>
                                             <td> <?= htmlspecialchars($row['gender']) ?> </td>
@@ -332,19 +378,19 @@ if (isset($_GET['id'])) {
                                                     onclick="window.location.href='add_candidates.php?id=<?= $row['candidateId'] ?>'">Edit</button>
                                             </td>
                                         </tr>
-                                        <div id="delete-modal-<?= $row['candidateId'] ?>" class="delete-modal">
+                                        <div id="delete-modal-<?= $row['candidateId'] ?>" class="delete-modal all-modals">
                                             <div class="delete-modal-content">
                                                 <p>Are you sure you want to delete this candidate?</p>
                                                 <button class="delete-modal-btn confirm-btn"
-                                                    onclick="confirmDelete(<?= $row['candidateId'] ?>,'candidates')">Yes</button>
+                                                    onclick="confirmDelete(<?= $row['candidateId'] ?>,'candidates','<?= $row['candidate_photo'] ?>')">Yes</button>
                                                 <button class="delete-modal-btn cancel-btn"
                                                     onclick="closeDeleteModal(<?= $row['candidateId'] ?>)">No</button>
                                             </div>
                                         </div>
-                                        <div id="modal-<?= $row['candidateId'] ?>" class="modal">
+                                        <div id="modal-<?= $row['candidateId'] ?>" class="modal all-modals">
                                             <button class="close-modal"
                                                 onclick="closeModal(<?= $row['candidateId'] ?>)">&times;</button>
-                                            <div class="modal-content">
+                                            <div class="modal-content img-modal">
                                                 <h3 id="modal-title-<?= $row['candidateId'] ?>"
                                                     style="color: Black; text-align: center;"></h3>
                                                 <img id="modal-img-<?= $row['candidateId'] ?>" src="" alt="Selected Image">
@@ -366,7 +412,83 @@ if (isset($_GET['id'])) {
         </div>
     </div>
 
-    <script>        // Show error modal if there's an error message
+    <script>
+        function searchCandidates() {
+            var searchQuery = document.getElementById('searchQuery').value;
+            var district = document.getElementById('districtSearch').value;
+            var party = document.getElementById('partySearch').value;
+            if (searchQuery == '' && district == '' && party == '') {
+                resetResults();
+            } else {
+                document.getElementById('results').style.display = 'table-row-group';
+                document.getElementById('pre-fetched-data').style.display = 'none';
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', 'searchCandidates.php?searchQuery=' + encodeURIComponent(searchQuery) + '&district=' + encodeURIComponent(district) + '&party=' + encodeURIComponent(party), true);
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        var response = JSON.parse(xhr.responseText);
+                        var resultsDiv = document.getElementById('results');
+                        resultsDiv.innerHTML = '';
+                        // alert(xhr.responseText);
+                        if (response.length > 0) {
+                            response.forEach(function (candidate) {
+                                var row = document.createElement('tr');
+                                row.innerHTML = `
+                                <td>${candidate.candidateId}</td>
+                                <td>${candidate.name}</td>
+                                <td>${candidate.dob}</td>
+                                <td>${candidate.gender}</td>
+                                <td>${candidate.citizenship_number}</td>
+                                <td>${candidate.education_level}</td>
+                                <td>${candidate.partyName}</td>
+                                <td>${candidate.district}</td>
+                                <td>${candidate.regionNo}</td>
+                                <td><img src="../uploads/${candidate.candidate_photo}" onclick="openModal(${candidate.candidateId},'${candidate.candidate_photo}')" alt='Candidate Photo' style='max-width: 100px;'></td>
+                        
+                                <td>
+                                    <button class="delete-btn styled-btn" onclick="openDeleteModal(${candidate.candidateId})">Delete</button>
+                                    <button class="update-btn styled-btn" onclick="window.location.href='add_candidates.php?id=${candidate.candidateId}'">Edit</button>
+                                </td>
+                            `;
+                                resultsDiv.appendChild(row);
+                            });
+                        } else {
+                            var noResultsRow = document.createElement('tr');
+                            noResultsRow.innerHTML = '<td colspan="11">No results found</td>';
+                            resultsDiv.appendChild(noResultsRow);
+                        }
+                    }
+                };
+                xhr.send();
+            }
+        }
+        function resetResults() {
+            var searchQuery = document.getElementById('searchQuery').value;
+            var district = document.getElementById('districtSearch').value;
+            var party = document.getElementById('partySearch').value;
+
+            if (searchQuery === '' && district === '' && party === '') {
+                document.getElementById('results').style.display = 'none';
+                document.getElementById('pre-fetched-data').style.display = 'table-row-group';
+            }
+        }
+        window.onload = function () {
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('pre-fetched-data').style.display = 'table-row-group';
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('searchQuery').addEventListener('input', function () {
+                searchCandidates();
+            });
+            document.getElementById('districtSearch').addEventListener('change', function () {
+                searchCandidates();
+            });
+            document.getElementById('partySearch').addEventListener('change', function () {
+                searchCandidates();
+            });
+        });
+
+        // Show error modal if there's an error message
         const errorMessage = <?= json_encode($errorMessage); ?>;
         if (errorMessage) {
             showErrorModal(errorMessage);
@@ -381,9 +503,9 @@ if (isset($_GET['id'])) {
         function showData() {
             document.getElementById("right1").style.display = "none";  // Hide the form
             document.getElementById("right2").style.display = "block"; // Show the table
-            document.querySelectorAll('.right-content').forEach(element => {
-                element.style.width = '95%';
-            });
+            // document.querySelectorAll('.right-content').forEach(element => {
+            //     element.style.width = '95%';
+            // });
         }
 
         // Initialize by hiding one of the sections (optional, depending on your default view)
@@ -545,15 +667,15 @@ if (isset($_GET['id'])) {
 
         // Close the modal when clicking outside of the modal content
         window.onclick = function (event) {
-            var modals = document.getElementsByClassName('delete-modal');
+            var modals = document.getElementsByClassName('all-modals');
             for (var i = 0; i < modals.length; i++) {
                 if (event.target == modals[i]) {
                     modals[i].style.display = 'none';
                 }
             }
         }
-        function confirmDelete(id, table) {
-            window.location.href = `delete_party_candidate.php?table=${table}&id=${id}`;
+        function confirmDelete(id, table, photoPath) {
+            window.location.href = `delete_party_candidate.php?table=${table}&id=${id}&photoPath=${photoPath}`;
         }
         document.addEventListener('DOMContentLoaded', function () {
             const id = document.getElementById('candidateId').value;
