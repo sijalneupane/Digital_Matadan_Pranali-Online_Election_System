@@ -23,16 +23,15 @@ require_once "../home/logout_modals_html.php";
     <link rel="stylesheet" href="../admin/admin_home.css">
     <link rel="stylesheet" href="../styles/modal1.css">
     <style>
-        .welcome-message {
+       .welcome-message {
             position: fixed;
-            top: -200px;
+            top: -100px;
             /* Hidden above the screen initially */
             left: 50%;
             transform: translateX(-50%);
             background-color: #4CAF50;
             /* Green background */
             color: white;
-            font-size: 1.2rem;
             /* White text */
             padding: 10px 20px;
             border-radius: 5px;
@@ -42,6 +41,7 @@ require_once "../home/logout_modals_html.php";
         }
 
         .welcome-message.show {
+            margin-top:20px;
             transform: translateX(-50%) translateY(100px);
             /* Moves into view */
         }
