@@ -17,16 +17,16 @@ function getDistrictId($district, $regionNo, $conn) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-  $candidateId = isset($_POST['candidateId']) ? trim($_POST['candidateId']) : '';
-  $name = isset($_POST['name']) ? trim($_POST['name']) : '';
-  $dob = isset($_POST['dob']) ? trim($_POST['dob']) : '';
-  $gender = isset($_POST['gender']) ? trim($_POST['gender']) : '';
-  $citizenship_number = isset($_POST['citizenship_number']) ? trim($_POST['citizenship_number']) : '';
-  $education_level = isset($_POST['education_level']) ? trim($_POST['education_level']) : '';
-  $manifesto = isset($_POST['manifesto']) ? trim($_POST['manifesto']) : '';
-  $partyName = isset($_POST['partyName']) ? trim($_POST['partyName']) : '';
-  $district = isset($_POST['district']) ? trim($_POST['district']) : '';
-  $regionNo = isset($_POST['regionNo']) ? trim($_POST['regionNo']) : 0;
+  $candidateId = isset($_POST['candidateId']) ? mysqli_real_escape_string($conn, trim($_POST['candidateId'])) : '';
+  $name = isset($_POST['name']) ? mysqli_real_escape_string($conn, trim($_POST['name'])) : '';
+  $dob = isset($_POST['dob']) ? mysqli_real_escape_string($conn, trim($_POST['dob'])) : '';
+  $gender = isset($_POST['gender']) ? mysqli_real_escape_string($conn, trim($_POST['gender'])) : '';
+  $citizenship_number = isset($_POST['citizenship_number']) ? mysqli_real_escape_string($conn, trim($_POST['citizenship_number'])) : '';
+  $education_level = isset($_POST['education_level']) ? mysqli_real_escape_string($conn, trim($_POST['education_level'])) : '';
+  $manifesto = isset($_POST['manifesto']) ? mysqli_real_escape_string($conn, trim($_POST['manifesto'])) : '';
+  $partyName = isset($_POST['partyName']) ? mysqli_real_escape_string($conn, trim($_POST['partyName'])) : '';
+  $district = isset($_POST['district']) ? mysqli_real_escape_string($conn, trim($_POST['district'])) : '';
+  $regionNo = isset($_POST['regionNo']) ? mysqli_real_escape_string($conn, trim($_POST['regionNo'])) : 0;
   $candidate_photo = isset($_FILES['candidate_photo']) ? $_FILES['candidate_photo'] : '';
 
   $partyId =($partyName=="INDEPENDENT") ? 1 : getPartyId($partyName, $conn);
