@@ -54,11 +54,24 @@ require_once '../php_for_ajax/districtRegionSelect.php';
         #backPreview,
         #userPhotoPreview {
             display: none;
-            max-width: 100%;
-            height: auto;
+            /* max-width: 100%; */ 
+    /* height: auto; */
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
             border: 1px solid #ccc;
             border-radius: 5px;
             margin-top: 10px;
+        }
+        #userPhotoPreview{
+            width: 50%;
+        }
+        @media (max-width:768px) {
+            #frontPreview,
+            #backPreview{
+                width: 50%;
+            }
+
         }
     </style>
     <script src="../js/register_validation.js"></script>

@@ -48,10 +48,10 @@ if (!isset($_SESSION["email"])) {
       box-shadow: 0 0 40px rgba(127, 64, 230, 0.35);
     }
 .personal-details{
-  max-width:50%;
+  width:50%;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
   gap: 15px;
 }
     .photo {
@@ -254,7 +254,7 @@ if (!isset($_SESSION["email"])) {
         max-width: 90%;
       }
       .personal-details{
-        max-width: 100%;
+        width: 100%;
       }
       .photo, .candidate-info{
         width: 50%;

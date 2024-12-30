@@ -7,12 +7,12 @@ if (!$conn) {
 
 // Handle form submission to set the voting period
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $start_time = $_POST['voting_start'];
-    $end_time = $_POST['voting_end'];
+    $start_time = $_POST['startTime'];
+    $end_time = $_POST['endTime'];
 
     // Insert or update voting time
-    $sql = "INSERT INTO voting_time (voting_start, voting_end) VALUES ('$start_time', '$end_time')
-            ON DUPLICATE KEY UPDATE voting_start='$start_time', voting_end='$end_time'";
+    $sql = "INSERT INTO electiontime (startTime, endTime) VALUES ('$start_time', '$end_time')
+            ON DUPLICATE KEY UPDATE startTime='$start_time', endTime='$end_time'";
 
     if (mysqli_query($conn, $sql)) {
         echo "<script>alert('Voting time allocated succesffully')</script>";
@@ -33,11 +33,11 @@ mysqli_close($conn);
 <body>
     <h2>Set Voting Time</h2>
     <form method="post" action="">
-        <label for="voting_start">Voting Start Time:</label>
-        <input type="datetime-local" name="voting_start" required>
+        <label for="startTime">Voting Start Time:</label>
+        <input type="datetime-local" name="startTime" required>
         <br><br>
-        <label for="voting_end">Voting End Time:</label>
-        <input type="datetime-local" name="voting_end" required>
+        <label for="endTime">Voting End Time:</label>
+        <input type="datetime-local" name="endTime" required>
         <br><br>
         <button type="submit">Set Voting Time</button>
     </form>

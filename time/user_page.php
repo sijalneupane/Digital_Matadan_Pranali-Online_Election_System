@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>User - Voting Status</title>
@@ -8,7 +9,7 @@
         function fetchVotingStatus() {
             const xhr = new XMLHttpRequest();
             xhr.open('GET', 'fetch_voting_status.php', true);
-            xhr.onload = function() {
+            xhr.onload = function () {
                 if (this.status === 200) {
                     document.getElementById('voting-message').innerHTML = this.responseText;
                 }
@@ -23,8 +24,10 @@
         window.onload = fetchVotingStatus;
     </script>
 </head>
+
 <body>
     <h2>Voting Status</h2>
     <p id="voting-message">Loading...</p>
 </body>
+
 </html>

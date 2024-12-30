@@ -76,49 +76,35 @@ require_once "../home/logout_modals_html.php";
     ?>
     <div class="dashboard-container">
         <?php logoutModalPhp("admin"); ?>
-        <div class="dashboard-content">
             <section class="overview">
                 <h2>Election Overview</h2>
                 <div class="overview-flex">
                     <div class="overview-item">
-                        <h3>Total Voters</h3>
+                        <h4>Total Voters</h4>
                         <p><?= getTotal($conn, "voters"); ?></p>
                     </div>
                     <div class="overview-item">
-                        <h3>Total Pending Voters</h3>
+                        <h4>Total Pending Voters</h4>
                         <p><?= getTotal($conn, "pendingstatus"); ?></p>
                     </div>
                     <div class="overview-item">
-                        <h3>Total candidates</h3>
+                        <h4>Total candidates</h4>
                         <p><?= getTotal($conn, "candidates"); ?></p>
                     </div>
                     <div class="overview-item">
-                        <h3>Total Parties</h3>
+                        <h4>Total Parties</h4>
                         <p><?= getTotal($conn, "parties"); ?></p>
                     </div>
                     <div class="overview-item">
-                        <h3>Votes Cast</h3>
+                        <h4>Votes Cast</h4>
                         <p><?= totalVoteCasted($conn); ?></p>
                     </div>
                     <div class="overview-item">
-                        <h3>Election Time</h3>
+                        <h4>Election Time</h4>
                         <p>2024-12-01 (6am - 6pm)</p>
                     </div>
                 </div>
             </section>
-
-            <section class="admin-actions">
-                <h2>Admin Actions</h2>
-                <div class="actions-flex">
-                    <a href="../admin/add_candidates.php" class="action-card">Manage candidates</a>
-                    <a href="../admin/manage_parties.php" class="action-card">Manage Parties</a>
-                    <a href="../admin/verify_voters.php" class="action-card">Verify Voters</a>
-                    <a href="#" class="action-card">View voters</a>
-                    <a href="#" class="action-card">View Results</a>
-                    <!-- <a href="#" class="action-card">Manage Election Time</a> -->
-                </div>
-            </section>
-        </div>
     </div>
 
     <script>
