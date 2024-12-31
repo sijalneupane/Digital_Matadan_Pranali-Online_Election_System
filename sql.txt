@@ -15,23 +15,7 @@ CREATE TABLE pendingstatus (
     FOREIGN KEY (addressId) REFERENCES localaddress(lid) ON DELETE CASCADE
 );
 
-//Create voters table
-CREATE TABLE voters (
-    id INT(11) AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) COLLATE latin1_swedish_ci NOT NULL,
-    email VARCHAR(255) COLLATE latin1_swedish_ci NOT NULL,
-    password VARCHAR(255) COLLATE latin1_swedish_ci NOT NULL,
-    dateOfBirth DATE NULL,
-    citizenshipNumber VARCHAR(50) COLLATE latin1_swedish_ci NULL,
-    gender VARCHAR(50) COLLATE latin1_swedish_ci NULL,
-    addressId INT(11) NOT NULL,
-    citizenshipFrontPhoto VARCHAR(255) COLLATE latin1_swedish_ci NULL,
-    citizenshipBackPhoto VARCHAR(255) COLLATE latin1_swedish_ci NULL,
-    userPhoto VARCHAR(255) COLLATE latin1_swedish_ci NULL,
-    votingStatus ENUM('notVoted', 'voted') DEFAULT 'notVoted',
-    FOREIGN KEY (addressId) REFERENCES localaddress(lid) ON DELETE CASCADE
-);
-
+//in voter add:
 ALTER TABLE voters
 ADD votingStatus ENUM('notVoted', 'voted') DEFAULT 'notVoted';
 
@@ -58,7 +42,7 @@ CREATE TABLE candidates (
     dob DATE NOT NULL,                            -- Candidate's date of birth
     gender ENUM('male', 'female', 'other') NOT NULL, -- Candidate's gender
     citizenship_number VARCHAR(15) NOT NULL,          -- Candidate's contact number
-    education_level  TEXT,         -- Candidate's highest education level
+    education_level VARCHAR(100),         -- Candidate's highest education level
     manifesto TEXT,                               -- Candidate's manifesto or campaign description
     partyId INT NOT NULL,                        -- Foreign key linking to parties table
     dId INT NOT NULL,            -- Foreign key linking to districts table
@@ -80,3 +64,15 @@ CREATE TABLE parties (
 INSERT INTO parties (partyName, partyLeader, partyLogo) 
 VALUES 
 ('Independent', 'No Leader', 'independent.png');
+
+//currentresults table 
+CREATE TABLE currentresults (
+    electionId INT NOT NULL,
+    candidateName VARCHAR(255) NOT NULL,
+    citizenshipNumber VARCHAR(50) NOT NULL,
+    partyName VARCHAR(255),
+    dId INT,
+    totalVotes INT,
+    PRIMARY KEY (electionId, candidateName, citizenshipNumber),
+    FOREIGN key(dId) REFERENCES district(dId)
+);
