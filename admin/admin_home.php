@@ -16,6 +16,7 @@ require_once "../home/logout_modals_html.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,7 +24,7 @@ require_once "../home/logout_modals_html.php";
     <link rel="stylesheet" href="../admin/admin_home.css">
     <link rel="stylesheet" href="../styles/modal1.css">
     <style>
-       .welcome-message {
+        .welcome-message {
             position: fixed;
             top: -100px;
             /* Hidden above the screen initially */
@@ -41,7 +42,7 @@ require_once "../home/logout_modals_html.php";
         }
 
         .welcome-message.show {
-            margin-top:20px;
+            margin-top: 20px;
             transform: translateX(-50%) translateY(100px);
             /* Moves into view */
         }
@@ -71,40 +72,40 @@ require_once "../home/logout_modals_html.php";
             <button onclick="closeModal1()">Close</button>
         </div>
     </div>
-    <?php require '../admin/admin_navbar.php'; 
-    
+    <?php require '../admin/admin_navbar.php';
+
     ?>
     <div class="dashboard-container">
         <?php logoutModalPhp("admin"); ?>
-            <section class="overview">
-                <h2>Election Overview</h2>
-                <div class="overview-flex">
-                    <div class="overview-item">
-                        <h4>Total Voters</h4>
-                        <p><?= getTotal($conn, "voters"); ?></p>
-                    </div>
-                    <div class="overview-item">
-                        <h4>Total Pending Voters</h4>
-                        <p><?= getTotal($conn, "pendingstatus"); ?></p>
-                    </div>
-                    <div class="overview-item">
-                        <h4>Total candidates</h4>
-                        <p><?= getTotal($conn, "candidates"); ?></p>
-                    </div>
-                    <div class="overview-item">
-                        <h4>Total Parties</h4>
-                        <p><?= getTotal($conn, "parties"); ?></p>
-                    </div>
-                    <div class="overview-item">
-                        <h4>Votes Cast</h4>
-                        <p><?= totalVoteCasted($conn); ?></p>
-                    </div>
-                    <div class="overview-item">
-                        <h4>Election Time</h4>
-                        <p>2024-12-01 (6am - 6pm)</p>
-                    </div>
+        <section class="overview">
+            <h2>Election Overview</h2>
+            <div class="overview-flex">
+                <div class="overview-item">
+                    <h4>Total Voters</h4>
+                    <p><?= getTotal($conn, "voters"); ?></p>
                 </div>
-            </section>
+                <div class="overview-item">
+                    <h4>Total Pending Voters</h4>
+                    <p><?= getTotal($conn, "pendingstatus"); ?></p>
+                </div>
+                <div class="overview-item">
+                    <h4>Total candidates</h4>
+                    <p><?= getTotal($conn, "candidates"); ?></p>
+                </div>
+                <div class="overview-item">
+                    <h4>Total Parties</h4>
+                    <p><?= getTotal($conn, "parties"); ?></p>
+                </div>
+                <div class="overview-item">
+                    <h4>Votes Cast</h4>
+                    <p><?= totalVoteCasted($conn); ?></p>
+                </div>
+                <div class="overview-item">
+                    <h4>Election Time</h4>
+                    <p>2024-12-01 (6am - 6pm)</p>
+                </div>
+            </div>
+        </section>
     </div>
 
     <script>
@@ -127,11 +128,11 @@ require_once "../home/logout_modals_html.php";
                     welcomeMessage.classList.add('hide');
                 });
             }
-           
+
         });
         const errorMessage = <?= json_encode($errorMessage); ?>;
-        if (errorMessage){ showErrorModal(errorMessage)};
-         // Show error modal if there's an error message
+        if (errorMessage) { showErrorModal(errorMessage) };
+        // Show error modal if there's an error message
     </script>
 </body>
 
