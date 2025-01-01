@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin navbar</title>
+  <link rel="icon" href="../images/DMP logo.png" type="image/x-icon">
   <link rel="stylesheet" href="../admin/admin_navbar.css">
   <!-- <script src="../js/confirm_modal.js"></script> -->
 </head>

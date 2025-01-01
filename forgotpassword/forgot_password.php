@@ -8,6 +8,7 @@ unset($_SESSION['error_message']); // Clear the message
 
 <head>
     <title>Forgot Password</title>
+    <link rel="icon" href="../images/DMP logo.png" type="image/x-icon">
     <link rel="stylesheet" href="../forgotpassword/style1.css">
     <link rel="stylesheet" href="../styles/modal1.css">
     <script>

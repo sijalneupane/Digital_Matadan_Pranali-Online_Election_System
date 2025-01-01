@@ -49,6 +49,7 @@ if (isset($_GET['id'])) {
     <link rel="stylesheet" href="../styles/modal1.css">
     <link rel="stylesheet" href="../admin/left_right_party_candidate.css">
     <link rel="stylesheet" href="../styles/table_img.css">
+    <link rel="icon" href="../images/DMP logo.png" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <style>

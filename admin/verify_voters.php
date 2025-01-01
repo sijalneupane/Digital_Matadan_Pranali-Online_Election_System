@@ -18,6 +18,7 @@ $_SESSION['pageName'] = "Verify Voters";// Clear the message
 <link rel="stylesheet" href="../styles/table_img.css">
     <link rel="stylesheet" href="../admin/admin_home.css">
     <link rel="stylesheet" href="../styles/modal1.css">
+    <link rel="icon" href="../images/DMP logo.png" type="image/x-icon">
     <style>
         /* General Styling */
         body {

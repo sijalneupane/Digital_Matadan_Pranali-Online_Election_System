@@ -1,11 +1,44 @@
-*{
+* {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
-:root{
-  --main-container-color:#efefef;;
+
+:root {
+  --main-container-color: #efefef;
+  ;
 }
+
+/* Welcome msg css */
+.welcome-message {
+  position: fixed;
+  top: -100px;
+  /* Hidden above the screen initially */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #4CAF50;
+  /* Green background */
+  color: white;
+  /* White text */
+  padding: 10px 20px;
+  border-radius: 5px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  transition: transform 1s ease-in-out, opacity 1s ease-out;
+  z-index: 1000;
+}
+
+.welcome-message.show {
+  margin-top: 20px;
+  transform: translateX(-50%) translateY(100px);
+  /* Moves into view */
+}
+
+.welcome-message.hide {
+  transform: translateX(-50%) translateY(-200px);
+  /* Moves out of view */
+  opacity: 0;
+}
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -19,26 +52,28 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: var(--main-container-color);
+  /* background-color: var(--main-container-color); */
   min-width: 90%;
 }
 
-.overview{
-  /* background:var(--main-container-color); */
+.overview {
+  background: var(--main-container-color);
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-.overview{
+
+.overview {
   width: 100%;
 }
-.overview h2{
+
+.overview h2 {
   margin-bottom: 20px;
   font-size: 1.5em;
   color: #007BFF;
 }
 
-.overview-flex{
+.overview-flex {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
@@ -46,8 +81,9 @@ body {
   align-items: center;
 }
 
-.overview-item{
-  flex: 1 1 calc(25% - 20px); /* Adjust for 4 items per row */
+.overview-item {
+  flex: 1 1 calc(25% - 20px);
+  /* Adjust for 4 items per row */
   max-width: calc(35% - 20px);
   text-align: center;
   background-color: white;
@@ -66,6 +102,95 @@ body {
   font-weight: bold;
   color: #333;
 }
+/* elecion time section css */
+/* General styling for the section election time */
+.election-time {
+  max-width:600px;
+  margin: 20px auto;
+  padding:20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color:#f9f9f9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+/* Notice section Styling  */
+.notice-section{
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.notice-section p{
+  font-size: 16px;
+  font-weight: bold;
+  color:#333;
+  margin-bottom: 10px;
+}
+
+.notice-section button{
+  padding:8px 16px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.notice-section button:hover{
+  background-color: #0056b3;
+}
+
+/* Form styling */
+form{
+  display:flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+form div{
+  display:flex;
+  flex-direction: column;
+}
+
+form label{
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+form input{
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+form input:focus{
+  border-color: #007bff;
+}
+
+form button{
+  padding:10px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #28a745;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+form button:hover{
+background-color: #218838;
+}
 
 @media (max-width: 768px) {
   .overview-item {
@@ -78,5 +203,17 @@ body {
   .overview-item {
       flex: 1 1 100%; /* 1 item per row on very small screens */
       max-width: 100%;
+  }
+
+  .election-time {
+      padding: 15px;
+  }
+
+  .notice-section p {
+      font-size: 14px;
+  }
+
+  form button {
+      font-size: 14px;
   }
 }

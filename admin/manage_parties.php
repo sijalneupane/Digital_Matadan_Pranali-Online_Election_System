@@ -19,6 +19,7 @@ unset($_SESSION['errorMsg']); // Clear the message
     <link rel="stylesheet" href="../admin/left_right_party_candidate.css">
     <link rel="stylesheet" href="../styles/modal1.css">
     <link rel="stylesheet" href="../styles/table_img.css">
+    <link rel="icon" href="../images/DMP logo.png" type="image/x-icon">
     <style>
         
         form {

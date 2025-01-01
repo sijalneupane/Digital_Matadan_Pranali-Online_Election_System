@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <head>
     <title>Reset Password</title>
-
+    <link rel="icon" href="../images/DMP logo.png" type="image/x-icon">
     <link rel="stylesheet" href="../forgotpassword/style1.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <script src="../js/togglepassword.js"></script>

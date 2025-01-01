@@ -23,37 +23,12 @@ require_once "../home/logout_modals_html.php";
     <title>Admin Dashboard - Online Voting System</title>
     <link rel="stylesheet" href="../admin/admin_home.css">
     <link rel="stylesheet" href="../styles/modal1.css">
+    <link rel="icon" href="../images/DMP logo.png" type="image/x-icon">
     <style>
-        .welcome-message {
-            position: fixed;
-            top: -100px;
-            /* Hidden above the screen initially */
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #4CAF50;
-            /* Green background */
-            color: white;
-            /* White text */
-            padding: 10px 20px;
-            border-radius: 5px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-            transition: transform 1s ease-in-out, opacity 1s ease-out;
-            z-index: 1000;
-        }
 
-        .welcome-message.show {
-            margin-top: 20px;
-            transform: translateX(-50%) translateY(100px);
-            /* Moves into view */
-        }
-
-        .welcome-message.hide {
-            transform: translateX(-50%) translateY(-200px);
-            /* Moves out of view */
-            opacity: 0;
-        }
     </style>
     <script src="../js/errorMessage_modal1.js"></script>
+    <script src="../js/get_votingTime.js"></script>
 </head>
 
 <body>
@@ -106,6 +81,35 @@ require_once "../home/logout_modals_html.php";
                 </div>
             </div>
         </section>
+        <section class="election-time">
+            <!-- Notice Display -->
+            <div class="notice-section">
+                <p id="current-notice"></p>
+                <button id="update-notice-btn">Update Notice</button>
+            </div>
+
+            <!-- Election Form -->
+            <form id="election-form">
+                <input type="hidden" id="election-id" />
+
+                <div>
+                    <label for="election-name">Election Name</label>
+                    <input type="text" id="election-name" name="electionName" required />
+                </div>
+
+                <div>
+                    <label for="start-time">Start Time</label>
+                    <input type="datetime-local" id="start-time" name="startTime" required />
+                </div>
+
+                <div>
+                    <label for="end-time">End Time</label>
+                    <input type="datetime-local" id="end-time" name="endTime" required />
+                </div>
+
+                <button type="submit" id="set-election-btn">Set Election</button>
+            </form>
+        </section>
     </div>
 
     <script>
@@ -128,11 +132,41 @@ require_once "../home/logout_modals_html.php";
                     welcomeMessage.classList.add('hide');
                 });
             }
-
         });
-        const errorMessage = <?= json_encode($errorMessage); ?>;
-        if (errorMessage) { showErrorModal(errorMessage) };
+
         // Show error modal if there's an error message
+        const errorMessage = <?= json_encode($errorMessage); ?>;
+        if (errorMessage) {
+            showErrorModal(errorMessage);
+        }
+
+        // Function to load the current notice
+        function loadCurrentNotice() {
+            const noticeElement = document.getElementById("current-notice");
+            if (votingTime && votingTime.electionName) {
+                noticeElement.textContent = `Current Election: ${votingTime.electionName} (Starts: ${votingTime.startTime}, Ends: ${votingTime.endTime})`;
+            } else {
+                noticeElement.textContent = "No election is currently set.";
+            }
+        }
+
+        // Initial load of the notice
+        loadCurrentNotice();
+
+        // Function to populate form with voting time details for update
+        function populateForm() {
+            if (votingTime) {
+                document.getElementById("election-id").value = votingTime.electionId || "";
+                document.getElementById("election-name").value = votingTime.electionName || "";
+                document.getElementById("start-time").value = votingTime.startTime || "";
+                document.getElementById("end-time").value = votingTime.endTime || "";
+            }
+        }
+
+        // Event listener for the Update Notice button
+        document.getElementById("update-notice-btn").addEventListener("click", function () {
+            document.getElementById("set-election-btn").textContent = "Update Election";
+        });
     </script>
 </body>
 

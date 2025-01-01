@@ -13,6 +13,7 @@ if (!isset($_SESSION['email'])) {
 <head>
   <title>Enter OTP</title>
   <link rel="stylesheet" href="../forgotpassword/style1.css">
+  <link rel="icon" href="../images/DMP logo.png" type="image/x-icon">
   <script>
 
     function validateForm() {
