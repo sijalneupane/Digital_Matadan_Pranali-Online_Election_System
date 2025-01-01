@@ -1,4 +1,4 @@
-//pending status table and voters table
+--1) //pending status table and voters table
 CREATE TABLE pendingstatus (
     id INT(11) AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) COLLATE latin1_swedish_ci NOT NULL,
@@ -15,11 +15,26 @@ CREATE TABLE pendingstatus (
     FOREIGN KEY (addressId) REFERENCES localaddress(lid) ON DELETE CASCADE
 );
 
-//in voter add:
-ALTER TABLE voters
-ADD votingStatus ENUM('notVoted', 'voted') DEFAULT 'notVoted';
+--2) voters table:
+CREATE TABLE pendingstatus (
+    id INT(11) AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) COLLATE latin1_swedish_ci NOT NULL,
+    email VARCHAR(255) COLLATE latin1_swedish_ci NOT NULL,
+    password VARCHAR(255) COLLATE latin1_swedish_ci NOT NULL,
+    dateOfBirth DATE NULL,
+    citizenshipNumber VARCHAR(50) COLLATE latin1_swedish_ci NULL,
+    gender VARCHAR(50) COLLATE latin1_swedish_ci NULL,
+    addressId INT(11) NOT NULL,
+    citizenshipFrontPhoto VARCHAR(255) COLLATE latin1_swedish_ci NULL,
+    citizenshipBackPhoto VARCHAR(255) COLLATE latin1_swedish_ci NULL,
+    userPhoto VARCHAR(255) COLLATE latin1_swedish_ci NULL,
+    votingStatus ENUM('notVoted', 'voted') DEFAULT 'notVoted',
+    FOREIGN KEY (addressId) REFERENCES localaddress(lid) ON DELETE CASCADE
+);
+-- ALTER TABLE voters
+-- ADD votingStatus ENUM('notVoted', 'voted') DEFAULT 'notVoted';
 
-//district table
+-- 3)//district table
 create table district(
     dId int AUTO_INCREMENT PRIMARY KEY,
     district varchar(100) not NULL,
@@ -27,7 +42,7 @@ create table district(
 )
 
 
-//localaddress table
+-- 4)//localaddress table
 CREATE TABLE localaddress (
     lid INT AUTO_INCREMENT PRIMARY KEY,
     dId INT NOT NULL,
@@ -35,7 +50,7 @@ CREATE TABLE localaddress (
     FOREIGN KEY (dId) REFERENCES district(dId) ON DELETE CASCADE
 );
 
-//candidates table
+-- 5)//candidates table
 CREATE TABLE candidates (
     candidateId INT AUTO_INCREMENT PRIMARY KEY,  -- Unique ID for each candidate
     name VARCHAR(255) NOT NULL,              -- Candidate's full name
@@ -54,7 +69,8 @@ CREATE TABLE candidates (
     CONSTRAINT fk_candidate_party FOREIGN KEY (partyId) REFERENCES parties(partyId) ON DELETE CASCADE,
     CONSTRAINT fk_candidate_district FOREIGN KEY (dId) REFERENCES district(dId) ON DELETE CASCADE
 );
-//parties table
+
+-- 6)//parties table
 CREATE TABLE parties (
     partyId INT AUTO_INCREMENT PRIMARY KEY,
     partyName VARCHAR(255) NOT NULL UNIQUE,
@@ -64,8 +80,21 @@ CREATE TABLE parties (
 INSERT INTO parties (partyName, partyLeader, partyLogo) 
 VALUES 
 ('Independent', 'No Leader', 'independent.png');
+-- the independent.png is located in images folder
 
-//currentresults table 
+-- 7)//election time table
+CREATE TABLE electionTime (
+    electionId INT(11) NOT NULL AUTO_INCREMENT,
+    electionName VARCHAR(50) NOT NULL,
+    startTime DATETIME NOT NULL,
+    endTime DATETIME NOT NULL,
+    nominationStartTime DATETIME NOT NULL,
+    nominationEndTime DATETIME NOT NULL,
+    PRIMARY KEY (electionId)
+);
+
+
+--8) //currentresults table 
 CREATE TABLE currentresults (
     electionId INT NOT NULL,
     candidateName VARCHAR(255) NOT NULL,

@@ -56,80 +56,61 @@ body {
   min-width: 90%;
 }
 
-.overview {
-  background: var(--main-container-color);
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+section {
+  background-color: var(--main-container-color);
+  width: 95%;
+  /* min-width: 500px; */
 }
 
-.overview {
-  width: 100%;
-}
 
-.overview h2 {
-  margin-bottom: 20px;
-  font-size: 1.5em;
-  color: #007BFF;
-}
-
-.overview-flex {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-  align-items: center;
-}
-
-.overview-item {
-  flex: 1 1 calc(25% - 20px);
-  /* Adjust for 4 items per row */
-  max-width: calc(35% - 20px);
-  text-align: center;
-  background-color: white;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.overview-item h4 {
-  margin-bottom: 10px;
-  color: #555;
-}
-
-.overview-item p {
-  font-size: 1.4em;
-  font-weight: bold;
-  color: #333;
-}
 /* elecion time section css */
 /* General styling for the section election time */
 .election-time {
-  max-width:600px;
-  margin: 20px auto;
-  padding:20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  /* min-width: 500px; */
+  padding: 20px;
   border: 1px solid #ccc;
   border-radius: 8px;
-  background-color:#f9f9f9;
+  /* background-color:#f9f9f9; */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   font-family: Arial, sans-serif;
 }
 
 /* Notice section Styling  */
-.notice-section{
+.notice-section {
+  width: 100%;
   text-align: center;
   margin-bottom: 20px;
 }
 
-.notice-section p{
-  font-size: 16px;
-  font-weight: bold;
-  color:#333;
-  margin-bottom: 10px;
+.notice-section h2 {
+  margin-bottom: 20px;
+  font-size: 1.5em;
+  color: #007BFF;
+}
+.overview h3{
+  font-size: 1.2em;
+  color: #007BFF;
 }
 
-.notice-section button{
-  padding:8px 16px;
+.notice-section p {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+.notice-section #current-notice {
+  overflow-x: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+.notice-section button {
+  padding: 8px 16px;
   font-size: 14px;
   font-weight: bold;
   color: #fff;
@@ -140,30 +121,75 @@ body {
   transition: background-color 0.3s;
 }
 
-.notice-section button:hover{
+.notice-section button:hover {
   background-color: #0056b3;
 }
 
+.content-wrapper {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.overview {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.overview-item {
+  width: 90%;
+  text-align: start;
+  background-color: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.overview-item summary {
+  font-size: 1.1em;
+  margin-bottom: 6px;
+  color: #000000;
+  font-weight: bold;
+}
+.overview-item summary:hover {
+  cursor: pointer;
+}
+.overview-item p {
+  font-size: 1em;
+  font-weight: normal;
+  color: #333;
+}
+
 /* Form styling */
-form{
-  display:flex;
+form {
+  background-color: white;
+  width: 50%;
+  padding: 20px;
+  display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
-form div{
-  display:flex;
+form div {
+  display: flex;
   flex-direction: column;
+  align-items: start;
 }
 
-form label{
+form label {
   font-size: 14px;
   font-weight: bold;
   color: #333;
   margin-bottom: 5px;
 }
 
-form input{
+form input {
+  width: 100%;
   padding: 8px;
   font-size: 14px;
   border: 1px solid #ccc;
@@ -172,12 +198,14 @@ form input{
   transition: border-color 0.3s;
 }
 
-form input:focus{
+form input:focus {
   border-color: #007bff;
 }
 
-form button{
-  padding:10px;
+form button {
+  width: 40%;
+  min-width: 120px;
+  padding: 10px;
   font-size: 16px;
   font-weight: bold;
   color: #fff;
@@ -188,32 +216,46 @@ form button{
   transition: background-color 0.3s;
 }
 
-form button:hover{
-background-color: #218838;
+form button:hover {
+  background-color: #218838;
 }
 
 @media (max-width: 768px) {
-  .overview-item {
-      flex: 1 1 calc(50% - 20px); /* 2 items per row on smaller screens */
-      max-width: calc(50% - 20px);
+  .notice-section #current-notice {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
+  .content-wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .overview {
+    width:80%;
+  }
+
+  form {
+    width: 80%;
+}
 }
 
 @media (max-width: 480px) {
   .overview-item {
-      flex: 1 1 100%; /* 1 item per row on very small screens */
-      max-width: 100%;
+    flex: 1 1 100%;
+    /* 1 item per row on very small screens */
+    max-width: 100%;
   }
 
   .election-time {
-      padding: 15px;
+    padding: 15px;
   }
 
   .notice-section p {
-      font-size: 14px;
+    font-size: 14px;
   }
 
   form button {
-      font-size: 14px;
+    font-size: 14px;
   }
 }

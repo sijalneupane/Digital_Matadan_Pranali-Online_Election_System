@@ -8,15 +8,14 @@ function fetchVotingTime() {
     xhr.onload = function () {
         if (this.status === 200) {
             votingTime = JSON.parse(this.responseText);
-            // document.getElementById('voting-message').innerHTML = JSON.stringify(votingTime, null, 2);
-            // document.getElementById('voting-message').innerHTML = votingTime.electionId;
         }
     };
     xhr.send();
 }
 
-// Automatically fetch the voting status every 10 seconds
-setInterval(fetchVotingTime, 10000); // Fetch every 10 seconds (10000 milliseconds)
 
-// Fetch voting status immediately when page loads
-window.onload = fetchVotingTime;
+window.onload = function () {
+    fetchVotingTime();
+};
+// // Automatically fetch the voting status every 10 seconds
+setInterval(fetchVotingTime, 1000); // Fetch every 10 seconds (10000 milliseconds)

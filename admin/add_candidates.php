@@ -43,6 +43,7 @@ if (isset($_GET['id'])) {
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Online Voting System</title>
@@ -109,6 +110,84 @@ if (isset($_GET['id'])) {
             outline: none;
         }
 
+        input:disabled,
+        select:disabled,
+        textarea:disabled,
+        button:disabled {
+            background-color: #f5f5f5;
+            cursor: not-allowed;
+        }
+
+        .candidate-form-modal {
+            display: none;
+            /* Initially hidden */
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .candidate-form-modal-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .candidate-form-modal-close-button {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        #loading-screen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 44px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            top: 0px;
+            right: 0;
+            z-index: 100;
+            width: 100%;
+            height: 100%;
+            color: red;
+            background-color: transparent;
+            transition: all 0.3s ease-in out;
+        }
+
+        .loading-indicator {
+            width: 70px;
+            height: 70px;
+            border: 6px solid rgba(0, 0, 0, 0.2);
+            /* Light border */
+            /* border-top: 6px solid    #3498db; */
+            border-top: 6px solid #007bff;
+            /* Blue border */
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
 
         @media (max-width: 768px) {
             .form-row {
@@ -129,8 +208,7 @@ if (isset($_GET['id'])) {
 <body style="
   font-family: 'Poppins', sans-serif;">
     <?php require_once 'admin_navbar.php'; ?>
-
-    <div class="content">
+    <div class="content" id="content">
         <?php require_once '../home/logout_modals_html.php';
         logoutModalPhp("admin"); ?>
         <div id="modal1" class="modal-overlay1 all-modals">
@@ -144,12 +222,17 @@ if (isset($_GET['id'])) {
             <div class="left">
                 <button id="addBtn" onclick="showForm()">Add Candidates </button>
                 <button id="viewBtn" onclick="showData()">View Candidates </button>
+                <div id="displayNominationTime" style="position: relative;
+                bottom:0;left:20"></div>
             </div>
             <div class="right">
-                <div id="right1" class="right-content">
+                <div id="loading-screen">
+                    <div class="loading-indicator"></div>
+                </div>
+                <div id="right1" class="right-content" style="display: none;">
                     <form id="addCandidateForm"
                         action="add_candidates_controller.php<?= isset($candidateId) ? '?id=' . $candidateId : '' ?>"
-                        method="POST" enctype="multipart/form-data" onsubmit="return validateForm();">
+                        method="POST" enctype="multipart/form-data" onsubmit="event.preventDefault();">
                         <h2 id="formTitle"><?= $candidateId != '' ? 'Update Candidate' : 'Add Candidates' ?></h2>
                         <input type="hidden" name="candidateId" id="candidateId" value="<?= $candidateId ?>">
                         <div class="form-row">
@@ -290,7 +373,7 @@ if (isset($_GET['id'])) {
                     </form>
 
                 </div>
-                <div id="right2" class="right-content">
+                <div id="right2" class="right-content" style="display: none;">
                     <h2>View Candidates</h2>
                     <form onsubmit="event.preventDefault();" class="search-form">
                         <div class="search-input-container">
@@ -414,6 +497,181 @@ if (isset($_GET['id'])) {
     </div>
 
     <script>
+      // Global variable to store the voting status
+let votingTime = {};
+let previousNominationStart = null;
+let previousNominationEnd = null;
+let nominationCheckInterval = null;
+let nominationTimeChecked = false; // Flag to ensure checkNominationTime is called only once
+
+// Function to fetch voting status from the server
+function fetchVotingTime() {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', '../time/fetch_voting_time.php', true);
+    xhr.onload = function () {
+        if (this.status === 200) {
+            const newVotingTime = JSON.parse(this.responseText);
+            if (previousNominationStart !== new Date(newVotingTime.nominationStartTime).getTime() || 
+                previousNominationEnd !== new Date(newVotingTime.nominationEndTime).getTime()) {
+                votingTime = newVotingTime;
+                checkNominationTime();
+            }
+            previousNominationStart = new Date(newVotingTime.nominationStartTime).getTime();
+            previousNominationEnd = new Date(newVotingTime.nominationEndTime).getTime();
+        }
+    };
+    xhr.send();
+}
+
+window.onload = function () {
+    fetchVotingTime();
+};
+
+// Automatically fetch the voting status every 10 seconds
+setInterval(fetchVotingTime, 1000); // Fetch every 10 seconds (10000 milliseconds)
+
+// check time every 1 sec
+document.addEventListener('DOMContentLoaded', function () {
+    if (!votingTime.startTime) {
+        setTimeout(() => {
+            document.getElementById('loading-screen').style.display = 'none';
+            // document.getElementById('right1').style.display = 'block';
+            // checkNominationTime();
+        }, 1000);
+    }
+});
+
+// Function for making input fields disabled
+function disableFormFields(disable) {
+    const form = document.getElementById('addCandidateForm');
+    const fields = form.querySelectorAll('input, select, textarea');
+    fields.forEach(field => {
+        field.disabled = disable;
+    });
+}
+
+function makeDisabled(disableOrNot) {
+    if (disableOrNot) {
+        document.getElementById('right1').style.display = 'block';
+        disableFormFields(true);
+        document.querySelectorAll('.form-group span').forEach(span => span.textContent = '');
+    } else {
+        disableFormFields(false);
+    }
+}
+
+// Function for checking nomination time
+function checkNominationTime(fromsubmit = false) {
+    console.log(votingTime);
+    // Parse the current time and nomination times as timestamps
+    const currentTime = new Date().getTime();
+    const nominationStartTime = new Date(votingTime.nominationStartTime).getTime();
+    const nominationEndTime = new Date(votingTime.nominationEndTime).getTime();
+
+    // Get the form element
+    const form = document.getElementById('addCandidateForm');
+
+    if (!votingTime.error) {
+        // Check nomination time conditions
+        if (currentTime < nominationStartTime) {
+            // Nomination time has not started
+            showCandidateFormModal('Election nomination date and time is yet to come.');
+            makeDisabled(true);
+            return false; // Prevent form submission
+        } else if (currentTime > nominationEndTime) {
+            // Nomination time has ended
+            showCandidateFormModal('The candidate nomination date and time is over. Please head over to the candidates list.');
+            // makeDisabled(true);
+            return false; // Prevent form submission
+        } else {
+            document.getElementById('loading-screen').style.display = 'none';
+            document.getElementById('right1').style.display = 'block';
+            makeDisabled(false); // Enable the form when nomination time is valid
+
+            if (fromsubmit) {
+                return validateForm(); // Allow form submission if validation passes
+            }
+            return false; // Prevent form submission if not triggered by the submit button
+        }
+    } else {
+        showCandidateFormModal('No upcoming election found. Please ensure that you have scheduled any election.');
+        // makeDisabled(true);
+        return false; // Prevent form submission
+    }
+}
+
+// Real-time nomination time check
+setInterval(() => {
+    const currentTime = new Date().getTime();
+    const nominationStartTime = new Date(votingTime.nominationStartTime).getTime();
+    const nominationEndTime = new Date(votingTime.nominationEndTime).getTime();
+
+    if (currentTime >= nominationStartTime && currentTime <= nominationEndTime) {
+        // If within nomination time
+        makeDisabled(false);
+    } else {
+        // If outside mainly nomination time
+        if(currentTime < nominationStartTime) {
+            makeDisabled(true);
+        }else{
+            document.getElementById('right1').style.display = 'none';
+    }
+}
+}, 1000); // Check every second
+
+        // Function to show a modal
+        function showCandidateFormModal(message) {
+            const modal = document.createElement('div');
+            modal.classList.add('candidate-form-modal');
+            modal.innerHTML = `
+                <div class="candidate-form-modal-content">
+                    <span class="candidate-form-modal-close-button">&times;</span>
+                    <p>${message}</p>
+                </div>
+                `;
+            modal.style.display = 'flex';
+            document.getElementById('content').appendChild(modal);
+
+            // Close the modal
+            modal.querySelector('.candidate-form-modal-close-button').onclick = function () {
+                modal.remove();
+                if (votingTime.error) {
+                    window.location.href = '../admin/admin_home.php';
+                }
+                if (new Date(votingTime.nominationEndTime).getTime() < new Date().getTime()) {
+                    showData();
+                }
+            };
+            window.onclick = function (event) {
+                if (event.target === modal) {
+                    modal.remove();
+                    if (new Date(votingTime.nominationEndTime).getTime() < new Date().getTime()) {
+                        showData();
+                    }
+                    if (votingTime.error) {
+                        window.location.href = '../admin/admin_home.php';
+                    }
+                }
+
+                var modals = document.getElementsByClassName('all-modals');
+                for (var i = 0; i < modals.length; i++) {
+                    if (event.target == modals[i]) {
+                        modals[i].style.display = 'none';
+                    }
+                }
+            };
+            // document.getElementById('go-to-candidate-list-button').onclick = function () {
+            //     showData();
+            //     modal.remove();
+            // };
+        }
+
+        //call the function to check nomination time when the page loads
+        document.getElementById('addCandidateForm').addEventListener('submit', function () {
+            checkNominationTime(true);
+        }
+        );
+
         function searchCandidates() {
             var searchQuery = document.getElementById('searchQuery').value;
             var district = document.getElementById('districtSearch').value;
@@ -667,14 +925,7 @@ if (isset($_GET['id'])) {
         }
 
         // Close the modal when clicking outside of the modal content
-        window.onclick = function (event) {
-            var modals = document.getElementsByClassName('all-modals');
-            for (var i = 0; i < modals.length; i++) {
-                if (event.target == modals[i]) {
-                    modals[i].style.display = 'none';
-                }
-            }
-        }
+
         function confirmDelete(id, table, photoPath) {
             window.location.href = `delete_party_candidate.php?table=${table}&id=${id}&photoPath=${photoPath}`;
         }
