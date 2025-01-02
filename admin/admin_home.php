@@ -40,7 +40,7 @@ require_once "../home/logout_modals_html.php";
         </button>
     </div>
 
-    <div id="modal1" class="modal-overlay1">
+    <div id="modal1" class="modal-overlay1 all-modals">
         <div class="modal-content1">
             <p id="modalMessage1"></p>
             <button onclick="closeModal1()">Close</button>
@@ -50,7 +50,8 @@ require_once "../home/logout_modals_html.php";
 
     ?>
     <div class="dashboard-container">
-        <?php logoutModalPhp("admin"); ?>
+    <?php require_once '../home/logout_modals_html.php';
+        logoutModalPhp("admin"); ?>
         <section class="election-time">
             <!-- Notice Display -->
             <div class="notice-section">
@@ -195,9 +196,19 @@ require_once "../home/logout_modals_html.php";
 
             return isValid;
         }
-
+window.onclick = function () {
+    
+            //clsing the modal when clicked outside
+            var modals = document.getElementsByClassName('all-modals');
+            for (var i = 0; i < modals.length; i++) {
+                if (event.target == modals[i]) {
+                    modals[i].style.display = 'none';
+                }
+            }
+}
         // Function to show the welcome message
         window.addEventListener('load', () => {
+            // Get the welcome message element and dismiss button
             const logIn = <?= json_encode($fromLogIn); ?>;
             const welcomeMessage = document.getElementById('welcomeMessage');
             const dismissButton = document.getElementById('dismissButton');

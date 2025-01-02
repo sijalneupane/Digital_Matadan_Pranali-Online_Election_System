@@ -179,6 +179,36 @@ if (isset($_GET['id'])) {
             animation: spin 1s linear infinite;
         }
 
+        /* Styling for the Go to Top button */
+        .go-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #007BFF;
+            /* Button color */
+            color: #fff;
+            /* Text color */
+            border: none;
+            border-radius: 50%;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 20px;
+            display: none;
+            /* Initially hidden */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease;
+        }
+
+        .go-to-top:hover {
+            background-color: #0056b3;
+            /* Darker color on hover */
+        }
+
+        /* Show the button when needed */
+        .go-to-top.show {
+            display: block;
+        }
+
         @keyframes spin {
             from {
                 transform: rotate(0deg);
@@ -491,133 +521,147 @@ if (isset($_GET['id'])) {
                             </tbody>
                         </table>
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
 
+    <button id="goToTop" class="go-to-top" title="Go to Top" onclick="scrollToTop()">↑</button>
     <script>
-      // Global variable to store the voting status
-let votingTime = {};
-let previousNominationStart = null;
-let previousNominationEnd = null;
-let nominationCheckInterval = null;
-let nominationTimeChecked = false; // Flag to ensure checkNominationTime is called only once
+        // Global variable to store the voting status
+        let votingTime = {};
+        let previousNominationStart = null;
+        let previousNominationEnd = null;
+        let nominationCheckInterval = null;
+        let nominationTimeChecked = false; // Flag to ensure checkNominationTime is called only once
 
-// Function to fetch voting status from the server
-function fetchVotingTime() {
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', '../time/fetch_voting_time.php', true);
-    xhr.onload = function () {
-        if (this.status === 200) {
-            const newVotingTime = JSON.parse(this.responseText);
-            if (previousNominationStart !== new Date(newVotingTime.nominationStartTime).getTime() || 
-                previousNominationEnd !== new Date(newVotingTime.nominationEndTime).getTime()) {
-                votingTime = newVotingTime;
-                checkNominationTime();
-            }
-            previousNominationStart = new Date(newVotingTime.nominationStartTime).getTime();
-            previousNominationEnd = new Date(newVotingTime.nominationEndTime).getTime();
+        // Function to fetch voting status from the server
+        function fetchVotingTime() {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', '../time/fetch_voting_time.php', true);
+            xhr.onload = function () {
+                if (this.status === 200) {
+                    const newVotingTime = JSON.parse(this.responseText);
+                    if (previousNominationStart !== new Date(newVotingTime.nominationStartTime).getTime() ||
+                        previousNominationEnd !== new Date(newVotingTime.nominationEndTime).getTime()) {
+                        votingTime = newVotingTime;
+                        checkNominationTime();
+                    }
+                    previousNominationStart = new Date(newVotingTime.nominationStartTime).getTime();
+                    previousNominationEnd = new Date(newVotingTime.nominationEndTime).getTime();
+                }
+            };
+            xhr.send();
         }
-    };
-    xhr.send();
-}
 
-window.onload = function () {
-    fetchVotingTime();
-};
+        window.onload = function () {
+            fetchVotingTime();
+        };
 
-// Automatically fetch the voting status every 10 seconds
-setInterval(fetchVotingTime, 1000); // Fetch every 10 seconds (10000 milliseconds)
+        // Automatically fetch the voting status every 10 seconds
+        setInterval(fetchVotingTime, 1000); // Fetch every 10 seconds (10000 milliseconds)
 
-// check time every 1 sec
-document.addEventListener('DOMContentLoaded', function () {
-    if (!votingTime.startTime) {
-        setTimeout(() => {
-            document.getElementById('loading-screen').style.display = 'none';
-            // document.getElementById('right1').style.display = 'block';
-            // checkNominationTime();
-        }, 1000);
-    }
-});
-
-// Function for making input fields disabled
-function disableFormFields(disable) {
-    const form = document.getElementById('addCandidateForm');
-    const fields = form.querySelectorAll('input, select, textarea');
-    fields.forEach(field => {
-        field.disabled = disable;
-    });
-}
-
-function makeDisabled(disableOrNot) {
-    if (disableOrNot) {
-        document.getElementById('right1').style.display = 'block';
-        disableFormFields(true);
-        document.querySelectorAll('.form-group span').forEach(span => span.textContent = '');
-    } else {
-        disableFormFields(false);
-    }
-}
-
-// Function for checking nomination time
-function checkNominationTime(fromsubmit = false) {
-    console.log(votingTime);
-    // Parse the current time and nomination times as timestamps
-    const currentTime = new Date().getTime();
-    const nominationStartTime = new Date(votingTime.nominationStartTime).getTime();
-    const nominationEndTime = new Date(votingTime.nominationEndTime).getTime();
-
-    // Get the form element
-    const form = document.getElementById('addCandidateForm');
-
-    if (!votingTime.error) {
-        // Check nomination time conditions
-        if (currentTime < nominationStartTime) {
-            // Nomination time has not started
-            showCandidateFormModal('Election nomination date and time is yet to come.');
-            makeDisabled(true);
-            return false; // Prevent form submission
-        } else if (currentTime > nominationEndTime) {
-            // Nomination time has ended
-            showCandidateFormModal('The candidate nomination date and time is over. Please head over to the candidates list.');
-            // makeDisabled(true);
-            return false; // Prevent form submission
-        } else {
-            document.getElementById('loading-screen').style.display = 'none';
-            document.getElementById('right1').style.display = 'block';
-            makeDisabled(false); // Enable the form when nomination time is valid
-
-            if (fromsubmit) {
-                return validateForm(); // Allow form submission if validation passes
+        // check time every 1 sec
+        document.addEventListener('DOMContentLoaded', function () {
+            if (!votingTime.startTime) {
+                setTimeout(() => {
+                    document.getElementById('loading-screen').style.display = 'none';
+                    // document.getElementById('right1').style.display = 'block';
+                    // checkNominationTime();
+                }, 1000);
             }
-            return false; // Prevent form submission if not triggered by the submit button
+        });
+
+        // Function for making input fields disabled
+        function disableFormFields(disable) {
+            const form = document.getElementById('addCandidateForm');
+            const fields = form.querySelectorAll('input, select, textarea');
+            fields.forEach(field => {
+                field.disabled = disable;
+            });
         }
-    } else {
-        showCandidateFormModal('No upcoming election found. Please ensure that you have scheduled any election.');
-        // makeDisabled(true);
-        return false; // Prevent form submission
-    }
-}
 
-// Real-time nomination time check
-setInterval(() => {
-    const currentTime = new Date().getTime();
-    const nominationStartTime = new Date(votingTime.nominationStartTime).getTime();
-    const nominationEndTime = new Date(votingTime.nominationEndTime).getTime();
+        function makeDisabled(disableOrNot) {
+            if (disableOrNot) {
+                document.getElementById('right1').style.display = 'block';
+                disableFormFields(true);
+                document.querySelectorAll('.form-group span').forEach(span => span.textContent = '');
+            } else {
+                disableFormFields(false);
+            }
+        }
 
-    if (currentTime >= nominationStartTime && currentTime <= nominationEndTime) {
-        // If within nomination time
-        makeDisabled(false);
-    } else {
-        // If outside mainly nomination time
-        if(currentTime < nominationStartTime) {
-            makeDisabled(true);
-        }else{
-            document.getElementById('right1').style.display = 'none';
-    }
-}
-}, 1000); // Check every second
+        // Function for checking nomination time
+        function checkNominationTime(fromsubmit = false) {
+            console.log(votingTime);
+            // Parse the current time and nomination times as timestamps
+            const currentTime = new Date().getTime();
+            const nominationStartTime = new Date(votingTime.nominationStartTime).getTime();
+            const nominationEndTime = new Date(votingTime.nominationEndTime).getTime();
+
+            // Get the form element
+            const form = document.getElementById('addCandidateForm');
+
+            if (!votingTime.error) {
+                // Check nomination time conditions
+                if (currentTime < nominationStartTime) {
+                    // Nomination time has not started
+                    showCandidateFormModal('Election nomination date and time is yet to come.');
+                    makeDisabled(true);
+                    return false; // Prevent form submission
+                } else if (currentTime > nominationEndTime) {
+                    // Nomination time has ended
+                    // showCandidateFormModal('The candidate nomination date and time is over. Please head over to the candidates list.');
+                    // makeDisabled(true);
+                    document.getElementById('right1').style.display = 'none';
+                    console.log('election ended');
+                    showCandidateFormModal('The candidate nomination date and time is over. Please head over to the candidates list.');
+                    electionEnded = true;
+                    return false; // Prevent form submission
+                } else {
+                    document.getElementById('loading-screen').style.display = 'none';
+                    document.getElementById('right1').style.display = 'block';
+                    document.getElementById('right2').style.display = 'none';
+                    makeDisabled(false); // Enable the form when nomination time is valid
+
+                    if (fromsubmit) {
+                        return validateForm(); // Allow form submission if validation passes
+                    }
+                    return false; // Prevent form submission if not triggered by the submit button
+                }
+            } else {
+                showCandidateFormModal('No upcoming election found. Please ensure that you have scheduled any election.');
+                // makeDisabled(true);
+                return false; // Prevent form submission
+            }
+        }
+
+        // Real-time nomination time check
+        let electionEnded = false;
+        setInterval(() => {
+            const currentTime = new Date().getTime();
+            const nominationStartTime = new Date(votingTime.nominationStartTime).getTime();
+            const nominationEndTime = new Date(votingTime.nominationEndTime).getTime();
+
+            if (currentTime >= nominationStartTime && currentTime <= nominationEndTime) {
+                // If within nomination time
+                makeDisabled(false);
+            } else {
+                // If outside mainly nomination time
+                if (currentTime < nominationStartTime) {
+                    makeDisabled(true);
+                } else if (currentTime > nominationStartTime) {
+                    if (!electionEnded) {
+                        document.getElementById('right1').style.display = 'none';
+                        console.log('election ended');
+                        showCandidateFormModal('The candidate nomination date and time is over. Please head over to the candidates list.');
+                        electionEnded = true;
+                    }
+
+                }
+            }
+        }, 1000); // Check every second
 
         // Function to show a modal
         function showCandidateFormModal(message) {
@@ -642,29 +686,30 @@ setInterval(() => {
                     showData();
                 }
             };
-            window.onclick = function (event) {
-                if (event.target === modal) {
-                    modal.remove();
-                    if (new Date(votingTime.nominationEndTime).getTime() < new Date().getTime()) {
-                        showData();
-                    }
-                    if (votingTime.error) {
-                        window.location.href = '../admin/admin_home.php';
-                    }
-                }
-
-                var modals = document.getElementsByClassName('all-modals');
-                for (var i = 0; i < modals.length; i++) {
-                    if (event.target == modals[i]) {
-                        modals[i].style.display = 'none';
-                    }
-                }
-            };
-            // document.getElementById('go-to-candidate-list-button').onclick = function () {
-            //     showData();
-            //     modal.remove();
-            // };
         }
+        window.onclick = function (event) {
+            modal = document.querySelector('.candidate-form-modal');
+            if (event.target === modal) {
+                modal.remove();
+                if (new Date(votingTime.nominationEndTime).getTime() < new Date().getTime()) {
+                    showData();
+                }
+                if (votingTime.error) {
+                    window.location.href = '../admin/admin_home.php';
+                }
+            }
+
+            var modals = document.getElementsByClassName('all-modals');
+            for (var i = 0; i < modals.length; i++) {
+                if (event.target == modals[i]) {
+                    modals[i].style.display = 'none';
+                }
+            }
+        };
+        // document.getElementById('go-to-candidate-list-button').onclick = function () {
+        //     showData();
+        //     modal.remove();
+        // };
 
         //call the function to check nomination time when the page loads
         document.getElementById('addCandidateForm').addEventListener('submit', function () {
@@ -947,6 +992,25 @@ setInterval(() => {
                 document.getElementById("photoPreview").innerHTML = `<img src="../uploads/${candidatePhoto}" alt="Preview">`;
             }
         });
+        const contentContainer = document.body;
+        const goToTopButton = document.getElementById("goToTop");
+
+        // Show/hide the Go to Top button based on scroll position of the window
+        window.addEventListener("scroll", function () {
+            if (window.scrollY > 100) {
+                goToTopButton.classList.add("show");
+            } else {
+                goToTopButton.classList.remove("show");
+            }
+        });
+
+        // Scroll to the top of the content container when the button is clicked
+        function scrollToTop() {
+            contentContainer.scrollTo({
+                top: 0,
+                behavior: "smooth",
+            });
+        }
     </script>
 </body>
 
