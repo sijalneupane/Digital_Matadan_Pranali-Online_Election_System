@@ -50,7 +50,7 @@ require_once "../home/logout_modals_html.php";
 
     ?>
     <div class="dashboard-container">
-    <?php require_once '../home/logout_modals_html.php';
+        <?php require_once '../home/logout_modals_html.php';
         logoutModalPhp("admin"); ?>
         <section class="election-time">
             <!-- Notice Display -->
@@ -65,7 +65,7 @@ require_once "../home/logout_modals_html.php";
 
                 <div class="content-wrapper">
                     <div class="overview">
-                    <h3>Election Overview</h3>
+                        <h3>Election Overview</h3>
                         <details class="overview-item">
                             <summary>Total Voters(<?= getTotal($conn, "voters"); ?>)</summary>
                             <p>Currently we have total <?= getTotal($conn, "voters"); ?> registered voters till now</p>
@@ -90,9 +90,10 @@ require_once "../home/logout_modals_html.php";
                     </div>
 
                     <!-- Election Form -->
-                    <form id="election-form" action="../admin/add_election_time.php" method="POST" onsubmit="return validateElectionForm();">
+                    <form id="election-form" action="../admin/add_election_time.php" method="POST"
+                        onsubmit="return validateElectionForm();">
                         <h3 id="form-title">Set New Election</h3>
-                        <input type="hidden" id="election-id" name="electionId"/>
+                        <input type="hidden" id="election-id" name="electionId" />
 
                         <div>
                             <label for="election-name">Election Name</label>
@@ -172,14 +173,14 @@ require_once "../home/logout_modals_html.php";
                 document.getElementById('endTimeError').textContent = 'End Time should be greater than Start Time.';
                 isValid = false;
             }
-            
+
             if (!nominationStartTime) {
                 document.getElementById('nominationStartTimeError').textContent = 'Nomination Start Time is required.';
                 isValid = false;
             } else if (nominationStartTime < currentTime) {
                 document.getElementById('nominationStartTimeError').textContent = 'Nomination Start Time should not be less than the current time.';
                 isValid = false;
-            }else if (nominationStartTime > startTime) {
+            } else if (nominationStartTime > startTime) {
                 document.getElementById('nominationStartTimeError').textContent = 'Nomination Start Time should set before the Election start time.';
                 isValid = false;
             }
@@ -189,15 +190,15 @@ require_once "../home/logout_modals_html.php";
             } else if (nominationEndTime < nominationStartTime) {
                 document.getElementById('nominationEndTimeError').textContent = 'Nomination end Time should not be less than the Nomination start time.';
                 isValid = false;
-            }else if (nominationEndTime > startTime) {
+            } else if (nominationEndTime > startTime) {
                 document.getElementById('nominationEndTimeError').textContent = 'Nomination end Time should not be less than the Nomination start time.';
                 isValid = false;
             }
 
             return isValid;
         }
-window.onclick = function () {
-    
+        window.onclick = function () {
+
             //clsing the modal when clicked outside
             var modals = document.getElementsByClassName('all-modals');
             for (var i = 0; i < modals.length; i++) {
@@ -205,7 +206,7 @@ window.onclick = function () {
                     modals[i].style.display = 'none';
                 }
             }
-}
+        }
         // Function to show the welcome message
         window.addEventListener('load', () => {
             // Get the welcome message element and dismiss button
