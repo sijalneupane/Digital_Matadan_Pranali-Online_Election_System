@@ -592,6 +592,7 @@ if (isset($_GET['id'])) {
             }
         }
 
+        let noElectionScheduledChecked = false;
         // Function for checking nomination time
         function checkNominationTime(fromsubmit = false) {
             console.log(votingTime);
@@ -631,8 +632,11 @@ if (isset($_GET['id'])) {
                     return false; // Prevent form submission if not triggered by the submit button
                 }
             } else {
-                showCandidateFormModal('No upcoming election found. Please ensure that you have scheduled any election.');
-                // makeDisabled(true);
+                // if (noElectionScheduledChecked == false) {
+                //     showCandidateFormModal('No upcoming election found. Please ensure that you have scheduled any election.');
+                //     // makeDisabled(true);
+                //     noElectionScheduledChecked = true;
+                // }
                 return false; // Prevent form submission
             }
         }
@@ -651,7 +655,7 @@ if (isset($_GET['id'])) {
                 // If outside mainly nomination time
                 if (currentTime < nominationStartTime) {
                     makeDisabled(true);
-                } else if (currentTime > nominationStartTime) {
+                } else if (currentTime > nominationEndTime) {
                     if (!electionEnded) {
                         document.getElementById('right1').style.display = 'none';
                         console.log('election ended');
@@ -659,6 +663,13 @@ if (isset($_GET['id'])) {
                         electionEnded = true;
                     }
 
+                } else if(votingTime.error) {
+                    if (noElectionScheduledChecked == false) {
+                        showCandidateFormModal('No upcoming election found. Please ensure that you have scheduled any election.');
+                        // makeDisabled(true);
+                        noElectionScheduledChecked = true;
+                    }
+                    // showCandidateFormModal('No upcoming election found. Please ensure that you have scheduled any election.');
                 }
             }
         }, 1000); // Check every second
