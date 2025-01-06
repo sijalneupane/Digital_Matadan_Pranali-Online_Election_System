@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     } else {
         if ($electionId) {
             // Update existing record
-            $sql = "UPDATE electionTime SET electionName = '$electionName', startTime = '$startTime', endTime = '$endTime', nominationStartTime = '$nominationStartTime', nominationEndTime = '$nominationEndTime' WHERE electionId = $electionId";
+            $sql = "UPDATE electiontime SET electionName = '$electionName', startTime = '$startTime', endTime = '$endTime', nominationStartTime = '$nominationStartTime', nominationEndTime = '$nominationEndTime' WHERE electionId = $electionId";
 
             if (mysqli_query($conn, $sql)) {
                 $_SESSION['errorMsg'] = "Election updated successfully.";
@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             }
         } else {
             // Insert new record
-            $sql = "INSERT INTO electionTime (electionName, startTime, endTime, nominationStartTime, nominationEndTime) VALUES ('$electionName', '$startTime', '$endTime', '$nominationStartTime', '$nominationEndTime')";
+            $sql = "INSERT INTO electiontime (electionName, startTime, endTime, nominationStartTime, nominationEndTime) VALUES ('$electionName', '$startTime', '$endTime', '$nominationStartTime', '$nominationEndTime')";
 
             if (mysqli_query($conn, $sql)) {
                 $_SESSION['errorMsg'] = "Election added successfully.";

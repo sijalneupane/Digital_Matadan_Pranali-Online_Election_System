@@ -83,7 +83,7 @@ VALUES
 -- the independent.png is located in images folder
 
 -- 7)//election time table
-CREATE TABLE electionTime (
+CREATE TABLE electiontime (
     electionId INT(11) NOT NULL AUTO_INCREMENT,
     electionName VARCHAR(50) NOT NULL,
     startTime DATETIME NOT NULL,
