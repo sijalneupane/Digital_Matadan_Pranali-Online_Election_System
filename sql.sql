@@ -16,7 +16,7 @@ CREATE TABLE pendingstatus (
 );
 
 --2) voters table:
-CREATE TABLE pendingstatus (
+CREATE TABLE voters (
     id INT(11) AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) COLLATE latin1_swedish_ci NOT NULL,
     email VARCHAR(255) COLLATE latin1_swedish_ci NOT NULL,
@@ -97,6 +97,20 @@ CREATE TABLE electiontime (
 --8) //currentresults table 
 CREATE TABLE currentresults (
     electionId INT NOT NULL,
+    electionName VARCHAR(50) NOT NULL,
+    candidateName VARCHAR(255) NOT NULL,
+    citizenshipNumber VARCHAR(50) NOT NULL,
+    partyName VARCHAR(255),
+    dId INT,
+    totalVotes INT,
+    PRIMARY KEY (electionId, candidateName, citizenshipNumber),
+    FOREIGN key(dId) REFERENCES district(dId)
+);
+
+--9) //archive results table(holds total election results till now altogether) 
+CREATE TABLE archiveresults (
+    electionId INT NOT NULL,
+    electionName VARCHAR(50) NOT NULL,
     candidateName VARCHAR(255) NOT NULL,
     citizenshipNumber VARCHAR(50) NOT NULL,
     partyName VARCHAR(255),

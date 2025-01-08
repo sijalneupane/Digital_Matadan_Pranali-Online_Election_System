@@ -132,6 +132,12 @@ require_once "../home/logout_modals_html.php";
 
     <script src="../js/get_votingTime.js"></script>
     <script>
+        window.onload = function () {
+            fetchVotingTime();
+        };
+        // // Automatically fetch the voting status every 10 seconds
+        setInterval(fetchVotingTime, 1000); // Fetch every 10 seconds (10000 milliseconds)
+
         //function to clear errors
         function clearErrors() {
             document.getElementById('electionNameError').textContent = '';

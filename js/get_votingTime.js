@@ -13,9 +13,3 @@ function fetchVotingTime() {
     xhr.send();
 }
 
-
-window.onload = function () {
-    fetchVotingTime();
-};
-// // Automatically fetch the voting status every 10 seconds
-setInterval(fetchVotingTime, 1000); // Fetch every 10 seconds (10000 milliseconds)
