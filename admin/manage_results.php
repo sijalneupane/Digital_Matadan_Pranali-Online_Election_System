@@ -1,23 +1,27 @@
-<!-- guidelines.php -->
 <?php
 session_start();
-if (!isset($_SESSION["email"])) {
-  header('Location: ../home/index.php');
+if (!isset($_SESSION['loggedin'])) {
+  header('Location: ../admin/admin_login.php');
 }
+$errorMessage = isset($_SESSION['errorMsg']) ? $_SESSION['errorMsg'] : '';
+unset($_SESSION['errorMsg']);
+$_SESSION['pageName'] = "Manage Results";// Clear the message
 require_once '../php_for_ajax/districtRegion2.php';
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Results</title>
+  <link rel="icon" href="../images/DMP logo.png" type="image/x-icon">
   <link rel="stylesheet" href="../styles/results_table.css">
-  <title>Results</title>
   <style>
-    /* .container {
+    .container {
       width: 100%;
-    } */
+    }
 
     .header {
       margin: 15px auto;
@@ -33,7 +37,45 @@ require_once '../php_for_ajax/districtRegion2.php';
       text-align: center;
     }
 
-    .content1 {
+    .header #publish-result-btn {
+      width: 150px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #fff;
+      cursor: pointer;
+      height: 45px;
+      text-align: center;
+      border: none;
+      background-size: 300% 100%;
+      border-radius: 10px;
+      moz-transition: all .4s ease-in-out;
+      -o-transition: all .4s ease-in-out;
+      -webkit-transition: all .4s ease-in-out;
+      transition: all .4s ease-in-out;
+    }
+
+    .header #publish-result-btn:hover {
+      background-position: 100% 0;
+      moz-transition: all .4s ease-in-out;
+      -o-transition: all .4s ease-in-out;
+      -webkit-transition: all .4s ease-in-out;
+      transition: all .4s ease-in-out;
+    }
+
+    .header #publish-result-btn:focus {
+      outline: none;
+    }
+
+    .header #publish-result-btn {
+      background-image: linear-gradient(to right,
+          #29323c,
+          #485563,
+          #2b5876,
+          #4e4376);
+      box-shadow: 0 4px 15px 0 rgba(45, 54, 65, 0.75);
+    }
+
+    .content {
       height: 75vh;
       overflow-y: auto;
       scrollbar-width: 0px;
@@ -48,7 +90,7 @@ require_once '../php_for_ajax/districtRegion2.php';
       /* Firefox */
     }
 
-    .content1::-webkit-scrollbar {
+    .content::-webkit-scrollbar {
       display: none;
       /* Chrome, Safari, and Opera */
     }
@@ -77,8 +119,8 @@ body {
       font-weight: bold;
     }
 
-    /* Styles specific to election warning content1 */
-    .admin-content1.election-warning-content1 {
+    /* Styles specific to election warning content */
+    .admin-content.election-warning-content {
       padding: 20px;
       max-width: 900px;
       margin: 30px auto;
@@ -88,40 +130,40 @@ body {
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
 
-    .admin-content1.election-warning-content1 .notice p,
-    .admin-content1.election-warning-content1 .notice ul {
+    .admin-content.election-warning-content .notice p,
+    .admin-content.election-warning-content .notice ul {
       margin: 15px 0;
       font-size: 18px;
       line-height: 1.6;
     }
 
-    .admin-content1.election-warning-content1 .notice ul {
+    .admin-content.election-warning-content .notice ul {
       padding-left: 20px;
       list-style: disc;
     }
 
-    .admin-content1.election-warning-content1 .link {
+    .admin-content.election-warning-content .link {
       color: #007bff;
       text-decoration: none;
     }
 
-    .admin-content1.election-warning-content1 .link:hover {
+    .admin-content.election-warning-content .link:hover {
       text-decoration: underline;
     }
 
-    .admin-content1.election-warning-content1 .action-suggestions,
-    .admin-content1.election-warning-content1 .contact-support {
+    .admin-content.election-warning-content .action-suggestions,
+    .admin-content.election-warning-content .contact-support {
       margin-top: 20px;
     }
 
-    .admin-content1.election-warning-content1 .action-suggestions h3,
-    .admin-content1.election-warning-content1 .contact-support h3 {
+    .admin-content.election-warning-content .action-suggestions h3,
+    .admin-content.election-warning-content .contact-support h3 {
       font-size: 20px;
       color: #e25822;
     }
 
-    .admin-content1.election-warning-content1 .action-suggestions ul,
-    .admin-content1.election-warning-content1 .contact-support p {
+    .admin-content.election-warning-content .action-suggestions ul,
+    .admin-content.election-warning-content .contact-support p {
       margin: 10px 0;
     }
 
@@ -243,19 +285,15 @@ body {
   </style>
 </head>
 
-
 <body>
+  <?php require '../admin/admin_navbar.php'; ?>
   <div class="container">
-    <?php include '../home/sidebar.php'; ?>
-
-    <script>
-      document.querySelector('a[href="../results/results.php"]').classList.add('active');
-    </script>
-<div class="content">
-<div class="header" id="header">
-      <!-- <h1>Lets look at the results of the election</h1>-->
+    <div class="header" id="header">
+      <!-- <h1>Lets look at the results of the election</h1>
+      <button id="publish-result-btn">Publish Result</button> -->
     </div>
-    <div class="content1" id="content1">
+
+    <div class="content" id="content">
       <!-- <div id="election-info">
         <h3 id="election-name"></h3>
         <p id="startTime"></p>
@@ -275,9 +313,8 @@ body {
       </form>
       <div class="responsive-table-container" id="old-results">
 
-      </div>  -->
+      </div> -->
     </div>
-</div>
   </div>
   <button id="goToTop" class="go-to-top" title="Go to Top" onclick="scrollToTop()">↑</button>
 
@@ -296,13 +333,14 @@ body {
   <!-- PHP generated dropdowns -->
   ${`
   <?php
-  district($_SESSION['district']);
-  regionNo($_SESSION['election_region']);
+  district();
+  regionNo();
   ?>`}
 </form>
 <div class="responsive-table-container" id="old-results"></div>
 `;;
-    let oldHeaderDiv = `<h1>Lets look at the results of the election</h1>`;
+    let oldHeaderDiv = `<h1>Lets look at the results of the election</h1>
+      <button id="publish-result-btn">Publish Result</button>`;
     // Global variable to store the voting status
     let votingTime = {};
 
@@ -314,6 +352,7 @@ body {
         if (this.status === 200) {
           votingTime = JSON.parse(this.responseText);
           checkVotingTime();
+
         }
       };
       xhr.send();
@@ -339,9 +378,6 @@ body {
         '&regionNo=' + encodeURIComponent(regionNo),
         true
       );
-      // console.log(district);
-      // console.log(regionNo);
-      
       xhr.onload = function () {
         if (xhr.status === 200) {
           // alert(xhr.responseText);
@@ -350,7 +386,7 @@ body {
             const results = response.data;
             const container = document.getElementById('old-results');
 
-            // Clear any previous content1
+            // Clear any previous content
             container.innerHTML = "";
 
             if (results.length > 0) {
@@ -400,55 +436,39 @@ body {
           console.error("AJAX request failed with status: " + xhr.status);
         }
       };
-        xhr.send();
+      xhr.send();
     }
 
     let headerDiv = document.getElementById('header');
-    let content1Div = document.getElementById("content1");
-    // let electionNotScheduled = false;
-    // let votingNotStarted = false;
-    // let votingStarted = false;
-    let isPublishedChecked=false;
-    let isNotPublishedChecked=false;
-    let resultPublished=false;
-    let electionNotEnded=false;
+
+    let contentDiv = document.getElementById("content");
+    let electionNotScheduled = false;
+    let votingNotStarted = false;
+    let votingStarted = false;
+    let votingEnded = false;
 
     function checkVotingTime() {
-      
-      resultPublished = (votingTime.resultStatus=='published')?true:false;
       // let votingStartTime=votingT
       let currentTime = new Date().getTime();
       let votingStartTime = new Date(votingTime.startTime).getTime();
       let votingEndTime = new Date(votingTime.endTime).getTime();
-      if (!isPublishedChecked && resultPublished ) {
-        isPublishedChecked=true;
-        isNotPublishedChecked=false;
-        electionNotEnded=false
-        console.log('a');
-        // electionNotScheduled = votingNotStarted = votingStarted = false;
-        showResultPublished();
-      } else if (!resultPublished && !isNotPublishedChecked && currentTime > votingEndTime) {
-        isPublishedChecked=false;
-        isNotPublishedChecked=true;
-        electionNotEnded=false;
-        console.log('b');
-        showResultNotPublished();
-      }else if(!electionNotEnded && currentTime < votingEndTime){
-        // isPublishedChecked=false;
-        isNotPublishedChecked=false;
-        electionNotEnded=true;
-        console.log('c');
+      if (!votingEnded && currentTime > votingEndTime) {
+        votingEnded = true;
+        electionNotScheduled = votingNotStarted = votingStarted = false;
+        showElectionEnded();
+      } else if (currentTime < votingEndTime) {
         showElectionNotEnded();
+        votingEnded = false;
       }
     }
 
-    function showResultPublished() {
+    function showElectionEnded() {
       // Add special classes for styling
       headerDiv.className = 'header';
-      content1Div.className = 'content1';
+      contentDiv.className = 'content';
       headerDiv.id = 'header';
-      content1Div.id = 'content1';
-      content1Div.innerHTML = oldContentDiv;
+      contentDiv.id = 'content';
+      contentDiv.innerHTML = oldContentDiv;
       document.getElementById('header').innerHTML = oldHeaderDiv;
       setDistrictRegion();
       const selects = document.getElementsByTagName("select");
@@ -459,9 +479,20 @@ body {
       document.getElementById('election-name').innerHTML = `${votingTime.electionName}`;
       document.getElementById('startTime').innerHTML = `<strong>Start Time: </strong> ${votingTime.startTime}`;
       document.getElementById('endTime').innerHTML = `<strong>End Time: </strong>${votingTime.endTime}`;
-    
+      if (votingTime.resultStatus == 'published') {
+        publishResultBtn = document.getElementById('publish-result-btn');
+        publishResultBtn.textContent = `Result Published`;
+        publishResultBtn.style.background = `#2c9f43`;
+        publishResultBtn.disabled = true;
+        publishResultBtn.style.boxShadow = "none";
+        publishResultBtn.onmouseover = function () {
+          publishResultBtn.style.cursor = `not-allowed`;
+
+        }
+        // publishResultBtn.style.width=`0px`;
+      }
       // Call the function to fetch results
-      document.onload = setTimeout(fetchCurrentResults, 200);
+      document.onload = fetchCurrentResults();
       document.getElementById('searchQuery').addEventListener('input', function () {
         fetchCurrentResults();
       });
@@ -471,106 +502,100 @@ body {
       document.getElementById('regionNo').addEventListener('change', function () {
         fetchCurrentResults();
       });
+      document.getElementById('publish-result-btn').onclick = function () {
+        publishResult();
+      };
     }
 
 
-    function showResultNotPublished() {
-      let content1Div = document.getElementById('content1');
-      let headerDiv = document.getElementById('header');
 
-      // Add special classes for styling
-      headerDiv.className = 'admin-header election-warning-header';
-      content1Div.className = 'admin-content1 election-warning-content1';
-      headerDiv.id = 'election-warning-header';
-      content1Div.id = 'election-warning-content1';
+    function publishResult() {
+      // Display a confirmation box
+      if (confirm("Are you sure you want to publish the results?")) {
+        // Create a new XMLHttpRequest object
+        var xhr = new XMLHttpRequest();
 
-      // Clear previous content1
-      content1Div.innerHTML = '';
-      headerDiv.innerHTML = '';
+        // Configure it: POST-request to the 'publishResult.php' page
+        xhr.open('POST', '../admin/publish_results.php', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-      // Add a heading to the headerDiv
-      headerDiv.innerHTML = `
-        <h1 class="warning-heading">⚠️ Results is not published ! ! !.</h1>
-    `;
+        // Handle the response
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4) { // Request is done
+            if (xhr.status === 200) { // Successfully received response
+              try {
+                var response = JSON.parse(xhr.responseText);
+                if (response.success) {
+                  alert("Results have been published successfully!");
+                } else {
+                  alert("An error occurred: " + response.message);
+                }
+              } catch (e) {
+                alert("Unexpected response from the server.");
+                console.error(e);
+              }
+            } else {
+              alert("Failed to connect to the server. Please try again later.");
+            }
+          }
+        };
 
-      // Add detailed content1 to the content1Div
-      content1Div.innerHTML = `
-        <div class="notice">
-            <p><strong>Status:</strong> Although election ended, Results will only be available after the results is published by admin.</p>
-            <p><strong>Next Steps:</strong></p>
-            <ul>
-                <li>Visit the <a href="../home/home.php" class="link">Home</a> to view the home page.</li>
-                <li>Go to the <a href="../canidate/candidates.php" class="link">Candidate Page</a> for detailed candidate information.</li>
-                <li>Ensure your profile is filled with correct details by visiting <a href="../register_and_login/user_profile.php" class="link">Profile page</a>.</li>
-            </ul>
-            <hr>
-            <div class="action-suggestions">
-                <h3>💡 Suggestions</h3>
-                <p>To enhance your experience, consider:</p>
-                <ul>
-                    <li>Viewing previous winner of your constituency in homepage if any election were held previously</li>
-                    <li>Submitting complaints or issue in <a href="../home/home.php" class="link">contact_us</a> if you have faced any</li>
-                </ul>
-            </div>
-            <hr>
-            <div class="contact-support">
-                <h3>📞 Need Help?</h3>
-                <p>If you encounter issues, contact our customer support team at 
-                <a href="mailto:sijalneupane5@gmail.com" class="link">sijalneupane5@gmail.com</a>.</p>
-            </div>
-        </div>
-    `;
-    }
+        // Send the request
+        xhr.send("action=publish");
+      }
+    };
+
 
     function showElectionNotEnded() {
-      let content1Div = document.getElementById('content1');
+      let contentDiv = document.getElementById('content');
       let headerDiv = document.getElementById('header');
 
       // Add special classes for styling
       headerDiv.className = 'admin-header election-warning-header';
-      content1Div.className = 'admin-content1 election-warning-content1';
+      contentDiv.className = 'admin-content election-warning-content';
       headerDiv.id = 'election-warning-header';
-      content1Div.id = 'election-warning-content1';
+      contentDiv.id = 'election-warning-content';
 
-      // Clear previous content1
-      content1Div.innerHTML = '';
+      // Clear previous content
+      contentDiv.innerHTML = '';
       headerDiv.innerHTML = '';
 
       // Add a heading to the headerDiv
       headerDiv.innerHTML = `
-        <h1 class="warning-heading" style="background-color:light-blue">⚠️ Election is not ended ! ! !.</h1>
+        <h1 class="warning-heading">⚠️ Election Not Ended</h1>
     `;
 
-      // Add detailed content1 to the content1Div
-      content1Div.innerHTML = `
+      // Add detailed content to the contentDiv
+      contentDiv.innerHTML = `
         <div class="notice">
-            <p><strong>Status:</strong> Results will only be available after the voting period ends.</p>
+            <p><strong>Status:</strong> The current election is ongoing. Results will only be available after the election ends.</p>
             <p><strong>Next Steps:</strong></p>
             <ul>
-                <li>Visit the <a href="../home/home.php" class="link">Home</a> to view homepage.</li>
-                <li>Go to the <a href="../canidate/candidates.php" class="link">Candidate Page</a> for detailed candidate information.</li>
-                <li>Ensure your profile is filled with correct details by visiting <a href="../register_and_login/user_profile.php" class="link">Profile page</a>.</li>
+                <li>Visit the <a href="../admin/admin_home.php" class="link">Homepage</a> to monitor voter turnout and live updates.</li>
+                <li>Go to the <a href="../admin/manage_candidates.php" class="link">Candidate Page</a> for detailed candidate information.</li>
+                <li>Ensure all pending statuses are checked by visiting <a href="../admin/verify_voters.php" class="link">Verify Voters</a>.</li>
             </ul>
             <hr>
             <div class="action-suggestions">
                 <h3>💡 Suggestions</h3>
-                <p>To enhance your experience, consider:</p>
+                <p>To enhance efficiency, consider:</p>
                 <ul>
-                    <li>Viewing previous winner of your constituency in homepage if any election were held previously</li>
-                    <li>Submitting complaints or issue in <a href="../home/home.php" class="link">contact_us</a> if you have faced any</li>
+                    <li>Sending reminders to unregistered voters.</li>
+                    <li>Reviewing submitted complaints or issues.</li>
                 </ul>
             </div>
             <hr>
             <div class="contact-support">
                 <h3>📞 Need Help?</h3>
-                <p>If you encounter issues, contact our customer support team at 
-                <a href="mailto:sijalneupane5@gmail.com" class="link">sijalneupane5@gmail.com</a>.</p>
+                <p>If you encounter issues, contact the IT support team at 
+                   <a href="mailto:sijalneupane5@gmail.com" class="link">sijalneupane5@gmail.com</a>.</p>
             </div>
         </div>
     `;
     }
-    // Show/hide the Go to Top button based on scroll position of the content1 container
-    const contentContainer = document.getElementById("content1");
+
+    // Show/hide the Go to Top button based on scroll position of the content container
+    const contentContainer = document.getElementById("content");
     const goToTopButton = document.getElementById("goToTop");
 
     contentContainer.addEventListener("scroll", function () {
@@ -581,7 +606,7 @@ body {
       }
     });
 
-    // Scroll to the top of the content1 container when the button is clicked
+    // Scroll to the top of the content container when the button is clicked
     function scrollToTop() {
       contentContainer.scrollTo({
         top: 0,

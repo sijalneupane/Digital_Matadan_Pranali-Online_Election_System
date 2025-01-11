@@ -9,7 +9,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $voterId = $_SESSION['voterId'];
   $name = $_POST['name'];
   $gender = $_POST['gender'];
-  $email = $_POST['email'];
+  // $email = $_POST['email'];
+  $email=$_SESSION['email'];
   $district = $_POST['district'];
   $election_region = $_POST['regionNo'];
   $local_address = $_POST['local_address'];
@@ -96,6 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           $row1 = mysqli_fetch_assoc($result);
           // Set session variables for successful login
           $_SESSION['districtId'] = $row1['did'];
+          $_SESSION['email']=$row1["email"];
           $_SESSION['addressId'] = $row1['addressId'];
           $_SESSION['election_region'] = $row1['regionNo'];
           $_SESSION['voterId'] = $row1['id'];

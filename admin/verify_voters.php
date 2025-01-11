@@ -15,7 +15,7 @@ $_SESSION['pageName'] = "Verify Voters";// Clear the message
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verify Voters</title>
-<link rel="stylesheet" href="../styles/table_img.css">
+    <link rel="stylesheet" href="../styles/table_img.css">
     <link rel="stylesheet" href="../admin/admin_home.css">
     <link rel="stylesheet" href="../styles/modal1.css">
     <link rel="icon" href="../images/DMP logo.png" type="image/x-icon">
@@ -118,7 +118,7 @@ $_SESSION['pageName'] = "Verify Voters";// Clear the message
         </div>
     </div>
     <?php require_once '../home/logout_modals_html.php';
-        logoutModalPhp('admin'); ?>
+    logoutModalPhp('admin'); ?>
     <div class="container">
         <div class="table-container">
             <!-- <h3></h3> -->

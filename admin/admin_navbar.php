@@ -24,7 +24,7 @@
         <li><a href="../admin/verify_voters.php">Verify Voters</a></li>
         <li><a href="../admin/add_candidates.php">Add Candidates</a></li>
         <li><a href="../admin/manage_parties.php">Manage Parties</a></li>
-        <li><a href="#">Option 4</a></li>
+        <li><a href="../admin/manage_results.php">Manage Results</a></li>
       </ul>
     </div>
     <div class="nav-links">

@@ -939,9 +939,10 @@ if (isset($_GET['id'])) {
                 valid = false;
             }
 
-
-
-            return valid;
+            // return valid;
+            if(valid){
+                document.getElementById("addCandidateForm").submit();
+            }
         }
 
         //image modal

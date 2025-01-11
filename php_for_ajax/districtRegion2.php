@@ -1,4 +1,4 @@
-<script src="../js/getRegion_ajax.js" defer></script>
+<script src="../js/getRegion_ajax2.js" defer></script>
 <!-- <script src="../js/getRegion_ajax.js" defer></script> -->
 <?php
 function district($selectedDistrict = null)

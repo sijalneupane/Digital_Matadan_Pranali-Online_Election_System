@@ -5,7 +5,7 @@ require '../register_and_login/dbconnection.php';
 // Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
   $voterId = $_POST['voterId'];
-  $email=$_SESSION['email'];
+  $email = $_SESSION['email'];
   // unset($_SESSION['password']);
   // Query to fetch user details based on email 
   $sql = "SELECT * FROM voters WHERE id='$voterId' and email='$email' LIMIT 1";
@@ -15,10 +15,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Fetch the user's data
     $row2 = mysqli_fetch_assoc($result);
     $joinSql = "SELECT * 
-                            FROM voters V 
-                            INNER JOIN localaddress la ON V.addressId = la.lid
-                            INNER JOIN district D ON D.dId = la.dId
-                            WHERE V.id='$voterId'";
+                FROM voters V 
+                INNER JOIN localaddress la ON V.addressId = la.lid
+                INNER JOIN district D ON D.dId = la.dId
+                WHERE V.id='$voterId'";
     $result = mysqli_query($conn, $joinSql);
     if (mysqli_num_rows($result) > 0) {
       $row1 = mysqli_fetch_assoc($result);
@@ -36,15 +36,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
       $_SESSION['userPhoto'] = $row1['userPhoto'];
       $_SESSION['citizenshipFrontPhoto'] = $row1['citizenshipFrontPhoto'];
       $_SESSION['citizenshipBackPhoto'] = $row1['citizenshipBackPhoto'];
-      $_SESSION['votingStatus'] =$row1['votingStatus']; 
+      $_SESSION['votingStatus'] = $row1['votingStatus'];
       header('Location: ../home/home.php');         // Redirect to the dashboard or homepage after successful login
     } else {
       $_SESSION['error_message'] = 'Unexpected error occured, please try again';
       header('Location: ../register_and_login/voter_login_form.php');
     }
-  }else {
-    $_SESSION['idErrorMsg']= 'Voter id didnot match';
+  } else {
+    $_SESSION['idErrorMsg'] = 'Voter id didnot match';
     header('Location: ../register_and_login/login_verification.php');
-    
-}
+
+  }
 }

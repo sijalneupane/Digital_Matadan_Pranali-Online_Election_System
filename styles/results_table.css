@@ -1,0 +1,42 @@
+.responsive-table-container {
+  background-color: white;
+  width: 100%;
+  overflow-x: auto; /* Enables horizontal scrolling */
+  margin: 20px 0;
+}
+
+.responsive-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 16px;
+  text-align: left;
+}
+.responsive-table tr{
+  border-bottom: 1px solid #ddd;
+}
+.responsive-table th, 
+.responsive-table td {
+  padding: 12px;
+}
+
+.responsive-table th {
+  background-color: #00799e;
+  color: #fff;
+  font-weight: bold;
+  /* text-transform: uppercase; */
+}
+
+.responsive-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.responsive-table tbody tr:hover {
+  background-color: #f1f1f1;
+  transition: background-color 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .responsive-table {
+      font-size: 14px; /* Slightly reduce font size for smaller screens */
+  }
+}
