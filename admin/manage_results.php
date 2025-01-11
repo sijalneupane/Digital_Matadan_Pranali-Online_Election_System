@@ -459,6 +459,9 @@ body {
       } else if (currentTime < votingEndTime) {
         showElectionNotEnded();
         votingEnded = false;
+      }else if(votingTime.error){
+        alert("No election scheduled or conducted till now. PLease come back later");
+        window.location.href="../admin/admin_home.php";
       }
     }
 

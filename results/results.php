@@ -414,13 +414,12 @@ body {
     let electionNotEnded=false;
 
     function checkVotingTime() {
-      
       resultPublished = (votingTime.resultStatus=='published')?true:false;
       // let votingStartTime=votingT
       let currentTime = new Date().getTime();
       let votingStartTime = new Date(votingTime.startTime).getTime();
       let votingEndTime = new Date(votingTime.endTime).getTime();
-      if (!isPublishedChecked && resultPublished ) {
+      if (!isPublishedChecked && resultPublished) {
         isPublishedChecked=true;
         isNotPublishedChecked=false;
         electionNotEnded=false
@@ -433,12 +432,15 @@ body {
         electionNotEnded=false;
         console.log('b');
         showResultNotPublished();
-      }else if(!electionNotEnded && currentTime < votingEndTime){
+      }else if(!electionNotEnded && currentTime < votingEndTime ){
         // isPublishedChecked=false;
         isNotPublishedChecked=false;
         electionNotEnded=true;
         console.log('c');
         showElectionNotEnded();
+      }else if(votingTime.error){
+        alert("No election scheduled or conducted till now. PLease come back later");
+        window.location.href="../home/home.php";
       }
     }
 
@@ -475,8 +477,8 @@ body {
 
 
     function showResultNotPublished() {
-      let content1Div = document.getElementById('content1');
-      let headerDiv = document.getElementById('header');
+      // let content1Div = document.getElementById('content1');
+      // let headerDiv = document.getElementById('header');
 
       // Add special classes for styling
       headerDiv.className = 'admin-header election-warning-header';
@@ -523,8 +525,8 @@ body {
     }
 
     function showElectionNotEnded() {
-      let content1Div = document.getElementById('content1');
-      let headerDiv = document.getElementById('header');
+      // let content1Div = document.getElementById('content1');
+      // let headerDiv = document.getElementById('header');
 
       // Add special classes for styling
       headerDiv.className = 'admin-header election-warning-header';

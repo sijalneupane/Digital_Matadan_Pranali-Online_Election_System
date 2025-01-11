@@ -36,8 +36,14 @@ if (!isset($_SESSION["email"])) {
       flex: 1 1 calc(33.333% - 20px);
       min-width: 150px;
       max-width: 250px;
-      padding: 20px;
+      
+      transition: transform 0.3s ease;
       border-radius: 8px;
+    }
+
+    .box a {
+      text-decoration: none;
+      color: white;padding: 20px;
       color: white;
       text-align: center;
       font-size: 1.2em;
@@ -78,17 +84,15 @@ if (!isset($_SESSION["email"])) {
     }
 
     .description-container {
-      background:whitesmoke;
-      /* background-color:#475670; */
-/* background-image: linear-gradient(180deg rgb(129, 143, 165) 0%, #475670 30%,rgb(38, 49, 68) 100%);  */
-
+      background: #bdbaba;
+      /* background-color: #475670; */
       display: flex;
-      color: wheat;
+      color: #123c44;
       align-items: start;
       justify-content: space-between;
       margin-top: 40px;
       padding: 25px;
-      border-top-right-radius:50px;
+      border-top-right-radius: 50px;
       border-bottom-left-radius: 50px;
     }
 
@@ -131,8 +135,8 @@ if (!isset($_SESSION["email"])) {
 
     <div class="content">
       <div class="title">
-        
-      <h2>Welcome to Digital Matadan Pranali</h2>
+
+        <h2>Welcome to Digital Matadan Pranali</h2>
       </div>
       <div class="boxes">
         <!-- <div class="box home">
@@ -140,20 +144,28 @@ if (!isset($_SESSION["email"])) {
           <span>Home</span>
         </div> -->
         <div class="box candidates">
-          <i class="fas fa-users"></i>
-          <span>Candidates</span>
+          <a href="../candidates/candidates.php">
+            <i class="fas fa-users"></i>
+            <span>Candidates</span>
+          </a>
         </div>
         <div class="box voting">
-          <i class="fas fa-vote-yea"></i>
-          <span>Voting</span>
+          <a href="../voting/voting.php">
+            <i class="fas fa-vote-yea"></i>
+            <span>Voting</span>
+          </a>
         </div>
         <div class="box results">
+          <a href="../results/results.php">
           <i class="fas fa-chart-pie"></i>
           <span>Results</span>
+          </a>
         </div>
         <div class="box contact">
+          <a href="../home/contact_us.php">
           <i class="fas fa-message"></i>
           <span>Contact Us</span>
+          </a>
         </div>
       </div>
 
