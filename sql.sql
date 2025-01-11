@@ -90,6 +90,7 @@ CREATE TABLE electiontime (
     endTime DATETIME NOT NULL,
     nominationStartTime DATETIME NOT NULL,
     nominationEndTime DATETIME NOT NULL,
+    resultStatus enum('notPublished','published') DEFAULT 'notPublished',
     PRIMARY KEY (electionId)
 );
 
@@ -102,7 +103,7 @@ CREATE TABLE currentresults (
     citizenshipNumber VARCHAR(50) NOT NULL,
     partyName VARCHAR(255),
     dId INT,
-    totalVotes INT,
+    totalVotes INT DEFAULT 0,
     PRIMARY KEY (electionId, candidateName, citizenshipNumber),
     FOREIGN key(dId) REFERENCES district(dId)
 );
@@ -115,7 +116,7 @@ CREATE TABLE archiveresults (
     citizenshipNumber VARCHAR(50) NOT NULL,
     partyName VARCHAR(255),
     dId INT,
-    totalVotes INT,
+    totalVotes INT DEFAULT 0,
     PRIMARY KEY (electionId, candidateName, citizenshipNumber),
     FOREIGN key(dId) REFERENCES district(dId)
 );
