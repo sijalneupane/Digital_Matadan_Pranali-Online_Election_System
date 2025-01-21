@@ -107,8 +107,8 @@
             text-decoration: none;
             background-color: rgb(129, 23, 23);
             color: white;
-            border: 3px solid rgb(170, 147, 14);
-            border-radius: 20px;
+            border: 1px solid rgb(170, 147, 14);
+            border-radius: 10px;
              font-size: 1.2rem;
             /* font-weight: bold; */ 
             /* transition:;? */
@@ -133,20 +133,21 @@
 
         .guidelines-link {
             display: block;
-            width: 40%;
+            /* width: 40%; */
             margin: 4% auto 0px;
-            color: white;
+            color: #510202;
             text-decoration: none;
             padding: 16px 10px;
             border: none;
             border-radius: 5px;
             /* transition: all ease-in-out 0.05s; */
             text-align: center;
-            background-color: rgb(18, 50, 63);
+            /* background-color: rgb(18, 50, 63); */
         }
 
         .guidelines-link:hover {
-            background-color: rgb(39, 94, 116);
+            text-decoration:underline;
+            /* background-color: rgb(39, 94, 116); */
             /* box-shadow: 0 2px 5px 4px rgba(0255, 0255, 255, 0.45); */
         }
 
