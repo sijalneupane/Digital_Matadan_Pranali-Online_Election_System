@@ -76,12 +76,17 @@ $_SESSION['pageName'] = "Verify Voters";// Clear the message
         .accept-button:hover {
             background-color: #218838;
         }
-
-        .decline-button {
+        .send-msg-button {
+            background-color: #007bff;
+        }
+        .send-msg-button:hover {
+            background-color: #0056b3;
+        }
+        .decline-button,.delete-button {
             background-color: #dc3545;
         }
 
-        .decline-button:hover {
+        .decline-button:hover,.delete-button:hover {
             background-color: #c82333;
         }
 
@@ -169,6 +174,26 @@ $_SESSION['pageName'] = "Verify Voters";// Clear the message
 
 <body>
     <?php require '../admin/admin_navbar.php'; ?>
+    
+  <!-- Universal Modal (Only one instance) -->
+<div id="universal-modal" class="modal all-modals" style="display: none;">
+    <button class="close-modal" onclick="closeModal()">&times;</button>
+    <div class="modal-content img-modal">
+        <h3 id="modal-title" style="color: Black; text-align: center;"></h3>
+        <img id="modal-img" src="" alt="Selected Image">
+    </div>
+</div>
+
+
+    <!-- Universal Action Modal (Only one instance) -->
+    <div id="universal-action-modal" class="modal all-modals" style="display: none;">
+    <div class="modal-content action-modal" style="align-items: center; gap: 20px;">
+        <h3 id="modal-action-title" style="text-align: center;"></h3>
+        <div id="modal-buttons" class="buttons"></div>
+        <button class="close-modal" onclick="closeActionModal()">&times;</button>
+    </div>
+</div>
+
     <div id="modal1" class="modal-overlay1 all-modals">
         <div class="modal-content1">
             <p id="modalMessage1"></p>
@@ -210,107 +235,7 @@ $_SESSION['pageName'] = "Verify Voters";// Clear the message
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody id="pendingVoters">
-                    <?php
-                    // Database connection
-                    require '../register_and_login/dbconnection.php';
-                    // SQL Query
-                    $query = "SELECT * 
-                    FROM pendingstatus P
-                    INNER JOIN district D ON p.dId = D.dId
-                    WHERE status = 'pending'
-                ";
-
-                    $result = $conn->query($query);
-
-                    if ($result->num_rows > 0) {
-                        while ($row = $result->fetch_assoc()) {
-                            $id = htmlspecialchars($row['id']);
-                            $name = htmlspecialchars($row['name']);
-                            $email = htmlspecialchars($row['email']);
-                            $dateOfBirth = htmlspecialchars($row['dateOfBirth']);
-                            $citizenshipNumber = htmlspecialchars($row['citizenshipNumber']);
-                            $gender = htmlspecialchars($row['gender']);
-                            $localAddress = htmlspecialchars($row['localAddress']);
-                            $district = htmlspecialchars($row['district']);
-                            $regionNo = htmlspecialchars($row['regionNo']);
-                            $frontPhoto = htmlspecialchars($row['citizenshipFrontPhoto']);
-                            $backPhoto = htmlspecialchars($row['citizenshipBackPhoto']);
-                            $userPhoto = htmlspecialchars($row['userPhoto']);
-                            $status = htmlspecialchars($row['status']);
-                            ?>
-                            <tr>
-                                <td><?= $id ?></td>
-                                <td>
-                                    <strong>Name:</strong> <?= $name ?><br>
-                                    <strong>Email:</strong> <?= $email ?><br>
-                                    <strong>Citizenship No:</strong> <?= $citizenshipNumber ?>
-                                </td>
-                                <td><?= $dateOfBirth ?></td>
-                                <td><?= $gender ?></td>
-                                <td>
-                                    <strong>District:</strong> <?= $district ?><br>
-                                    <strong>Region No:</strong> <?= $regionNo ?><br>
-                                    <strong>Local Address:</strong> <?= $localAddress ?><br>
-                                </td>
-                                <td><img src="../uploads/<?= $frontPhoto ?>"
-                                        onclick="openModal(<?= $id ?>,'<?= $frontPhoto ?>')">
-                                </td>
-                                <td><img src="../uploads/<?= $backPhoto ?>" onclick="openModal(<?= $id ?>,'<?= $backPhoto ?>')">
-                                </td>
-                                <td><img src="../uploads/<?= $userPhoto ?>" onclick="openModal(<?= $id ?>,'<?= $userPhoto ?>')">
-                                </td>
-                                <!-- <td>
-                                <button class="action-btn accept-button">Accept</button>
-                                <button class="action-btn decline-button">Decline</button>
-                            </td> -->
-                                <td>
-                                    <strong>Status:</strong> <?= $status ?> <br>
-                                </td>
-                                <td><button class="action-btn accept-button"
-                                        onclick="openActionModal(<?= $id ?>)">Actions</button>
-                                </td>
-                            </tr>
-                            <div id="modal-<?= $id ?>" class="modal all-modals">
-                                <button class="close-modal" onclick="closeModal(<?= $id ?>)">&times;</button>
-                                <div class="modal-content img-modal">
-                                    <h3 id="modal-title-<?= $id ?>" style="color: Black; text-align: center;"></h3>
-                                    <img id="modal-img-<?= $id ?>" src="" alt="Selected Image">
-                                </div>
-                            </div>
-                            <!-- Accept/Decline Modal -->
-                            <div id="action-modal-<?= $id ?>" class="modal all-modals">
-                                <div class="modal-content  action-modal" style="align-items: center; gap: 20px;">
-                                    <h3 style="text-align: center;">Action for ApplicationId: <?= $name ?></h3>
-                                    <div class="buttons">
-                                        <button class="action-btn accept-button"
-                                            onclick="handleAccept(<?= $id ?>)">Accept</button>
-                                        <div
-                                            style="display:flex;align-items:center;border-top:1px solid black; padding-top:12px">
-                                            <textarea id="decline-message-<?= $id ?>" rows="3"
-                                                placeholder="Enter reason for rejection..." style="width: 100%;"></textarea>
-                                            <button class="action-btn decline-button"
-                                                onclick="handleDecline(<?= $id ?>,'<?= $email ?>','<?= $name ?>')">Decline</button>
-                                        </div>
-                                    </div>
-                                    <button class="close-modal" onclick="closeActionModal(<?= $id ?>)">&times;</button>
-                                </div>
-                            </div>
-
-
-                            <?php
-                        }
-                    } else {
-                        ?>
-                        <tr>
-                            <td colspan="12">No pending voters to verify.</td>
-                        </tr>
-                        <?php
-                    }
-                    $conn->close();
-                    ?>
-                </tbody>
-                <tbody id="voters">
+                <tbody id="searchResults">
 
                 </tbody>
             </table>
@@ -319,15 +244,12 @@ $_SESSION['pageName'] = "Verify Voters";// Clear the message
 
     <script>
 
-        function openModal(id, title) {
-            const modal = document.getElementById('modal-' + id);
-            const modalImg = document.getElementById('modal-img-' + id);
-            const modalTitle = document.getElementById('modal-title-' + id);
+        function openModal(title, imageSrc) {
+            const modal = document.getElementById('universal-modal');
+            const modalImg = document.getElementById('modal-img');
+            const modalTitle = document.getElementById('modal-title');
 
-            // Determine the image to display
-            const imageSrc = event.target.src;
-
-            // Set modal content
+            // Set modal content dynamically
             modalImg.src = imageSrc;
             modalTitle.innerText = title;
 
@@ -335,42 +257,75 @@ $_SESSION['pageName'] = "Verify Voters";// Clear the message
             modal.style.display = 'flex';
         }
 
-        function closeModal(id) {
-            const modal = document.getElementById('modal-' + id);
-            modal.style.display = 'none';
-
-            // Clear the modal content
-            const modalImg = document.getElementById('modal-img-' + id);
-            modalImg.src = '';
+        function closeModal() {
+            document.getElementById('universal-modal').style.display = 'none';
         }
 
+//action handling function
+        function openActionModal(id, name, email, userType) {
+    const modal = document.getElementById('universal-action-modal');
+    const modalTitle = document.getElementById('modal-action-title');
+    const modalButtons = document.getElementById('modal-buttons');
 
-        function openActionModal(id) {
-            document.getElementById('action-modal-' + id).style.display = 'flex';
-        }
+    // Update modal title dynamically
+    modalTitle.innerText = `Action for ${name}`;
 
-        function closeActionModal(id) {
-            document.getElementById('action-modal-' + id).style.display = 'none';
-        }
+    // Clear previous buttons
+    modalButtons.innerHTML = '';
 
-        function handleAccept(id) {
-            // Redirect to acceptvoters.php with voter ID
-            window.location.href = '../admin/acceptvoters.php?id=' + id;
-        }
+    if (userType === 'pending') {
+        // Structure for pending users
+        modalButtons.innerHTML = `
+            <button class="action-btn accept-button" onclick="handleAccept(${id})">Accept</button>
+            <div style="display: flex; align-items: center; border-top: 1px solid black; padding-top: 12px;">
+                <textarea id="decline-message" rows="3" placeholder="Enter reason for rejection..." style="width: 100%;"></textarea>
+                <button class="action-btn decline-button" onclick="handleDecline(${id}, '${email}', '${name}')">Decline</button>
+            </div>
+        `;
+    } else if (userType === 'verified') {
+        // Structure for voters
+        modalButtons.innerHTML = `
+            <textarea id="voter-message" rows="3" placeholder="Enter a message or reason for deletion..." style="width: 100%;"></textarea>
+            <button class="action-btn send-msg-button" onclick="sendMessageOrDelete(${id}, '${email}', '${name}', 'message')">Send Message</button>
+            <button class="action-btn delete-button" onclick="sendMessageOrDelete(${id}, '${email}', '${name}', 'delete')">Delete Voter</button>
+        `;
+    }
 
-        function handleDecline(id, email, name) {
-            // Get the decline message
-            const message = document.getElementById('decline-message-' + id).value.trim();
+    // Show modal
+    modal.style.display = 'flex';
+}
 
-            if (message === '') {
-                alert('Please enter a reason for rejection.');
-                return;
-            }
+function closeActionModal() {
+    document.getElementById('universal-action-modal').style.display = 'none';
+}
 
-            // Redirect to declinevoters.php with voter ID and message
-            const encodedMessage = encodeURIComponent(message);
-            window.location.href = `../admin/declinevoters.php?id=${id}&message=${encodedMessage}&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`;
-        }// Close the modal when clicking outside of the modal content
+function handleAccept(id) {
+    window.location.href = `../admin/acceptvoters.php?id=${id}`;
+}
+
+function handleDecline(id, email, name) {
+    const message = document.getElementById('decline-message').value.trim();
+    if (message === '') {
+        alert('Please enter a reason for rejection.');
+        return;
+    }
+    const encodedMessage = encodeURIComponent(message);
+    window.location.href = `../admin/declinevoters.php?id=${id}&message=${encodedMessage}&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`;
+}
+
+function sendMessageOrDelete(id, email, name, action) {
+    const message = document.getElementById('voter-message').value.trim();
+    if (message === '') {
+        alert('Please enter a message or reason for deletion.');
+        return;
+    }
+    
+    const encodedMessage = encodeURIComponent(message);
+    window.location.href = `../admin/sendMsgOrDeleteVoters.php?id=${id}&message=${encodedMessage}&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}&action=${action}`;
+}
+
+
+        // Close the modal when clicking outside of the modal content
         window.onclick = function (event) {
             var modals = document.getElementsByClassName('all-modals');
             for (var i = 0; i < modals.length; i++) {
@@ -389,6 +344,7 @@ $_SESSION['pageName'] = "Verify Voters";// Clear the message
 
         //search funtionality
         document.addEventListener('DOMContentLoaded', function () {
+            searchVoters();
             document.getElementById('searchQuery').addEventListener('input', function () {
                 searchVoters();
             });
@@ -407,32 +363,52 @@ $_SESSION['pageName'] = "Verify Voters";// Clear the message
             const district = document.getElementById('district').value;
             const regionNo = document.getElementById('regionNo').value;
             const voterType = document.getElementById('voter-type').value;
+            let isPendingStatus = (voterType === 'pending') ? true : false;
+            let searchResultsBody = document.getElementById('searchResults');
+
+            //ajax searching 
             let xhr = new XMLHttpRequest();
-            const pendingVotersBody = document.getElementById('pendingVoters');
-            const votersBody = document.getElementById('voters');
             xhr.open('GET', `../admin/searchVoters.php?searchQuery=${encodeURIComponent(searchQuery)}&district=${encodeURIComponent(district)}&regionNo=${encodeURIComponent(regionNo)}&voterType=${encodeURIComponent(voterType)}`, true);
             xhr.onreadystatechange = function () {
                 try {
                     if (xhr.readyState == 4 && xhr.status == 200) {
                         let users = JSON.parse(xhr.responseText);
                         // console.log(users);
-                        if (voterType === 'pending') {
-                            console.log('pending');
-
-                            // pendingVotersBody.innerHTML = '';
-                            // users.forEach(user => {
-                            //     pendingVotersBody.innerHTML += `
-                            // `;
-                            // });
-                        } else {
-                            console.log('verified');
-
-                            //     votersBody.innerHTML = '';
-                            //     users.forEach(user => {
-                            //         votersBody.innerHTML += `
-                            // `;
-                            //     });
+                        if (users.error) {
+                            searchResultsBody.innerHTML = `<tr><td colspan="12">${users.message}${isPendingStatus ? ' in pending status' : ' in voter list'}</td></tr>`;
+                            return;
                         }
+                        searchResultsBody.innerHTML = ''; // Clear existing content
+                        users.forEach(user => {
+                            searchResultsBody.innerHTML += `
+                                    <tr>
+                                        <td>${user.id}</td>
+                                        <td>
+                                            <strong>Name:</strong> ${user.name}<br>
+                                            <strong>Email:</strong> ${user.email}<br>
+                                            <strong>Citizenship No:</strong> ${user.citizenshipNumber}
+                                        </td>
+                                        <td>${user.dateOfBirth}</td>
+                                        <td>${user.gender}</td>
+                                        <td>
+                                            <strong>District:</strong> ${user.district}<br>
+                                            <strong>Region No:</strong> ${user.regionNo}<br>
+                                            <strong>Local Address:</strong> ${user.localAddress}<br>
+                                        </td>
+                                        <td><img src="../uploads/${user.citizenshipFrontPhoto}" onclick="openModal('${user.citizenshipFrontPhoto}', this.src)"></td>
+                                        <td><img src="../uploads/${user.citizenshipBackPhoto}" onclick="openModal('${user.citizenshipBackPhoto}', this.src)"></td>
+                                        <td><img src="../uploads/${user.userPhoto}" onclick="openModal('${user.userPhoto}', this.src)"></td>
+                                        <td>
+                                             ${isPendingStatus ? user.status : user.votingStatus} <br>
+                                        </td>
+                                        <td>
+    <button class="action-btn accept-button" onclick="openActionModal(${user.id}, '${user.name}', '${user.email}', '${voterType}')">
+        Actions
+    </button>
+</td>
+                                    </tr>
+                                `;
+                        });
                     }
                 } catch (e) {
                     console.error(e);

@@ -36,7 +36,7 @@ $result = $conn->query($sql);
 $response = [];
 if ($result && $result->num_rows > 0) {
   while ($row = $result->fetch_assoc()) {
-    $response = [
+    $response[] = [
       'id' => $row['id'],
       'name' => $row['name'],
       'email' => $row['email'],
@@ -51,10 +51,10 @@ if ($result && $result->num_rows > 0) {
       'userPhoto' => $row['userPhoto']
     ];
     if ($tableName == 'voters') {
-      $response['votingStatus'] = $row['votingStatus'];
+      $response[count($response) - 1]['votingStatus'] = $row['votingStatus'];
     }
     if ($tableName == 'pendingStatus') {
-      $response['status'] = $row['status'];
+      $response[count($response) - 1]['status'] = $row['status'];
     }
   }
 }else{
