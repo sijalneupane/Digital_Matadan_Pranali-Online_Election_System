@@ -19,6 +19,7 @@ $_SESSION['pageName'] = "Verify Voters";// Clear the message
     <link rel="stylesheet" href="../admin/admin_home.css">
     <link rel="stylesheet" href="../styles/modal1.css">
     <link rel="icon" href="../images/DMP logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         /* General Styling */
         body {
@@ -91,6 +92,63 @@ $_SESSION['pageName'] = "Verify Voters";// Clear the message
             border-radius: 5px;
         }
 
+        /* search-css */
+        .search-form {
+            display: flex;
+            flex-direction: row;
+            gap: 15px;
+            width: 100%;
+            /* max-width: 450px; */
+            margin: 10px auto;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-input-container {
+            align-content: center;
+            position: relative;
+            /* flex: 1 0 40%; */
+            flex: 3.5;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        .search-input:not(:first-child) {
+            width: 15%;
+        }
+
+        #searchQuery::placeholder {
+            color: #bbb;
+        }
+
+        #district,
+        #regionNo {
+            appearance: none;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMCIgaGVpZ2h0PSI2Ij4KICA8cGF0aCBkPSJNIDAgMCAxMCAwIDUgNiIgZmlsbD0iIzY2NiIgLz4KPC9zdmc+Cg==') no-repeat right 10px center;
+            background-size: 10px 6px;
+            padding-right: 30px;
+        }
+
+        #district option,
+        #regionNo option {
+            padding: 10px;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             /* table {
@@ -120,6 +178,21 @@ $_SESSION['pageName'] = "Verify Voters";// Clear the message
     <?php require_once '../home/logout_modals_html.php';
     logoutModalPhp('admin'); ?>
     <div class="container">
+        <form onsubmit="event.preventDefault();" class="search-form">
+            <div class="search-input-container">
+                <input type="text" id="searchQuery" placeholder="Search by name" class="search-input">
+                <i class="fas fa-search"
+                    style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%);"></i>
+            </div>
+            <?php require_once '../php_for_ajax/districtRegionSelect.php';
+            district();
+            regionNo();
+            ?>
+            <select class="search-input" name="voter-type" id="voter-type">
+                <option value="pending">Pending Voters</option>
+                <option value="verified">Verified Voters</option>
+            </select>
+        </form>
         <div class="table-container">
             <!-- <h3></h3> -->
             <table>
@@ -133,6 +206,7 @@ $_SESSION['pageName'] = "Verify Voters";// Clear the message
                         <th>Citizenship Front</th>
                         <th>Citizenship Back</th>
                         <th>Userphoto</th>
+                        <th>Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -163,6 +237,7 @@ $_SESSION['pageName'] = "Verify Voters";// Clear the message
                             $frontPhoto = htmlspecialchars($row['citizenshipFrontPhoto']);
                             $backPhoto = htmlspecialchars($row['citizenshipBackPhoto']);
                             $userPhoto = htmlspecialchars($row['userPhoto']);
+                            $status = htmlspecialchars($row['status']);
                             ?>
                             <tr>
                                 <td><?= $id ?></td>
@@ -189,6 +264,9 @@ $_SESSION['pageName'] = "Verify Voters";// Clear the message
                                 <button class="action-btn accept-button">Accept</button>
                                 <button class="action-btn decline-button">Decline</button>
                             </td> -->
+                                <td>
+                                    <strong>Status:</strong> <?= $status ?> <br>
+                                </td>
                                 <td><button class="action-btn accept-button"
                                         onclick="openActionModal(<?= $id ?>)">Actions</button>
                                 </td>
@@ -232,11 +310,15 @@ $_SESSION['pageName'] = "Verify Voters";// Clear the message
                     $conn->close();
                     ?>
                 </tbody>
+                <tbody id="voters">
+
+                </tbody>
             </table>
         </div>
     </div>
 
     <script>
+
         function openModal(id, title) {
             const modal = document.getElementById('modal-' + id);
             const modalImg = document.getElementById('modal-img-' + id);
@@ -296,6 +378,67 @@ $_SESSION['pageName'] = "Verify Voters";// Clear the message
                     modals[i].style.display = 'none';
                 }
             }
+        }
+
+
+        // adding search-input class to the region and district select in searching area
+        const selects = document.getElementsByTagName("select");
+        for (let i = 0; i < selects.length; i++) {
+            selects[i].classList.add('search-input');
+        }
+
+        //search funtionality
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('searchQuery').addEventListener('input', function () {
+                searchVoters();
+            });
+            document.getElementById('district').addEventListener('change', function () {
+                setTimeout(searchVoters, 100);
+            });
+            document.getElementById('regionNo').addEventListener('change', function () {
+                searchVoters();
+            });
+            document.getElementById('voter-type').addEventListener('change', function () {
+                searchVoters();
+            });
+        });
+        function searchVoters() {
+            const searchQuery = document.getElementById('searchQuery').value.trim();
+            const district = document.getElementById('district').value;
+            const regionNo = document.getElementById('regionNo').value;
+            const voterType = document.getElementById('voter-type').value;
+            let xhr = new XMLHttpRequest();
+            const pendingVotersBody = document.getElementById('pendingVoters');
+            const votersBody = document.getElementById('voters');
+            xhr.open('GET', `../admin/searchVoters.php?searchQuery=${encodeURIComponent(searchQuery)}&district=${encodeURIComponent(district)}&regionNo=${encodeURIComponent(regionNo)}&voterType=${encodeURIComponent(voterType)}`, true);
+            xhr.onreadystatechange = function () {
+                try {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        let users = JSON.parse(xhr.responseText);
+                        // console.log(users);
+                        if (voterType === 'pending') {
+                            console.log('pending');
+
+                            // pendingVotersBody.innerHTML = '';
+                            // users.forEach(user => {
+                            //     pendingVotersBody.innerHTML += `
+                            // `;
+                            // });
+                        } else {
+                            console.log('verified');
+
+                            //     votersBody.innerHTML = '';
+                            //     users.forEach(user => {
+                            //         votersBody.innerHTML += `
+                            // `;
+                            //     });
+                        }
+                    }
+                } catch (e) {
+                    console.error(e);
+                }
+            }
+            xhr.send();
         }
     </script>
     <script>

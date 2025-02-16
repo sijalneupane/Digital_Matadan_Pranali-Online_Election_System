@@ -12,7 +12,7 @@ if (!isset($_SESSION["email"])) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Candidates Page</title>
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     .content {
       padding-left: 40px !important;
@@ -400,8 +400,8 @@ if (!isset($_SESSION["email"])) {
   const selects = document.getElementsByTagName("select");
   for (let i = 0; i < selects.length; i++) {
     selects[i].classList.add('search-input');
-
   }
+
   const toggleButton = document.getElementById('open-search');
   toggleButton.addEventListener('click', () => {
     if (toggleButton.classList.contains('inactive')) {
