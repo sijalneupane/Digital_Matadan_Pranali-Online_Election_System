@@ -21,15 +21,16 @@ if (isset($_GET['id'])) {
     $dateOfBirth = $row['dateOfBirth'];
     $citizenshipNumber = $row['citizenshipNumber'];
     $gender = $row['gender'];
-    $addressId = $row['addressId'];
+    $localAddress = $row['localAddress'];
+    $dId = $row['dId'];
     $citizenshipFrontPhoto = $row['citizenshipFrontPhoto'];
     $citizenshipBackPhoto = $row['citizenshipBackPhoto'];
     $userPhoto = $row['userPhoto'];
 
     $deleteSql = "DELETE FROM pendingstatus WHERE id='$id'";
     if (mysqli_query($conn, $deleteSql)) {
-      $sql1 = "INSERT INTO voters (name,  email, password,dateOfBirth,  citizenshipNumber,gender,addressid, citizenshipFrontPhoto, citizenshipBackPhoto, userPhoto)
-        VALUES ('$name',  '$email', '$password', '$dateOfBirth', '$citizenshipNumber','$gender','$addressId', '$citizenshipFrontPhoto', '$citizenshipBackPhoto', '$userPhoto')";
+      $sql1 = "INSERT INTO voters (name,  email, password,dateOfBirth,  citizenshipNumber,gender,dId,localAddress, citizenshipFrontPhoto, citizenshipBackPhoto, userPhoto)
+        VALUES ('$name',  '$email', '$password', '$dateOfBirth', '$citizenshipNumber','$gender','$dId','$localAddress', '$citizenshipFrontPhoto', '$citizenshipBackPhoto', '$userPhoto')";
       if (mysqli_query($conn, $sql1)) {
         $voterId = mysqli_insert_id($conn);
         sendMail($email, $name, "Voter registration successfull", "You account is verified and your voter id is " . $voterId);
@@ -56,3 +57,4 @@ if (isset($_GET['id'])) {
   header('Location: ../admin/verify_voters.php');
 }
 mysqli_close($conn);
+?>

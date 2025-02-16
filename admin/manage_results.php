@@ -361,9 +361,8 @@ body {
       fetchVotingTime();
     };
 
-    // Automatically fetch the voting status every 10 seconds
-    setInterval(fetchVotingTime, 1000); // Fetch every 10 seconds (10000 milliseconds)
-
+    // Automatically fetch the voting status every 1 seconds
+    setInterval(fetchVotingTime, 1000); // Fetch every 1 seconds (1000 milliseconds)
 
     function fetchCurrentResults() {
       var searchQuery = document.getElementById('searchQuery').value;

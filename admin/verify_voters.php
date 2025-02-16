@@ -136,15 +136,14 @@ $_SESSION['pageName'] = "Verify Voters";// Clear the message
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="pendingVoters">
                     <?php
                     // Database connection
                     require '../register_and_login/dbconnection.php';
                     // SQL Query
                     $query = "SELECT * 
-                    FROM pendingstatus P 
-                    INNER JOIN localaddress la ON P.addressId = la.lid
-                    INNER JOIN district D ON D.dId = la.dId
+                    FROM pendingstatus P
+                    INNER JOIN district D ON p.dId = D.dId
                     WHERE status = 'pending'
                 ";
 
@@ -158,7 +157,7 @@ $_SESSION['pageName'] = "Verify Voters";// Clear the message
                             $dateOfBirth = htmlspecialchars($row['dateOfBirth']);
                             $citizenshipNumber = htmlspecialchars($row['citizenshipNumber']);
                             $gender = htmlspecialchars($row['gender']);
-                            $localAddress = htmlspecialchars($row['local_address']);
+                            $localAddress = htmlspecialchars($row['localAddress']);
                             $district = htmlspecialchars($row['district']);
                             $regionNo = htmlspecialchars($row['regionNo']);
                             $frontPhoto = htmlspecialchars($row['citizenshipFrontPhoto']);

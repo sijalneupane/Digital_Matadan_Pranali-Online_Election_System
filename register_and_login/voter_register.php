@@ -13,8 +13,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = isset($_POST['email']) ? trim($_POST['email']) : '';
     $password = isset($_POST['password']) ? trim($_POST['password']) : '';
     $district = isset($_POST['district']) ? trim($_POST['district']) : '';
-    $election_region = isset($_POST['regionNo']) ? trim($_POST['regionNo']) : '';
-    $local_address = isset($_POST['local_address']) ? trim($_POST['local_address']) : '';
+    $electionRegion = isset($_POST['regionNo']) ? trim($_POST['regionNo']) : '';
+    $localAddress = isset($_POST['local_address']) ? trim($_POST['local_address']) : '';
     $citizenshipNumber = isset($_POST['citizenshipNumber']) ? trim($_POST['citizenshipNumber']) : '';
     $dateOfBirth = isset($_POST['dateOfBirth']) ? trim($_POST['dateOfBirth']) : '';
 
@@ -52,8 +52,8 @@ $postFields = [
     'Email' => $email,
     'Password' => $password,
     'District' => $district,
-    'Election Region' => $election_region,
-    'Local Address' => $local_address,
+    'Election Region' => $electionRegion,
+    'Local Address' => $localAddress,
     'Citizenship Number' => $citizenshipNumber,
     'Date of Birth' => $dateOfBirth
 ];
@@ -113,34 +113,34 @@ if (!$isEmpty) {
             }
         } else {
             // Step 1: Retrieve the dId from the district table
-            $d_query = "SELECT dId FROM district WHERE district = '$district' AND regionNo = '$election_region'";
+            $d_query = "SELECT dId FROM district WHERE district = '$district' AND regionNo = '$electionRegion'";
             $d_result = mysqli_query($conn, $d_query);
     
             if (mysqli_num_rows($d_result) > 0) {
                 $row = mysqli_fetch_assoc($d_result);
                 $dId = $row['dId'];
-                // Step 2: Check if the local_address already exists
-                $check_query = "SELECT lid FROM localaddress WHERE dId = '$dId' AND local_address = '$local_address'";
-                $check_result = mysqli_query($conn, $check_query);
+            //     // Step 2: Check if the local_address already exists
+            //     $check_query = "SELECT lid FROM localaddress WHERE dId = '$dId' AND local_address = '$local_address'";
+            //     $check_result = mysqli_query($conn, $check_query);
     
-                if (mysqli_num_rows($check_result) > 0) {
-                    $row = mysqli_fetch_assoc($check_result);
-                    $addressID = $row['lid'];
-                } else {
-                    // Address doesn't exist, insert it
-                    $local_query = "INSERT INTO localaddress (dId, local_address) VALUES ('$dId', '$local_address')";
-                    if (mysqli_query($conn, $local_query)) {
-                        $addressID = mysqli_insert_id($conn);
-                    } else {
-                        $_SESSION['error_message'] = "Error inserting local address: " . mysqli_error($conn);
-                        header('Location: ../register_and_login/voter_register_form.php');
-                        exit();
-                    }
-                }
+            //     if (mysqli_num_rows($check_result) > 0) {
+            //         $row = mysqli_fetch_assoc($check_result);
+            //         $addressID = $row['lid'];
+            //     } else {
+            //         // Address doesn't exist, insert it
+            //         $local_query = "INSERT INTO localaddress (dId, local_address) VALUES ('$dId', '$local_address')";
+            //         if (mysqli_query($conn, $local_query)) {
+            //             $addressID = mysqli_insert_id($conn);
+            //         } else {
+            //             $_SESSION['error_message'] = "Error inserting local address: " . mysqli_error($conn);
+            //             header('Location: ../register_and_login/voter_register_form.php');
+            //             exit();
+            //         }
+            //     }
     
                 // Step 3: Insert voter information into pendingstatus table
-                $voter_query = "INSERT INTO pendingstatus (name, email, password, dateOfBirth, citizenshipNumber, gender, addressid, citizenshipFrontPhoto, citizenshipBackPhoto, userPhoto)
-                                VALUES ('$name', '$email', '$hashed_password', '$dateOfBirth', '$citizenshipNumber', '$gender', '$addressID', '$newCitizenshipFrontPhoto', '$newCitizenshipBackPhoto', '$newUserPhoto')";
+                $voter_query = "INSERT INTO pendingstatus (name, email, password, dateOfBirth, citizenshipNumber, gender, dId,localAddress, citizenshipFrontPhoto, citizenshipBackPhoto, userPhoto)
+                                VALUES ('$name', '$email', '$hashed_password', '$dateOfBirth', '$citizenshipNumber', '$gender','$dId','$localAddress',  '$newCitizenshipFrontPhoto', '$newCitizenshipBackPhoto', '$newUserPhoto')";
     
                 if (mysqli_query($conn, $voter_query)) {
                     move_uploaded_file($_FILES['citizenshipFrontPhoto']['tmp_name'], $target_dir . $newCitizenshipFrontPhoto);

@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $email=$_SESSION['email'];
   $district = $_POST['district'];
   $election_region = $_POST['regionNo'];
-  $local_address = $_POST['local_address'];
+  $localAddress = $_POST['localAddress'];
   $citizenshipNumber = $_POST['citizenshipNumber'];
   $dateOfBirth = date('Y-m-d', strtotime($_POST['dateOfBirth']));
 
@@ -55,24 +55,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (mysqli_num_rows($d_result) > 0) {
       $row = mysqli_fetch_assoc($d_result);
       $dId = $row['dId'];
-      // Step 2: Check if the local_address already exists
-      $check_query = "SELECT lid FROM localaddress WHERE dId = '$dId' AND local_address = '$local_address'";
-      $check_result = mysqli_query($conn, $check_query);
+      // // Step 2: Check if the local_address already exists
+      // $check_query = "SELECT lid FROM localaddress WHERE dId = '$dId' AND local_address = '$local_address'";
+      // $check_result = mysqli_query($conn, $check_query);
 
-      if (mysqli_num_rows($check_result) > 0) {
-        $row = mysqli_fetch_assoc($check_result);
-        $addressID = $row['lid'];
-      } else {
-        // Address doesn't exist, insert it
-        $local_query = "INSERT INTO localaddress (dId, local_address) VALUES ('$dId', '$local_address')";
-        if (mysqli_query($conn, $local_query)) {
-          $addressID = mysqli_insert_id($conn);
-        } else {
-          $_SESSION['error_message'] = "Error inserting local address: " . mysqli_error($conn);
-          header('Location:  ../register_and_login/user_profile.php');
-          exit();
-        }
-      }
+      // if (mysqli_num_rows($check_result) > 0) {
+      //   $row = mysqli_fetch_assoc($check_result);
+      //   $addressID = $row['lid'];
+      // } else {
+      //   // Address doesn't exist, insert it
+      //   $local_query = "INSERT INTO localaddress (dId, local_address) VALUES ('$dId', '$local_address')";
+      //   if (mysqli_query($conn, $local_query)) {
+      //     $addressID = mysqli_insert_id($conn);
+      //   } else {
+      //     $_SESSION['error_message'] = "Error inserting local address: " . mysqli_error($conn);
+      //     header('Location:  ../register_and_login/user_profile.php');
+      //     exit();
+      //   }
+      // }
 
       // Step 4: Update voter information in the voters table
       $update_query = "UPDATE voters 
@@ -80,16 +80,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
          email='$email',
              gender = '$gender', 
              citizenshipNumber = '$citizenshipNumber', 
-             dateOfBirth = '$dateOfBirth', 
-             addressid = '$addressID' 
+             dateOfBirth = '$dateOfBirth'
          WHERE id = '$voterId'";
 
       if (mysqli_query($conn, $update_query)) {
 
         $joinSql = "SELECT * 
-        FROM voters V 
-        INNER JOIN localaddress la ON V.addressId = la.lid
-        INNER JOIN district D ON D.dId = la.dId
+        FROM voters V
+        INNER JOIN district D ON v.dId = D.dId
         WHERE V.id='$voterId'";
 
         $result = mysqli_query($conn, $joinSql);
@@ -98,12 +96,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           // Set session variables for successful login
           $_SESSION['districtId'] = $row1['did'];
           $_SESSION['email']=$row1["email"];
-          $_SESSION['addressId'] = $row1['addressId'];
           $_SESSION['election_region'] = $row1['regionNo'];
           $_SESSION['voterId'] = $row1['id'];
           $_SESSION['name'] = $row1['name'];
           $_SESSION['district'] = $row1['district'];
-          $_SESSION['local_address'] = $row1['local_address'];
+          $_SESSION['localAddress'] = $row1['localAddress'];
           $_SESSION['citizenshipNumber'] = $row1['citizenshipNumber'];
           $_SESSION['birthDate'] = $row1['dateOfBirth'];
           $_SESSION['gender'] = $row1['gender'];

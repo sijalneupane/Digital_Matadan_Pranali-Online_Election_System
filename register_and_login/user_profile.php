@@ -578,7 +578,7 @@ require_once '../php_for_ajax/districtRegionSelect.php';
                         <p><i class="fas fa-map-signs"></i> <strong>Election Region:</strong>
                             <?php echo $_SESSION['election_region']; ?></p>
                         <p><i class="fas fa-home"></i> <strong>Local Address:</strong>
-                            <?php echo $_SESSION['local_address']; ?></p>
+                            <?php echo $_SESSION['localAddress']; ?></p>
                         <p><i class="fas fa-birthday-cake"></i> <strong>Birth Date:</strong>
                             <?php echo $_SESSION['birthDate']; ?></p>
                         <p><i class="fas fa-venus-mars"></i> <strong>Gender:</strong> <?php echo $_SESSION['gender']; ?>
@@ -727,7 +727,7 @@ require_once '../php_for_ajax/districtRegionSelect.php';
                     <div class="field-error-groups">
                         <label for="local_address">Local Address:</label>
                         <input type="text" id="local_address" name="local_address"
-                            value="<?php echo $_SESSION['local_address']; ?>">
+                            value="<?php echo $_SESSION['localAddress']; ?>">
                         <span id="addressError" class="error"></span>
                     </div>
                     <div class="field-error-groups">
@@ -777,7 +777,7 @@ require_once '../php_for_ajax/districtRegionSelect.php';
             gender: "<?php echo $_SESSION['gender']; ?>",
             district: "<?php echo $_SESSION['district']; ?>",
             election_region: "<?php echo $_SESSION['election_region']; ?>",
-            local_address: "<?php echo $_SESSION['local_address']; ?>",
+            local_address: "<?php echo $_SESSION['localAddress']; ?>",
             email: "<?php echo $_SESSION['email']; ?>",
             birthDate: "<?php echo $_SESSION['birthDate']; ?>",
             citizenshipNumber: "<?php echo $_SESSION['citizenshipNumber']; ?>"

@@ -16,20 +16,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $row2 = mysqli_fetch_assoc($result);
     $joinSql = "SELECT * 
                 FROM voters V 
-                INNER JOIN localaddress la ON V.addressId = la.lid
-                INNER JOIN district D ON D.dId = la.dId
+                INNER JOIN district D ON v.dId = D.dId
                 WHERE V.id='$voterId'";
     $result = mysqli_query($conn, $joinSql);
     if (mysqli_num_rows($result) > 0) {
       $row1 = mysqli_fetch_assoc($result);
       // Set session variables for successful login
       $_SESSION['dId'] = $row1['dId'];
-      $_SESSION['addressId'] = $row1['addressId'];
       $_SESSION['election_region'] = $row1['regionNo'];
       $_SESSION['voterId'] = $row1['id'];
       $_SESSION['name'] = $row1['name'];
       $_SESSION['district'] = $row1['district'];
-      $_SESSION['local_address'] = $row1['local_address'];
+      $_SESSION['localAddress'] = $row1['localAddress'];
       $_SESSION['citizenshipNumber'] = $row1['citizenshipNumber'];
       $_SESSION['birthDate'] = $row1['dateOfBirth'];
       $_SESSION['gender'] = $row1['gender'];

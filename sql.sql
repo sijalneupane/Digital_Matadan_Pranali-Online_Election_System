@@ -7,12 +7,14 @@ CREATE TABLE pendingstatus (
     dateOfBirth DATE NULL,
     citizenshipNumber VARCHAR(50) COLLATE latin1_swedish_ci NULL,
     gender VARCHAR(50) COLLATE latin1_swedish_ci NULL,
-    addressId INT(11) NOT NULL,
+    dId INT NOT NULL,
+    localAddress VARCHAR(255) NOT NULL,
+    -- addressId INT(11) NOT NULL,
     citizenshipFrontPhoto VARCHAR(255) COLLATE latin1_swedish_ci NULL,
     citizenshipBackPhoto VARCHAR(255) COLLATE latin1_swedish_ci NULL,
     userPhoto VARCHAR(255) COLLATE latin1_swedish_ci NULL,
     status VARCHAR(255) COLLATE latin1_swedish_ci NOT NULL DEFAULT 'pending',
-    FOREIGN KEY (addressId) REFERENCES localaddress(lid) ON DELETE CASCADE
+    FOREIGN KEY (dId) REFERENCES district(dId) ON DELETE CASCADE
 );
 
 --2) voters table:
@@ -24,12 +26,14 @@ CREATE TABLE voters (
     dateOfBirth DATE NULL,
     citizenshipNumber VARCHAR(50) COLLATE latin1_swedish_ci NULL,
     gender VARCHAR(50) COLLATE latin1_swedish_ci NULL,
-    addressId INT(11) NOT NULL,
+    dId INT NOT NULL,
+    localAddress VARCHAR(255) NOT NULL,
+    -- addressId INT(11) NOT NULL,
     citizenshipFrontPhoto VARCHAR(255) COLLATE latin1_swedish_ci NULL,
     citizenshipBackPhoto VARCHAR(255) COLLATE latin1_swedish_ci NULL,
     userPhoto VARCHAR(255) COLLATE latin1_swedish_ci NULL,
     votingStatus ENUM('notVoted', 'voted') DEFAULT 'notVoted',
-    FOREIGN KEY (addressId) REFERENCES localaddress(lid) ON DELETE CASCADE
+    FOREIGN KEY (dId) REFERENCES district(dId) ON DELETE CASCADE
 );
 -- ALTER TABLE voters
 -- ADD votingStatus ENUM('notVoted', 'voted') DEFAULT 'notVoted';
@@ -43,12 +47,12 @@ create table district(
 
 
 -- 4)//localaddress table
-CREATE TABLE localaddress (
-    lid INT AUTO_INCREMENT PRIMARY KEY,
-    dId INT NOT NULL,
-    local_address VARCHAR(255) NOT NULL,
-    FOREIGN KEY (dId) REFERENCES district(dId) ON DELETE CASCADE
-);
+-- CREATE TABLE localaddress (
+--     lid INT AUTO_INCREMENT PRIMARY KEY,
+--     dId INT NOT NULL,
+--     local_address VARCHAR(255) NOT NULL,
+--     FOREIGN KEY (dId) REFERENCES district(dId) ON DELETE CASCADE
+-- );
 
 -- 5)//candidates table
 CREATE TABLE candidates (
