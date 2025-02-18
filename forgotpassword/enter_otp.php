@@ -5,6 +5,11 @@ if (!isset($_SESSION['email'])) {
   header("Location: ../forgotpassword/forgot_password.php");
   exit();
 }
+$errorMessage = isset($_SESSION['error_message']) ? $_SESSION['error_message'] : '';
+unset($_SESSION['error_message']); // Clear the message
+
+$successMessage = isset($_SESSION['success_message']) ? $_SESSION['success_message'] : '';
+unset($_SESSION['success_message']); // Clear the message
 ?>
 
 <!DOCTYPE html>
@@ -14,6 +19,7 @@ if (!isset($_SESSION['email'])) {
   <title>Enter OTP</title>
   <link rel="stylesheet" href="../forgotpassword/style1.css">
   <link rel="icon" href="../images/DMP logo.png" type="image/x-icon">
+  <link rel="stylesheet" href="../styles/modal1.css">
   <script>
 
     function validateForm() {
@@ -35,9 +41,16 @@ if (!isset($_SESSION['email'])) {
       return isValid;
     }
   </script>
+  <script src="../js/errorMessage_modal1.js"></script>
 </head>
 
 <body>
+  <div id="modal1" class="modal-overlay1">
+        <div class="modal-content1">
+            <p id="modalMessage1"></p>
+            <button onclick="closeModal1()">Close</button>
+        </div>
+    </div>
   <!-- Logo Section -->
   <div class="logo-container">
     <img src="../images/DMP logo.png" alt="Logo">
@@ -51,6 +64,17 @@ if (!isset($_SESSION['email'])) {
     <br><br>
     <input type="submit" value="Verify">
   </form>
+  <script>
+    
+        // Show error modal if there's an error message
+        const errorMessage = <?= json_encode($errorMessage); ?>;
+        const successMessage = <?= json_encode($successMessage); ?>;
+        if (errorMessage) {
+            showErrorModal(errorMessage);
+        }else if(successMessage){
+            showErrorModal(successMessage,true);
+        }
+  </script>
 </body>
 
 </html>

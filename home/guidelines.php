@@ -184,7 +184,7 @@
       <div class="section">
         <h2>Important Notes</h2>
         <ul>
-          <li>The voting period will be scheduled by admin and can be seen in homepage</li>
+          <li>The voting period will be scheduled by admin and can be seen in landing page and homepage</li>
           <li>If you encounter technical issues, contact the election support team immediately.</li>
           <li>Results will be announced on the <strong>Results</strong> page after the counting process is complete.</li>
         </ul>

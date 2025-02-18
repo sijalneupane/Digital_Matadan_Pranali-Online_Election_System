@@ -40,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $result = $conn->query($sql);
       if ($result) {
         // $_SESSION['success_message'] = 'Image updated successfully';
-        $_SESSION['error_message'] = 'Image updated successfully';
+        $_SESSION['success_message'] = 'Image updated successfully';
         $_SESSION[$columnType] = $newImageName;
         header('Location: ../register_and_login/user_profile.php');
         exit();

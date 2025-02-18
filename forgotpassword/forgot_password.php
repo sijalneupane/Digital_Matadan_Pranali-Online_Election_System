@@ -36,6 +36,7 @@ unset($_SESSION['error_message']); // Clear the message
             return isValid;
         }
     </script>
+    
 </head>
 
 <body>

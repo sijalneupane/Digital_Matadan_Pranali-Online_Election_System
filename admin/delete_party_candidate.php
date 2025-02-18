@@ -29,7 +29,7 @@ if (($table === 'parties' || $table === 'candidates') && $id > 0) {
     if (file_exists($photoPath)) {
       unlink($photoPath);
     }
-    $_SESSION['errorMsg'] = "Record deleted successfully";
+    $_SESSION['successMsg'] = "Record deleted successfully";
   } else {
     $_SESSION['errorMsg'] = "Error: " . mysqli_error($conn);
   }

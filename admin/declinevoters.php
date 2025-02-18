@@ -1,53 +1,76 @@
 <?php
 session_start();
 require '../home/email_send.php';
-// Database connection
 require '../register_and_login/dbconnection.php';
 
-// Check if ID and message are provided
 if (isset($_GET['id']) && isset($_GET['message']) && isset($_GET['email']) && isset($_GET['name'])) {
-  $id = intval($_GET['id']);
-  $message = mysqli_real_escape_string($conn, $_GET['message']);
-  $email = mysqli_real_escape_string($conn, $_GET['email']);
-  $name = mysqli_real_escape_string($conn, $_GET['name']);
+    $id = intval($_GET['id']);
+    $message = mysqli_real_escape_string($conn, $_GET['message']);
+    $email = mysqli_real_escape_string($conn, $_GET['email']);
+    $name = mysqli_real_escape_string($conn, $_GET['name']);
 
-  $sql1 = "SELECT citizenshipFrontPhoto, citizenshipBackPhoto, userPhoto FROM pendingstatus WHERE id = '$id'";
-  $result1 = mysqli_query($conn, $sql1);
+    // Start transaction
+    mysqli_begin_transaction($conn);
 
-  if ($result1 && mysqli_num_rows($result1) > 0) {
-    $row1 = mysqli_fetch_assoc($result1);
+    // Step 1: Fetch image paths before deleting the record
+    $sql1 = "SELECT citizenshipFrontPhoto, citizenshipBackPhoto, userPhoto FROM pendingstatus WHERE id = '$id'";
+    $result1 = mysqli_query($conn, $sql1);
 
-    // Step 2: Adjust paths for deletion (relative to the script location)
-    $imagePaths = [
-      "../uploads/" . basename($row1['citizenshipFrontPhoto']),
-      "../uploads/" . basename($row1['citizenshipBackPhoto']),
-      "../uploads/" . basename($row1['userPhoto']),
-    ];
+    if ($result1 && mysqli_num_rows($result1) > 0) {
+        $row1 = mysqli_fetch_assoc($result1);
 
-    // Delete each file if it exists
-    foreach ($imagePaths as $path) {
-      if (!empty($path) && file_exists($path)) {
-        unlink($path); // Deletes the file
-      }
-    }
-    // Update the status to 'declined' and save the decline message
-    $query = "DELETE from pendingstatus WHERE id = '$id'";
-    if (mysqli_query($conn, $query)) {
-      sendMail($email, $name, "Accound verification failed", "Your account has failed to ber verified by us. <br>The reason is" . $message);
+        $imagePaths = [
+            "../uploads/" . $row1['citizenshipFrontPhoto'],
+            "../uploads/" . $row1['citizenshipBackPhoto'],
+            "../uploads/" . $row1['userPhoto'],
+        ];
 
-      $_SESSION['errorMsg'] = "Declined the application and rejection email sent successfully";
-      header('Location: ../admin/verify_voters.php');
+        // Step 2: Delete the record from the database
+        $query = "DELETE FROM pendingstatus WHERE id = '$id'";
+        if (mysqli_query($conn, $query)) {
+
+            // Step 3: Send rejection email
+            $emailSent = sendMail($email, $name, "Account verification failed", 
+                "Your account has failed to be verified by us. <br>The reason is: " . $message);
+
+            if ($emailSent) {
+                // Step 4: Delete images from the server
+                $allDeleted = true;
+                foreach ($imagePaths as $path) {
+                    if (!empty($path) && file_exists($path) && !unlink($path)) {
+                        $allDeleted = false;
+                    }
+                }
+
+                if ($allDeleted) {
+                    mysqli_commit($conn);
+                    $_SESSION['successMsg'] = "Application declined, email sent, and images deleted successfully";
+                } else {
+                    // If image deletion fails, rollback
+                    sendMail($email, $name, "Account deletion failed", 
+                        "Your account was declined, but we encountered an issue deleting your images. Please contact support.");
+                    mysqli_rollback($conn);
+                    $_SESSION['errorMsg'] = "Image deletion failed, rollback performed";
+                }
+            } else {
+                // If email fails, rollback
+                mysqli_rollback($conn);
+                $_SESSION['errorMsg'] = "Failed to send rejection email";
+            }
+        } else {
+            // If delete query fails, rollback
+            mysqli_rollback($conn);
+            $_SESSION['errorMsg'] = "Failed to delete record: " . mysqli_error($conn);
+        }
     } else {
-      $_SESSION['errorMsg'] = mysqli_error($conn);
-      header('Location: ../admin/verify_voters.php');
+        $_SESSION['errorMsg'] = "No images found";
     }
-  } else {
-    $_SESSION['errorMsg'] = "No images are founds";
-    header('Location: ../admin/verify_voters.php');
-  }
 } else {
-
-  $_SESSION['errorMsg'] = "Invalid request";
-  header('Location: ../admin/verify_voters.php');
+    $_SESSION['errorMsg'] = "Invalid request";
 }
+
+// echo $_SESSION['errorMsg'];
 mysqli_close($conn);
+header('Location: ../admin/manage_voters.php');
+exit();
+?>

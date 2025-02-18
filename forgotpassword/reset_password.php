@@ -5,6 +5,12 @@ if (!isset($_SESSION['email'])) {
     header("Location: ../forgotpassword/forgot_password.php");
     exit();
 }
+$errorMessage = isset($_SESSION['error_message']) ? $_SESSION['error_message'] : '';
+unset($_SESSION['error_message']); // Clear the message
+
+// $successMessage = isset($_SESSION['success_message']) ? $_SESSION['success_message'] : '';
+// unset($_SESSION['success_message']); // Clear the message
+
 require '../register_and_login/dbconnection.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Fetch new password from the form
@@ -22,13 +28,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     unset($_SESSION['pending']);
     if ($result) {
         // Notify the user of successful password reset
-        $_SESSION['error_message'] = "Password has been reset successfully.";
+        $_SESSION['success_message'] = "Password has been reset successfully.";
         unset($_SESSION['email']); // Clear session
         header("Location: ../register_and_login/voter_login_form.php");
         exit();
     } else {
         // Handle update error
-        echo "Error updating password: " . mysqli_error($conn);
+        // echo "Error updating password: " . mysqli_error($conn);
+        $_session['error_message'] = "Error updating password. PLease try again";
+        header("Location: ../forgotpassword/reset_password.php");
     }
 
     // Close the connection
@@ -43,6 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Reset Password</title>
     <link rel="icon" href="../images/DMP logo.png" type="image/x-icon">
     <link rel="stylesheet" href="../forgotpassword/style1.css">
+    <link rel="stylesheet" href="../styles/modal1.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <script src="../js/togglepassword.js"></script>
 
@@ -84,9 +93,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             cursor: pointer;
         }
     </style>
+    <script src="../js/errorMessage_modal1.js"></script>
 </head>
 
 <body>
+<div id="modal1" class="modal-overlay1">
+        <div class="modal-content1">
+            <p id="modalMessage1"></p>
+            <button onclick="closeModal1()">Close</button>
+        </div>
+    </div>
     <!-- Logo Section -->
     <div class="logo-container">
         <img src="../images/DMP logo.png" alt="Logo">
@@ -103,6 +119,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <br><br>
         <input type="submit" value="Reset Password">
     </form>
+    <script>
+        
+        // Show error modal if there's an error message
+        const errorMessage = <?= json_encode($errorMessage); ?>;
+        const successMessage = <?= json_encode($successMessage); ?>;
+        if (errorMessage) {
+            showErrorModal(errorMessage);
+        }else if(successMessage){
+            showErrorModal(successMessage,true);
+        }
+    </script>
 </body>
 
 </html>

@@ -4,8 +4,10 @@ if (!isset($_SESSION['loggedin'])) {
     header('Location: ../admin/admin_login.php');
 }
 $errorMessage = isset($_SESSION['errorMsg']) ? $_SESSION['errorMsg'] : '';
-unset($_SESSION['errorMsg']);
-$_SESSION['pageName'] = "Verify Voters";// Clear the message
+unset($_SESSION['errorMsg']); //clear the message
+$successMessage = isset($_SESSION['successMsg']) ? $_SESSION['successMsg'] : '';
+unset($_SESSION['successMsg']); // Clear the message
+$_SESSION['pageName'] = "Manage Voters";// Clear the message
 ?>
 
 <!DOCTYPE html>
@@ -14,7 +16,7 @@ $_SESSION['pageName'] = "Verify Voters";// Clear the message
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verify Voters</title>
+    <title>Manage Voters</title>
     <link rel="stylesheet" href="../styles/table_img.css">
     <link rel="stylesheet" href="../admin/admin_home.css">
     <link rel="stylesheet" href="../styles/modal1.css">
@@ -170,6 +172,7 @@ $_SESSION['pageName'] = "Verify Voters";// Clear the message
             }
         }
     </style>
+    <script src="../js/errorMessage_modal1.js"></script>
 </head>
 
 <body>
@@ -418,20 +421,14 @@ function sendMessageOrDelete(id, email, name, action) {
         }
     </script>
     <script>
-        // PHP Message passed to JavaScript
+        
+        // Show error modal if there's an error message
         const errorMessage = <?= json_encode($errorMessage); ?>;
-
-        // Show modal if there is a message
+        const successMessage = <?= json_encode($successMessage); ?>;
         if (errorMessage) {
-            const modal = document.getElementById('modal1');
-            const modalMessage = document.getElementById('modalMessage1');
-            modalMessage.textContent = errorMessage;
-            modal.style.display = 'flex';
-        }
-
-        // Function to close the modal
-        function closeModal1() {
-            document.getElementById('modal1').style.display = 'none';
+            showErrorModal(errorMessage);
+        }else if(successMessage){
+            showErrorModal(successMessage,true);
         }
     </script>
 </body>

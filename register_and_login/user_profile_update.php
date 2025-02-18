@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $email=$_SESSION['email'];
   $district = $_POST['district'];
   $election_region = $_POST['regionNo'];
-  $localAddress = $_POST['localAddress'];
+  $localAddress = $_POST['local_address'];
   $citizenshipNumber = $_POST['citizenshipNumber'];
   $dateOfBirth = date('Y-m-d', strtotime($_POST['dateOfBirth']));
 
@@ -80,7 +80,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
          email='$email',
              gender = '$gender', 
              citizenshipNumber = '$citizenshipNumber', 
-             dateOfBirth = '$dateOfBirth'
+             dateOfBirth = '$dateOfBirth',
+             dId='$dId',
+             localAddress='$localAddress'
          WHERE id = '$voterId'";
 
       if (mysqli_query($conn, $update_query)) {
@@ -94,7 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (mysqli_num_rows($result) > 0) {
           $row1 = mysqli_fetch_assoc($result);
           // Set session variables for successful login
-          $_SESSION['districtId'] = $row1['did'];
+          $_SESSION['dId'] = $row1['did'];
           $_SESSION['email']=$row1["email"];
           $_SESSION['election_region'] = $row1['regionNo'];
           $_SESSION['voterId'] = $row1['id'];
@@ -105,7 +107,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           $_SESSION['birthDate'] = $row1['dateOfBirth'];
           $_SESSION['gender'] = $row1['gender'];
 
-          $_SESSION['error_message'] = "Profile updated successfully!";
+          $_SESSION['success_message'] = "Profile updated successfully!";
           header('Location: ../register_and_login/user_profile.php');         // Redirect to the dashboard or homepage after successful login
         } else {
           $_SESSION['error_message'] = 'Unexpected error occured, please try again';

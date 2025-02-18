@@ -362,6 +362,7 @@ body {
               const thead = document.createElement('thead');
               thead.innerHTML = `
             <tr>
+              <th>Result ID</th>
               <th>Candidate Name</th>
               <th>Citizenship Number</th>
               <th>Party Name</th>
@@ -377,8 +378,9 @@ body {
               results.forEach(result => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-              <td>${result.candidateName}</td>
-              <td>${result.citizenshipNumber}</td>
+              <td>${result.currentResultId}</td>
+              <td>${result.name}</td>
+              <td>${result.citizenship_number}</td>
               <td>${result.partyName}</td>
               <td>${result.district}</td>
               <td>${result.regionNo}</td>

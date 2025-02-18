@@ -47,7 +47,10 @@
             width: 145px;
             min-width: 50px;
         }
-
+        .election-time{
+            font-size: 1.2rem;
+            color:#0d2ec4;
+        }
         .nav-links .admin-login {
             color: #fff;
             text-decoration: none;
@@ -226,8 +229,8 @@
         <div class="logo">
             <img src="../images/DMP logo.png" alt="Election Logo">
         </div>
-        <div class="election-time">
-            <p style="color: red;">Election time: 2024-11-01 (6am - 6pm) </p>
+        <div class="election-time" id="election-time">
+        
         </div>
         <div class="nav-links">
             <a href="../admin/admin_login.php" class="admin-login">Admin Login</a>
@@ -250,7 +253,44 @@
                 alt="Voting Image" class="voting-image">
         </div>
     </div>
+    <script>
+    // Global variable to store the voting status
+    let votingTime = {};
 
+    // Function to fetch voting status from the server
+    function fetchVotingTime() {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', '../time/fetch_voting_time.php', true);
+      xhr.onload = function () {
+        if (this.status === 200) {
+          const newVotingTime = JSON.parse(this.responseText);
+          if (JSON.stringify(votingTime) !== JSON.stringify(newVotingTime)) {
+            votingTime = newVotingTime;
+            if (votingTime.error) {
+              document.getElementById('election-time').innerHTML = 'No election scheduled till now';
+            } else {
+              const currentTime = new Date();
+              const startTime = new Date(votingTime.startTime);
+              const endTime = new Date(votingTime.endTime);
+
+              if (currentTime < endTime) {
+                  console.log('hello');
+                  document.getElementById('election-time').innerHTML = `
+                    <div>Election Start: ${startTime.toLocaleString()} <br>Election End: ${endTime.toLocaleString()}</div>
+                  `;
+            } else {
+                console.log('changed');
+                document.getElementById('election-time').innerHTML = 'Election has ended';
+              }
+            }
+          }
+        }
+      };
+      xhr.send();
+    }
+    fetchVotingTime();
+    setInterval(fetchVotingTime,2000);
+  </script>
 </body>
 
 </html>

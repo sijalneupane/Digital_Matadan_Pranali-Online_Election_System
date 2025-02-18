@@ -6,6 +6,8 @@ if (!isset($_SESSION['loggedin'])) {
 }
 $errorMessage = isset($_SESSION['errorMsg']) ? $_SESSION['errorMsg'] : '';
 unset($_SESSION['errorMsg']); // Clear the message
+$successMessage = isset($_SESSION['successMsg']) ? $_SESSION['successMsg'] : '';
+unset($_SESSION['successMsg']); // Clear the message
 $fromLogIn = isset($_SESSION['fromLogIn']) ? $_SESSION['fromLogIn'] : '';
 unset($_SESSION['fromLogIn']);
 
@@ -113,15 +115,16 @@ require_once "../home/logout_modals_html.php";
                             <span class="error" id="endTimeError"></span>
                         </div>
                         <div>
-                            <label for="nominationStartTime">Nomination Start Time</label>
+                            <label for="nomination-StartTime">Nomination Start Time</label>
                             <input type="datetime-local" id="nomination-StartTime" name="nominationStartTime" />
                             <span class="error" id="nominationStartTimeError"></span>
                         </div>
                         <div>
-                            <label for="nominationEndTime">Nomination Start Time</label>
+                            <label for="nomination-EndTime">Nomination End Time</label>
                             <input type="datetime-local" id="nomination-EndTime" name="nominationEndTime" />
                             <span class="error" id="nominationEndTimeError"></span>
                         </div>
+                        
 
                         <button type="submit" id="set-election-btn">Set Election</button>
                     </form>
@@ -200,7 +203,10 @@ require_once "../home/logout_modals_html.php";
                 document.getElementById('nominationEndTimeError').textContent = 'Nomination end Time should not be less than the Nomination start time.';
                 isValid = false;
             }
-
+            if((document.getElementById("election-id").value)==="" && votingTime.resultStatus === "notPublished"){
+                    showErrorModal("Current election result is not published yet. You can't  set new election",false);
+                    isValid = false;
+                }
             return isValid;
         }
         window.onclick = function () {
@@ -238,8 +244,11 @@ require_once "../home/logout_modals_html.php";
 
         // Show error modal if there's an error message
         const errorMessage = <?= json_encode($errorMessage); ?>;
+        const successMessage = <?= json_encode($successMessage); ?>;
         if (errorMessage) {
             showErrorModal(errorMessage);
+        }else if(successMessage){
+            showErrorModal(successMessage,true);
         }
 
         // Function to convert date string to required format
@@ -266,17 +275,18 @@ require_once "../home/logout_modals_html.php";
                 document.getElementById("update-notice-btn").style.display = "inline";
                 noticeElement.innerHTML = ``;
                 noticeElement.innerHTML = `
-                <thead>
+                <thead style="">
                     <tr>
-                        <th>Election ID</th>
-                        <th>Election Name</th>
+                        <th>ID</th>
+                        <th>Name</th>
                         <th>Start Time</th>
                         <th>End Time</th>
                         <th>Nomination Start</th>
                         <th>Nomination End</th>
+                        <th>Result Status</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody style="">
                     <tr>
                         <td style="padding:5px 10px;">${votingTime.electionId}</td>
                         <td style="padding:5px 10px;">${votingTime.electionName}</td>
@@ -284,6 +294,7 @@ require_once "../home/logout_modals_html.php";
                         <td style="padding:5px 10px;">${formatDateTimeWithAMPM(votingTime.endTime)}</td>
                         <td style="padding:5px 10px;">${formatDateTimeWithAMPM(votingTime.nominationStartTime)}</td>
                         <td style="padding:5px 10px;">${formatDateTimeWithAMPM(votingTime.nominationEndTime)}</td>
+                        <td style="padding:5px 10px;">${votingTime.resultStatus}</td>
                     </tr>
                 </tbody>
             `;
@@ -301,6 +312,7 @@ require_once "../home/logout_modals_html.php";
 
         // Function to populate form with voting time details for update
         function populateForm() {
+
             if (votingTime) {
                 document.getElementById("election-id").value = votingTime.electionId || "";
                 document.getElementById("election-name").value = votingTime.electionName || "";
@@ -315,10 +327,16 @@ require_once "../home/logout_modals_html.php";
         document.getElementById("update-notice-btn").addEventListener("click", function () {
             const setElectionBtn = document.getElementById("set-election-btn");
             const formTitle = document.getElementById("form-title");
+            
             if (setElectionBtn.textContent === "Set Election") {
+                if(votingTime.resultStatus === "published"){
+                    showErrorModal("Result has been published for this election. You can't update the election details.",false);
+                    return;
+                }
                 setElectionBtn.textContent = "Update Election";
                 populateForm();
                 clearErrors();
+                // console.log(document.getElementById("election-id").value+"\n");
                 formTitle.textContent = "Update Election";
                 this.textContent = "Reset Form";
             } else {
@@ -326,6 +344,8 @@ require_once "../home/logout_modals_html.php";
                 formTitle.textContent = "Set New Election";
                 document.getElementById("election-form").reset();
                 clearErrors();
+                document.getElementById("election-id").value = "";
+                // console.log(document.getElementById("election-id").value+"\n");
                 this.textContent = "Update Notice";
             }
         });

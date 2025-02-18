@@ -18,26 +18,69 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $_SESSION['errorMsg'] = "All fields except Election ID are required.";
         header("Location: ../admin/admin_home.php");
         exit();
-    } else {
+    }
+
+    // Start transaction
+    mysqli_begin_transaction($conn);
+    try {
+        //for updating the electionTime
         if ($electionId) {
-            // Update existing record
-            $sql = "UPDATE electiontime SET electionName = '$electionName', startTime = '$startTime', endTime = '$endTime', nominationStartTime = '$nominationStartTime', nominationEndTime = '$nominationEndTime' WHERE electionId = $electionId";
+            // Check if the election result has been published
+            $checkQuery = "SELECT resultStatus FROM electiontime WHERE electionId = $electionId";
+            $result = mysqli_query($conn, $checkQuery);
 
-            if (mysqli_query($conn, $sql)) {
-                $_SESSION['errorMsg'] = "Election updated successfully.";
+            if ($row = mysqli_fetch_assoc($result)) {
+                if ($row['resultStatus'] === 'published') {
+                    throw new Exception("Cannot update an election whose result has been published.");
+                }
+
+                // Update election details
+                $sql = "UPDATE electiontime SET electionName = '$electionName', startTime = '$startTime', endTime = '$endTime', nominationStartTime = '$nominationStartTime', nominationEndTime = '$nominationEndTime' WHERE electionId = $electionId";
+                mysqli_query($conn, $sql);
+                $_SESSION['successMsg'] = "Election updated successfully.";
             } else {
-                $_SESSION['errorMsg'] = "Error updating election: " . mysqli_error($conn);
+                throw new Exception("Election not found.");
             }
+
+            //for adding new election time
         } else {
-            // Insert new record
-            $sql = "INSERT INTO electiontime (electionName, startTime, endTime, nominationStartTime, nominationEndTime) VALUES ('$electionName', '$startTime', '$endTime', '$nominationStartTime', '$nominationEndTime')";
+            // Check if the latest election's result is published
+            $checkQuery = "SELECT resultStatus FROM electiontime ORDER BY electionId DESC LIMIT 1";
+            $result = mysqli_query($conn, $checkQuery);
 
-            if (mysqli_query($conn, $sql)) {
-                $_SESSION['errorMsg'] = "Election added successfully.";
-            } else {
-                $_SESSION['errorMsg'] = "Error adding election: " . mysqli_error($conn);
+            if ($row = mysqli_fetch_assoc($result)) {
+                if ($row['resultStatus'] === 'notPublished') {
+                    throw new Exception("Cannot set a new election as the previous election result is not published.");
+                }
             }
+
+            // Insert new election
+            $sql = "INSERT INTO electiontime (electionName, startTime, endTime, nominationStartTime, nominationEndTime) VALUES ('$electionName', '$startTime', '$endTime', '$nominationStartTime', '$nominationEndTime')";
+            mysqli_query($conn, $sql);
+
+            // Clear all the data from currentResults
+            $deleteSql = "DELETE FROM currentResults";
+            if (!mysqli_query($conn, $deleteSql)) {
+                throw new Exception("Error deleting data from currentResults: " . mysqli_error($conn));
+            }
+            // Reset auto-increment for currentResults
+            mysqli_query($conn, "ALTER TABLE currentResults AUTO_INCREMENT = 1");
+
+            // Clear all the data from candidates
+            $deleteCandidatesSql = "DELETE FROM candidates";
+            if (!mysqli_query($conn, $deleteCandidatesSql)) {
+                throw new Exception("Error deleting data from candidates: " . mysqli_error($conn));
+            }
+            // Reset auto-increment for candidates
+            mysqli_query($conn, "ALTER TABLE candidates AUTO_INCREMENT = 1");
+            $_SESSION['successMsg'] = "Election added successfully.";
         }
+
+        // Commit transaction
+        mysqli_commit($conn);
+    } catch (Exception $e) {
+        mysqli_rollback($conn);
+        $_SESSION['errorMsg'] = "Error: " . $e->getMessage();
     }
 } else {
     $_SESSION['errorMsg'] = "Invalid request method.";

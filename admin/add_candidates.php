@@ -11,6 +11,8 @@ require_once "../register_and_login/dbconnection.php";
 
 $errorMessage = isset($_SESSION['errorMsg']) ? $_SESSION['errorMsg'] : '';
 unset($_SESSION['errorMsg']); // Clear the message
+$successMessage = isset($_SESSION['successMsg']) ? $_SESSION['successMsg'] : '';
+unset($_SESSION['successMsg']); // Clear the message
 $candidateId = $name = $dob = $gender = $citizenshipNumber = $educationLevel = $manifesto = $partyName = $district = $regionNo = $candidatePhoto = "";
 
 if (isset($_GET['id'])) {
@@ -358,7 +360,7 @@ if (isset($_GET['id'])) {
                             </div>
 
                             <div class="form-group">
-                                <label for="region">Region</label>
+                                <label for="regionNo">Region</label>
                                 <div class="input-container">
                                     <i class="fas fa-globe"></i>
                                     <?= $regionNo == '' ? regionNo() : regionNo($regionNo) ?>
@@ -466,7 +468,8 @@ if (isset($_GET['id'])) {
                                 $sql2 = "SELECT candidates.*, parties.partyName, district.district, district.regionNo 
                                          FROM candidates 
                                          JOIN parties ON candidates.partyId = parties.partyId 
-                                         JOIN district ON candidates.dId = district.dId";
+                                         JOIN district ON candidates.dId = district.dId
+                                         ORDER BY candidateId ASC";
                                 $result2 = mysqli_query($conn, $sql2);
                                 if (mysqli_num_rows($result2) > 0) {
                                     while ($row = mysqli_fetch_assoc($result2)) {
@@ -538,11 +541,11 @@ if (isset($_GET['id'])) {
 
         // Function to fetch voting status from the server
         function fetchVotingTime() {
-            const xhr = new XMLHttpRequest();
+            let xhr = new XMLHttpRequest();
             xhr.open('GET', '../time/fetch_voting_time.php', true);
             xhr.onload = function () {
                 if (this.status === 200) {
-                    const newVotingTime = JSON.parse(this.responseText);
+                    let newVotingTime = JSON.parse(this.responseText);
                     if (previousNominationStart !== new Date(newVotingTime.nominationStartTime).getTime() ||
                         previousNominationEnd !== new Date(newVotingTime.nominationEndTime).getTime()) {
                         votingTime = newVotingTime;
@@ -575,8 +578,8 @@ if (isset($_GET['id'])) {
 
         // Function for making input fields disabled
         function disableFormFields(disable) {
-            const form = document.getElementById('addCandidateForm');
-            const fields = form.querySelectorAll('input, select, textarea');
+            let form = document.getElementById('addCandidateForm');
+            let fields = form.querySelectorAll('input, select, textarea');
             fields.forEach(field => {
                 field.disabled = disable;
             });
@@ -595,14 +598,14 @@ if (isset($_GET['id'])) {
         let noElectionScheduledChecked = false;
         // Function for checking nomination time
         function checkNominationTime(fromsubmit = false) {
-            console.log(votingTime);
+            // console.log(votingTime);
             // Parse the current time and nomination times as timestamps
-            const currentTime = new Date().getTime();
-            const nominationStartTime = new Date(votingTime.nominationStartTime).getTime();
-            const nominationEndTime = new Date(votingTime.nominationEndTime).getTime();
+            let currentTime = new Date().getTime();
+            let nominationStartTime = new Date(votingTime.nominationStartTime).getTime();
+            let nominationEndTime = new Date(votingTime.nominationEndTime).getTime();
 
             // Get the form element
-            const form = document.getElementById('addCandidateForm');
+            let form = document.getElementById('addCandidateForm');
 
             if (!votingTime.error) {
                 // Check nomination time conditions
@@ -644,9 +647,9 @@ if (isset($_GET['id'])) {
         // Real-time nomination time check
         let electionEnded = false;
         setInterval(() => {
-            const currentTime = new Date().getTime();
-            const nominationStartTime = new Date(votingTime.nominationStartTime).getTime();
-            const nominationEndTime = new Date(votingTime.nominationEndTime).getTime();
+            let currentTime = new Date().getTime();
+            let nominationStartTime = new Date(votingTime.nominationStartTime).getTime();
+            let nominationEndTime = new Date(votingTime.nominationEndTime).getTime();
 
             if (currentTime >= nominationStartTime && currentTime <= nominationEndTime) {
                 // If within nomination time
@@ -676,7 +679,7 @@ if (isset($_GET['id'])) {
 
         // Function to show a modal
         function showCandidateFormModal(message) {
-            const modal = document.createElement('div');
+            let modal = document.createElement('div');
             modal.classList.add('candidate-form-modal');
             modal.innerHTML = `
                 <div class="candidate-form-modal-content">
@@ -804,9 +807,12 @@ if (isset($_GET['id'])) {
         });
 
         // Show error modal if there's an error message
-        const errorMessage = <?= json_encode($errorMessage); ?>;
+        let errorMessage = <?= json_encode($errorMessage); ?>;
+        let successMessage = <?= json_encode($successMessage); ?>;
         if (errorMessage) {
             showErrorModal(errorMessage);
+        }else if(successMessage){
+            showErrorModal(successMessage,true);
         }
 
         // Function to show the form (right1)
@@ -831,10 +837,10 @@ if (isset($_GET['id'])) {
 
         // Add this to your existing JavaScript
         document.getElementById('candidate_photo').addEventListener('change', function (e) {
-            const preview = document.getElementById('photoPreview');
-            const file = e.target.files[0];
+            let preview = document.getElementById('photoPreview');
+            let file = e.target.files[0];
             if (file) {
-                const reader = new FileReader();
+                let reader = new FileReader();
                 reader.onload = function (e) {
                     preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
                 }
@@ -848,22 +854,22 @@ if (isset($_GET['id'])) {
             document.querySelectorAll('.form-group span').forEach(span => span.textContent = '');
 
             // Validate Name
-            const name = document.getElementById('name').value;
+            let name = document.getElementById('name').value;
             if (name.trim() === '') {
                 document.getElementById('nameError').textContent = 'Name is required';
                 valid = false;
             }
 
             // Validate Date of Birth
-            const dob = document.getElementById('dob').value;
+            let dob = document.getElementById('dob').value;
             if (dob.trim() === '') {
                 document.getElementById('dobError').textContent = 'Date of Birth is required';
                 valid = false;
             } else {
-                const dobDate = new Date(dob);
-                const today = new Date();
-                const age = today.getFullYear() - dobDate.getFullYear();
-                const monthDiff = today.getMonth() - dobDate.getMonth();
+                let dobDate = new Date(dob);
+                let today = new Date();
+                let age = today.getFullYear() - dobDate.getFullYear();
+                let monthDiff = today.getMonth() - dobDate.getMonth();
                 if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dobDate.getDate())) {
                     age--;
                 }
@@ -874,58 +880,58 @@ if (isset($_GET['id'])) {
             }
 
             // Validate Gender
-            const gender = document.getElementById('gender').value;
+            let gender = document.getElementById('gender').value;
             if (gender.trim() === '' || gender.trim() === 'default') {
                 document.getElementById('genderError').textContent = 'Gender is required';
                 valid = false;
             }
 
             // Validate Citizenship Number
-            const citizenshipNumber = document.getElementById('citizenship_number').value;
+            let citizenshipNumber = document.getElementById('citizenship_number').value;
             if (citizenshipNumber.trim() === '') {
                 document.getElementById('citizenshipNumberError').textContent = 'Citizenship Number is required';
                 valid = false;
             }
 
             // Validate Education Level
-            const educationLevel = document.getElementById('education_level').value;
+            let educationLevel = document.getElementById('education_level').value;
             if (educationLevel.trim() === '') {
                 document.getElementById('educationLevelError').textContent = 'Education Level is required';
                 valid = false;
             }
 
             // Validate Manifesto
-            const manifesto = document.getElementById('manifesto').value;
+            let manifesto = document.getElementById('manifesto').value;
             if (manifesto.trim() === '') {
                 document.getElementById('manifestoError').textContent = 'Manifesto is required';
                 valid = false;
             }
 
             // Validate Party Name
-            const partyName = document.getElementById('partyName').value;
+            let partyName = document.getElementById('partyName').value;
             if (partyName.trim() === '' || partyName.trim() === 'default') {
                 document.getElementById('partyNameError').textContent = 'Please select party';
                 valid = false;
             }
 
             // Validate District
-            const district = document.getElementById('district').value;
+            let district = document.getElementById('district').value;
             if (district.trim() === '' || district.trim() === 'default') {
                 document.getElementById('districtError').textContent = 'Please select district';
                 valid = false;
             }
 
             // Validate Region
-            const region = document.getElementById('regionNo').value;
+            let region = document.getElementById('regionNo').value;
             if (region.trim() === '' || region.trim() === 'default') {
                 document.getElementById('regionError').textContent = 'Please Select region';
                 valid = false;
             }
 
             // Validate Candidate Photo
-            const allowedTypes = ['image/jpeg', 'image/png'];
-            const maxSize = 2 * 1024 * 1024;
-            const candidatePhoto = document.getElementById('candidate_photo').files[0];
+            let allowedTypes = ['image/jpeg', 'image/png'];
+            let maxSize = 2 * 1024 * 1024;
+            let candidatePhoto = document.getElementById('candidate_photo').files[0];
             if (!candidatePhoto) {
                 document.getElementById('candidatePhotoError').textContent = 'Candidate Photo is required';
                 valid = false;
@@ -947,12 +953,12 @@ if (isset($_GET['id'])) {
 
         //image modal
         function openModal(id, title) {
-            const modal = document.getElementById('modal-' + id);
-            const modalImg = document.getElementById('modal-img-' + id);
-            const modalTitle = document.getElementById('modal-title-' + id);
+            let modal = document.getElementById('modal-' + id);
+            let modalImg = document.getElementById('modal-img-' + id);
+            let modalTitle = document.getElementById('modal-title-' + id);
 
             // Determine the image to display
-            const imageSrc = event.target.src;
+            let imageSrc = event.target.src;
 
             // Set modal content
             modalImg.src = imageSrc;
@@ -963,11 +969,11 @@ if (isset($_GET['id'])) {
         }
 
         function closeModal(id) {
-            const modal = document.getElementById('modal-' + id);
+            let modal = document.getElementById('modal-' + id);
             modal.style.display = 'none';
 
             // Clear the modal content
-            const modalImg = document.getElementById('modal-img-' + id);
+            let modalImg = document.getElementById('modal-img-' + id);
             modalImg.src = '';
         }
         //delete comfirmation modal
@@ -987,16 +993,16 @@ if (isset($_GET['id'])) {
             window.location.href = `delete_party_candidate.php?table=${table}&id=${id}&photoPath=${photoPath}`;
         }
         document.addEventListener('DOMContentLoaded', function () {
-            const id = document.getElementById('candidateId').value;
+            let id = document.getElementById('candidateId').value;
             if (id) {
-                const candidatePhotoInput = document.getElementById("candidate_photo");
-                const candidatePhoto = `<?= $candidatePhoto ?>`;
-                const filePath = `../uploads/${candidatePhoto}`;
+                let candidatePhotoInput = document.getElementById("candidate_photo");
+                let candidatePhoto = `<?= $candidatePhoto ?>`;
+                let filePath = `../uploads/${candidatePhoto}`;
                 fetch(filePath)
                     .then(response => response.blob())
                     .then(blob => {
-                        const file = new File([blob], candidatePhoto, { type: blob.type });
-                        const dataTransfer = new DataTransfer();
+                        let file = new File([blob], candidatePhoto, { type: blob.type });
+                        let dataTransfer = new DataTransfer();
                         dataTransfer.items.add(file);
                         candidatePhotoInput.files = dataTransfer.files;
                     })
@@ -1004,8 +1010,8 @@ if (isset($_GET['id'])) {
                 document.getElementById("photoPreview").innerHTML = `<img src="../uploads/${candidatePhoto}" alt="Preview">`;
             }
         });
-        const contentContainer = document.body;
-        const goToTopButton = document.getElementById("goToTop");
+        let contentContainer = document.body;
+        let goToTopButton = document.getElementById("goToTop");
 
         // Show/hide the Go to Top button based on scroll position of the window
         window.addEventListener("scroll", function () {

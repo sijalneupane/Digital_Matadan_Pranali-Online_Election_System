@@ -17,6 +17,13 @@ function getDistrictId($district, $regionNo, $conn)
   $row = mysqli_fetch_assoc($result);
   return $row['dId'];
 }
+function getElectionId($conn)
+{
+  $query = "SELECT electionId FROM electiontime ORDER BY electionId DESC LIMIT 1";
+  $result = mysqli_query($conn, $query);
+  $row = mysqli_fetch_assoc($result);
+  return $row['electionId'];
+}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $candidateId = isset($_POST['candidateId']) ? mysqli_real_escape_string($conn, trim($_POST['candidateId'])) : '';
@@ -33,9 +40,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
   $partyId = ($partyName == "INDEPENDENT") ? 1 : getPartyId($partyName, $conn);
   $dId = getDistrictId($district, $regionNo, $conn);
+  $electionId = getElectionId($conn);
 
   $extension = pathinfo($candidate_photo['name'], PATHINFO_EXTENSION);
-  $new_filename = $partyId . '_' . $dId . '_' . $name . '.' . $extension;
+  $new_filename = $electionId.'_'.$partyId . '_' . $dId . '_' . $name . '.' . $extension;
   $upload_path = '../uploads/' . $new_filename;
 
   $electionId = '';
@@ -69,8 +77,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           $query = "INSERT INTO candidates (name, dob, gender, citizenship_number, education_level, manifesto, partyId, dId, candidate_photo) VALUES ('$name', '$dob', '$gender', '$citizenship_number', '$education_level', '$manifesto', $partyId, $dId, '$new_filename')";
 
           if (mysqli_query($conn, $query)) {
+            $candidateId = mysqli_insert_id($conn);
             if (move_uploaded_file($candidate_photo['tmp_name'], $upload_path)) {
-              $_SESSION['errorMsg'] = "Candidate details and photo successfully inserted.";
+              $_SESSION['successMsg'] = "Candidate details and photo successfully inserted.";
+
+              //needs to insert into currentResults
+              $currentresults_query = "INSERT INTO currentresults (electionId, candidateId, partyId, dId) 
+               VALUES ('$electionId', '$candidateId', '$partyId', '$dId')";
+              if (!mysqli_query($conn, $currentresults_query)) {
+                throw new Exception("Error inserting into currentresults: " . mysqli_error($conn));
+              }
+
             } else {
               $_SESSION['errorMsg'] = "Candidate details added, but failed to upload photo.";
             }
@@ -104,7 +121,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
           if (mysqli_query($conn, $query)) {
             if (move_uploaded_file($candidate_photo['tmp_name'], $upload_path)) {
-              $_SESSION['errorMsg'] = "Candidate details and photo successfully updated.";
+              $_SESSION['successMsg'] = "Candidate details and photo successfully updated.";
+
+              //needs to update candidate info in the currentResults
+              $currentresults_updatequery = "UPDATE currentresults SET electionId = '$electionId', partyId = '$partyId', dId = '$dId' WHERE candidateId = $candidateId";
+              if (!mysqli_query($conn, $currentresults_updatequery)) {
+                throw new Exception("Error inserting into currentresults: " . mysqli_error($conn));
+              }
             } else {
               $_SESSION['errorMsg'] = "Candidate details updated, but failed to upload new photo.";
             }
@@ -128,8 +151,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           $query = "INSERT INTO candidates (name, dob, gender, citizenship_number, education_level, manifesto, partyId, dId, candidate_photo) VALUES ('$name', '$dob', '$gender', '$citizenship_number', '$education_level', '$manifesto', $partyId, $dId, '$new_filename')";
 
           if (mysqli_query($conn, $query)) {
+            $candidateId = mysqli_insert_id($conn);
             if (move_uploaded_file($candidate_photo['tmp_name'], $upload_path)) {
-              $_SESSION['errorMsg'] = "Candidate details and photo successfully inserted.";
+              $_SESSION['successMsg'] = "Candidate details and photo successfully inserted.";
+              //needs to insert into currentResults
+              $currentresults_query = "INSERT INTO currentresults (electionId, candidateId, partyId, dId) 
+              VALUES ('$electionId', '$candidateId', '$partyId', '$dId')";
+
+              if (!mysqli_query($conn, $currentresults_query)) {
+                throw new Exception("Error inserting into currentresults: " . mysqli_error($conn));
+              }
             } else {
               $_SESSION['errorMsg'] = "Candidate details added, but failed to upload photo.";
             }
@@ -163,7 +194,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
           if (mysqli_query($conn, $query)) {
             if (move_uploaded_file($candidate_photo['tmp_name'], $upload_path)) {
-              $_SESSION['errorMsg'] = "Candidate and photo successfully updated.";
+              $_SESSION['successMsg'] = "Candidate and photo successfully updated.";
+
+              //needs to update candidate info in the currentResults
+              $currentresults_updatequery = "UPDATE currentresults SET electionId = '$electionId', partyId = '$partyId', dId = '$dId' WHERE candidateId = $candidateId";
+              if (!mysqli_query($conn, $currentresults_updatequery)) {
+                throw new Exception("Error inserting into currentresults: " . mysqli_error($conn));
+              }
             } else {
               $_SESSION['errorMsg'] = "Candidate updated, but failed to upload new photo.";
             }
@@ -175,17 +212,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     if (empty($candidateId)) {
       // Insert into currentresults
-      $currentresults_query = "INSERT INTO currentresults (electionId, electionName, candidateName, citizenshipNumber, partyName, dId) VALUES ('$electionId', '$electionName', '$name', '$citizenship_number', '$partyName', $dId)";
-      if (!mysqli_query($conn, $currentresults_query)) {
-        throw new Exception("Error inserting into currentresults: " . mysqli_error($conn));
-      }
-    } else {
-      // Update currentresults
-      $currentresults_query = "UPDATE currentresults SET electionId = '$electionId', electionName = '$electionName', candidateName = '$name', citizenshipNumber = '$citizenship_number', partyName = '$partyName', dId = $dId WHERE candidateId = $candidateId";
-      if (!mysqli_query($conn, $currentresults_query)) {
-        throw new Exception("Error updating currentresults: " . mysqli_error($conn));
-      }
+
     }
+    // } else {
+    //   // Update currentresults
+    //   $currentresults_query = "UPDATE currentresults SET electionId = '$electionId', electionName = '$electionName', candidateName = '$name', citizenshipNumber = '$citizenship_number', partyName = '$partyName', dId = $dId WHERE candidateId = $candidateId";
+    //   if (!mysqli_query($conn, $currentresults_query)) {
+    //     throw new Exception("Error updating currentresults: " . mysqli_error($conn));
+    //   }
+    // }
 
     mysqli_commit($conn);
     header('Location: ../admin/add_candidates.php');

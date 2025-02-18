@@ -2,6 +2,8 @@
 session_start();
 $errorMessage = isset($_SESSION['error_message']) ? $_SESSION['error_message'] : '';
 unset($_SESSION['error_message']); // Clear the message
+$successMessage = isset($_SESSION['success_message']) ? $_SESSION['success_message'] : '';
+unset($_SESSION['success_message']); // Clear the message
 ?>
 
 <!DOCTYPE html>
@@ -226,8 +228,14 @@ unset($_SESSION['error_message']); // Clear the message
     </div>
     <script src="../js/errorMessage_modal1.js"></script>
     <script>
+        // Show error modal if there's an error message
         const errorMessage = <?= json_encode($errorMessage); ?>;
-        showErrorModal(errorMessage); // Pass PHP error to JS function
+        const successMessage = <?= json_encode($successMessage); ?>;
+        if (errorMessage) {
+            showErrorModal(errorMessage);
+        }else if(successMessage){
+            showErrorModal(successMessage,true);
+        }
     </script>
 </body>
 

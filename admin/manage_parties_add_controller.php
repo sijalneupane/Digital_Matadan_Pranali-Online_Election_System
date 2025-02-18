@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (mysqli_query($conn, $sql)) {
         // If data inserted/updated successfully, move the image to the target directory
       if (move_uploaded_file($image['tmp_name'], $targetFile)) {
-        $_SESSION['errorMsg'] = "Party " . ($partyId == '' ? "added" : "updated") . " successfully with logo.";
+        $_SESSION['successMsg'] = "Party " . ($partyId == '' ? "added" : "updated") . " successfully with logo.";
         header('Location: ../admin/manage_parties.php');
         unset($_POST); // Clear the form data
       } else {

@@ -4,6 +4,10 @@ session_start();
 if (!isset($_SESSION["email"])) {
   header('Location: ../home/index.php');
 }
+$errorMessage = isset($_SESSION['error_message']) ? $_SESSION['error_message'] : '';
+unset($_SESSION['error_message']); // Clear the message
+$successMessage = isset($_SESSION['success_message']) ? $_SESSION['success_message'] : '';
+unset($_SESSION['success_message']); // Clear the message
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -12,84 +16,90 @@ if (!isset($_SESSION["email"])) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Candidates Page</title>
+  <link rel="stylesheet" href="../styles/modal1.css">
+  <style>
+    :root {
+      --li-color: rgb(101, 71, 182);
+      --button-color: rgb(34, 103, 150);
+    }
 
-</html>
-<style>
-  :root{
-    --li-color:rgb(101, 71, 182);
-    --button-color:rgb(34, 103, 150);
-  }
+    .content p {
+      font-size: 1.1em;
+      line-height: 1.5;
+      margin-bottom: 10px;
+    }
 
-  .content p {
-    font-size: 1.1em;
-    line-height: 1.5;
-    margin-bottom: 10px;
-  }
+    .content ul {
+      list-style-type: circle;
+      /* padding: 0; */
+      margin-top: 5px;
+      width: 100%;
+      max-width: 400px;
+    }
 
-  .content ul {
-    list-style-type: circle;
-    /* padding: 0; */
-    margin-top: 5px;
-    width: 100%;
-    max-width: 400px;
-  }
+    .content ul li {
+      color: --li-color;
+      /* margin: 10px 0; */
+      padding: 5px;
+      border-radius: 5px;
+      font-size: 1em;
+      opacity: 0.8;
+      font-weight: bold;
+    }
 
-  .content ul li {
-    color: --li-color;
-    /* margin: 10px 0; */
-    padding: 5px;
-    border-radius: 5px;
-    font-size: 1em;
-    opacity: 0.8;
-    font-weight: bold;
-  }
+    .contact-form {
+      margin-top: 20px;
+      width: 100%;
+      max-width: 680px;
+    }
 
-  .contact-form {
-    margin-top: 20px;
-    width: 100%;
-    max-width: 680px;
-  }
-
-  .contact-form label {
+    .contact-form label {
       display: block;
       font-size: 1.2em;
       margin-bottom: 10px;
-      color:rgb(9, 35, 150);
+      color: rgb(9, 35, 150);
     }
-    
-  .contact-form textarea {
-    width: 100%;
-    /* max-width: 600px; */
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 1em;
-    resize: vertical;
-    display: block;
-    margin-bottom: 20px;
-  }
 
-  .contact-form button {
-    background-color:var(--button-color);
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 1em;
-    cursor: pointer;
-    transition: all 0.3s;
-    opacity: 0.8;
-  }
+    .contact-form textarea {
+      width: 100%;
+      /* max-width: 600px; */
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1em;
+      resize: vertical;
+      display: block;
+      margin-bottom: 20px;
+    }
 
-  .contact-form button:hover {
-    /* background-color: #45a049; */
-    opacity: 1;
-  }
-</style>
+    .contact-form button {
+      background-color: var(--button-color);
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: all 0.3s;
+      opacity: 0.8;
+    }
+
+    .contact-form button:hover {
+      /* background-color: #45a049; */
+      opacity: 1;
+    }
+  </style>
+  <script src="../js/errorMessage_modal1.js"></script>
 </head>
 
 <body>
-  <didv class="container">
+  <div class="container">
+    <div id="modal1" class="modal-overlay1">
+      <div class="modal-content1">
+        <p id="modalMessage1"></p>
+        <button onclick="closeModal1()">Close</button>
+      </div>
+    </div>
     <!-- Include sidebar -->
     <?php include '../home/sidebar.php'; ?>
 
@@ -101,7 +111,7 @@ if (!isset($_SESSION["email"])) {
       <p>Our online election system, Digital Matadan Pranali, is designed to provide a seamless and secure voting
         experience. With our system, you can participate in elections from the comfort of your home, ensuring that your
         vote is counted accurately and efficiently.</p>
-        
+
       <p style="margin:0">We aims to provides various features like</p>
       <ul>
         <li>Secured voting process with real time counting</li>
@@ -110,16 +120,39 @@ if (!isset($_SESSION["email"])) {
       </ul>
       <p>We are committed to providing a reliable and trustworthy platform for all your election needs. However, we
         understand that you may encounter issues or have suggestions for improvement. Please use the contact form below
-        to reach out to our admin team. 
+        to reach out to our admin team.
       </p>
-      <div class="contact-form">
-        <label for="">Your feedback is valuable to us and helps us enhance the system for everyone.</label>
+      <form class="contact-form" method="post" onsubmit="return validateContactForm()" action="../home/contact_us_controller.php">
+        <label for="message">Your feedback is valuable to us and helps us enhance the system for everyone.</label>
         <textarea name="message" id="message" cols="30" rows="10"></textarea>
         <button type="submit">Submit</button>
-      </div>
+      </form>
       <footer>
         <p>&copy; 2023 Your Company. All rights reserved.</p>
       </footer>
     </div>
-  </didv>
+  </div>
+  <script>
+    function validateContactForm() {
+      // Validate the contact form
+      const message = document.getElementById('message').value;
+      if (!message) {
+        showErrorModal('Please enter your message, Dont Submit Empty message');
+        return false;
+      }
+      return true;
+    }
+
+
+    // Show error modal if there's an error message
+    const errorMessage = <?= json_encode($errorMessage); ?>;
+    const successMessage = <?= json_encode($successMessage); ?>;
+    if (errorMessage) {
+      showErrorModal(errorMessage);
+    } else if (successMessage) {
+      showErrorModal(successMessage, true);
+    }
+  </script>
 </body>
+
+</html>

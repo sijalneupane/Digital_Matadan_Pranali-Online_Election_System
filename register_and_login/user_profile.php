@@ -6,6 +6,8 @@ if (!isset($_SESSION["email"])) {
 $_SESSION['allow_logout'] = true;
 $errorMessage = isset($_SESSION['error_message']) ? $_SESSION['error_message'] : '';
 unset($_SESSION['error_message']); // Clear the message
+$successMessage = isset($_SESSION['success_message']) ? $_SESSION['success_message'] : '';
+unset($_SESSION['success_message']); // Clear the message
 require_once '../php_for_ajax/districtRegionSelect.php';
 ?>
 <!DOCTYPE html>
@@ -533,6 +535,7 @@ require_once '../php_for_ajax/districtRegionSelect.php';
         }
     </style>
     <script src="../js/update_validation.js"></script>
+    <script src="../js/errorMessage_modal1.js"></script>
     <!-- <script src="../js/getRegion_ajax.js" defer></script> -->
 </head>
 
@@ -805,20 +808,14 @@ require_once '../php_for_ajax/districtRegionSelect.php';
             document.getElementById('editModal').style.display = 'none';
             resetFormValues(); // Reset form fields to initial values
         }
-        // PHP Message passed to JavaScript
+       
+        // Show error modal if there's an error message
         const errorMessage = <?= json_encode($errorMessage); ?>;
-
-        // Show modal if there is a message
+        const successMessage = <?= json_encode($successMessage); ?>;
         if (errorMessage) {
-            const modal = document.getElementById('modal1');
-            const modalMessage = document.getElementById('modalMessage1');
-            modalMessage.textContent = errorMessage;
-            modal.style.display = 'flex';
-        }
-
-        // Function to close the modal
-        function closeModal1() {
-            document.getElementById('modal1').style.display = 'none';
+            showErrorModal(errorMessage);
+        }else if(successMessage){
+            showErrorModal(successMessage,true);
         }
 
         // Close image modal when clicking outside of the image

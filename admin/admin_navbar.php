@@ -21,7 +21,7 @@
       <span class="arrow">▼</span>
       <ul class="dropdown-menu">
         <li><a href="../admin/admin_home.php">Admin Dashboard</a></li>
-        <li><a href="../admin/verify_voters.php">Verify Voters</a></li>
+        <li><a href="../admin/manage_voters.php">Manage Voters</a></li>
         <li><a href="../admin/add_candidates.php">Add Candidates</a></li>
         <li><a href="../admin/manage_parties.php">Manage Parties</a></li>
         <li><a href="../admin/manage_results.php">Manage Results</a></li>

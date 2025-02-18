@@ -345,7 +345,7 @@ if (!isset($_SESSION["email"])) {
               <h3><?= $row['name'] ?></h3>
               <p><span class="title">Date of birth</span>: <?= $row['dob'] ?></p>
               <p><span class="title">Gender</span>: <?= $row['gender'] ?></p>
-              <p><span class="title">Constituency</span>: <?= $row['district'] ?><?= $row['regionNo'] ?> </p>
+              <p><span class="title">Constituency</span>: <?= $row['district'] ?>- <?= $row['regionNo'] ?> </p>
               <p><span class="title">Education Level</span>: <?= $row['education_level'] ?></p>
             </div>
             </div>

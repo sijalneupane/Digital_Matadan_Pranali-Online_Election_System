@@ -7,6 +7,8 @@ if (!isset($_SESSION['loggedin'])) {
 $_SESSION['pageName'] = "Manage Parties";
 $errorMessage = isset($_SESSION['errorMsg']) ? $_SESSION['errorMsg'] : '';
 unset($_SESSION['errorMsg']); // Clear the message
+$successMessage = isset($_SESSION['successMsg']) ? $_SESSION['successMsg'] : '';
+unset($_SESSION['successMsg']); // Clear the message
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -207,7 +209,7 @@ unset($_SESSION['errorMsg']); // Clear the message
             document.getElementById("right1").style.display = "block"; // Show the form
             document.getElementById("right2").style.display = "none";  // Hide the table
             document.getElementById("formTitle").innerText = "Add Party";
-            document.getElementById("submitButton").innerText = "Add Party";
+            document.getElementById("submitButton").value = "Add Party";
             document.getElementById("partyForm").action = "../admin/manage_parties_add_controller.php";
             document.getElementById("partyId").value = "";
             document.getElementById("partyName").value = "";
@@ -273,10 +275,14 @@ unset($_SESSION['errorMsg']); // Clear the message
                 reader.readAsDataURL(file);
             }
         });
+
         // Show error modal if there's an error message
         const errorMessage = <?= json_encode($errorMessage); ?>;
+        const successMessage = <?= json_encode($successMessage); ?>;
         if (errorMessage) {
             showErrorModal(errorMessage);
+        }else if(successMessage){
+            showErrorModal(successMessage,true);
         }
 
         //image modal
@@ -331,7 +337,7 @@ unset($_SESSION['errorMsg']); // Clear the message
         function editParty(partyId, partyName, partyLeader, partyLogo) {
             showForm();
             document.getElementById("formTitle").innerText = "Update Party";
-            document.getElementById("submitButton").innerText = "Update Party";
+            document.getElementById("submitButton").value = "Update Party";
             document.getElementById("partyForm").action = "../admin/manage_parties_add_controller.php?id=" + partyId;
             document.getElementById("partyId").value = partyId;
             document.getElementById("partyName").value = partyName;

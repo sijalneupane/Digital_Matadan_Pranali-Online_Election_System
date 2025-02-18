@@ -112,6 +112,9 @@ if (!$isEmpty) {
                 header('Location: ../register_and_login/voter_register_form.php');
             }
         } else {
+            // Start transaction
+            mysqli_begin_transaction($conn);
+
             // Step 1: Retrieve the dId from the district table
             $d_query = "SELECT dId FROM district WHERE district = '$district' AND regionNo = '$electionRegion'";
             $d_result = mysqli_query($conn, $d_query);
@@ -119,37 +122,33 @@ if (!$isEmpty) {
             if (mysqli_num_rows($d_result) > 0) {
                 $row = mysqli_fetch_assoc($d_result);
                 $dId = $row['dId'];
-            //     // Step 2: Check if the local_address already exists
-            //     $check_query = "SELECT lid FROM localaddress WHERE dId = '$dId' AND local_address = '$local_address'";
-            //     $check_result = mysqli_query($conn, $check_query);
-    
-            //     if (mysqli_num_rows($check_result) > 0) {
-            //         $row = mysqli_fetch_assoc($check_result);
-            //         $addressID = $row['lid'];
-            //     } else {
-            //         // Address doesn't exist, insert it
-            //         $local_query = "INSERT INTO localaddress (dId, local_address) VALUES ('$dId', '$local_address')";
-            //         if (mysqli_query($conn, $local_query)) {
-            //             $addressID = mysqli_insert_id($conn);
-            //         } else {
-            //             $_SESSION['error_message'] = "Error inserting local address: " . mysqli_error($conn);
-            //             header('Location: ../register_and_login/voter_register_form.php');
-            //             exit();
-            //         }
-            //     }
-    
-                // Step 3: Insert voter information into pendingstatus table
                 $voter_query = "INSERT INTO pendingstatus (name, email, password, dateOfBirth, citizenshipNumber, gender, dId,localAddress, citizenshipFrontPhoto, citizenshipBackPhoto, userPhoto)
                                 VALUES ('$name', '$email', '$hashed_password', '$dateOfBirth', '$citizenshipNumber', '$gender','$dId','$localAddress',  '$newCitizenshipFrontPhoto', '$newCitizenshipBackPhoto', '$newUserPhoto')";
     
                 if (mysqli_query($conn, $voter_query)) {
-                    move_uploaded_file($_FILES['citizenshipFrontPhoto']['tmp_name'], $target_dir . $newCitizenshipFrontPhoto);
-                    move_uploaded_file($_FILES['citizenshipBackPhoto']['tmp_name'], $target_dir . $newCitizenshipBackPhoto);
-                    move_uploaded_file($_FILES['userPhoto']['tmp_name'], $target_dir . $newUserPhoto);
-                    sendMail($email, $name, "Voter registration successful", "Wait for the ID and account verification");
-                    $_SESSION['error_message'] = 'Application successfully received! Wait for verification.';
-                    header('Location: ../register_and_login/voter_login_form.php');
+                    if(sendMail($email, $name, "Voter registration successful", "Wait for the ID and account verification")){
+                        if (move_uploaded_file($_FILES['citizenshipFrontPhoto']['tmp_name'], $target_dir . $newCitizenshipFrontPhoto) &&
+                            move_uploaded_file($_FILES['citizenshipBackPhoto']['tmp_name'], $target_dir . $newCitizenshipBackPhoto) &&
+                            move_uploaded_file($_FILES['userPhoto']['tmp_name'], $target_dir . $newUserPhoto)) {
+                            
+                            // Commit transaction
+                            mysqli_commit($conn);
+                            $_SESSION['success_message'] = 'Application successfully received! Wait for verification.';
+                            header('Location: ../register_and_login/voter_login_form.php');
+                        } else {
+                            // Rollback transaction
+                            mysqli_rollback($conn);
+                            $_SESSION['error_message'] = 'Image insertion failed.';
+                            header('Location: ../register_and_login/voter_register_form.php');
+                        }
+                    }else{
+                        // Rollback transaction
+                        mysqli_rollback($conn);
+                        $_SESSION['error_message'] = 'Email sending failed.';
+                        header('Location: ../register_and_login/voter_register_form.php');}
                 } else {
+                    // Rollback transaction
+                    mysqli_rollback($conn);
                     $_SESSION['error_message'] = "Error inserting voter data: " . mysqli_error($conn);
                     header('Location: ../register_and_login/voter_register_form.php');
                 }
@@ -163,7 +162,6 @@ if (!$isEmpty) {
     header('Location: ../register_and_login/voter_register_form.php');
 }
 }
-
 // Close connection
 mysqli_close($conn);
 ?>

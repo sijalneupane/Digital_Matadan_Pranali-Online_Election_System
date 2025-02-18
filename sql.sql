@@ -54,7 +54,7 @@ create table district(
 --     FOREIGN KEY (dId) REFERENCES district(dId) ON DELETE CASCADE
 -- );
 
--- 5)//candidates table
+-- 4)//candidates table
 CREATE TABLE candidates (
     candidateId INT AUTO_INCREMENT PRIMARY KEY,  -- Unique ID for each candidate
     name VARCHAR(255) NOT NULL,              -- Candidate's full name
@@ -74,7 +74,7 @@ CREATE TABLE candidates (
     CONSTRAINT fk_candidate_district FOREIGN KEY (dId) REFERENCES district(dId) ON DELETE CASCADE
 );
 
--- 6)//parties table
+-- 5)//parties table
 CREATE TABLE parties (
     partyId INT AUTO_INCREMENT PRIMARY KEY,
     partyName VARCHAR(255) NOT NULL UNIQUE,
@@ -86,7 +86,7 @@ VALUES
 ('Independent', 'No Leader', 'independent.png');
 -- the independent.png is located in images folder
 
--- 7)//election time table
+-- 6)//election time table
 CREATE TABLE electiontime (
     electionId INT(11) NOT NULL AUTO_INCREMENT,
     electionName VARCHAR(50) NOT NULL,
@@ -99,28 +99,54 @@ CREATE TABLE electiontime (
 );
 
 
---8) //currentresults table 
-CREATE TABLE currentresults (
+--7) //currentresults table 
+CREATE TABLE currentresults ( 
+    currentResultId INT AUTO_INCREMENT PRIMARY KEY, 
     electionId INT NOT NULL,
-    electionName VARCHAR(50) NOT NULL,
-    candidateName VARCHAR(255) NOT NULL,
-    citizenshipNumber VARCHAR(50) NOT NULL,
-    partyName VARCHAR(255),
-    dId INT,
+    candidateId INT NOT NULL,
+    partyId INT NOT NULL,
+    dId INT NOT NULL,
     totalVotes INT DEFAULT 0,
-    PRIMARY KEY (electionId, candidateName, citizenshipNumber),
-    FOREIGN key(dId) REFERENCES district(dId)
+    UNIQUE(electionId, candidateId),
+    Foreign key(electionId) references electiontime(electionId) ON DELETE CASCADE,
+    -- FOREIGN KEY (candidateId) REFERENCES candidates(candidateId) ON DELETE CASCADE,
+    FOREIGN KEY (partyId) REFERENCES parties(partyId) ON DELETE CASCADE,
+    FOREIGN KEY (dId) REFERENCES district(dId) ON DELETE CASCADE
 );
 
---9) //archive results table(holds total election results till now altogether) 
+--8) //archive results table(holds total election results till now altogether) 
 CREATE TABLE archiveresults (
+    archiveResultsId INT AUTO_INCREMENT PRIMARY KEY,
     electionId INT NOT NULL,
     electionName VARCHAR(50) NOT NULL,
     candidateName VARCHAR(255) NOT NULL,
     citizenshipNumber VARCHAR(50) NOT NULL,
     partyName VARCHAR(255),
-    dId INT,
+    dId INT, 
+    candidatePhoto VARCHAR(255),                  -- Path to candidate's profile photo
     totalVotes INT DEFAULT 0,
-    PRIMARY KEY (electionId, candidateName, citizenshipNumber),
-    FOREIGN key(dId) REFERENCES district(dId)
+    UNIQUE (electionId, candidateName, citizenshipNumber)
 );
+
+--10) //voters message table 
+CREATE TABLE votersMessages (
+    messageId INT AUTO_INCREMENT PRIMARY KEY,  -- Unique primary key
+    voterId INT,  -- Foreign key (but not part of the primary key)
+    messages TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (voterId) REFERENCES voters(id) ON DELETE CASCADE
+);
+
+--creating trigger in mysql to update the votingStatus to 'notVoted' in the voters table when new election is added 
+DELIMITER //
+
+CREATE TRIGGER set_voting_status
+AFTER INSERT ON electionTime
+FOR EACH ROW
+BEGIN
+    UPDATE voters
+    SET votingStatus = 'notVoted';
+END;
+//
+
+DELIMITER ;
