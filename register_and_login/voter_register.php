@@ -84,7 +84,7 @@ if (!$isEmpty) {
         $result1 = mysqli_query($conn, $sql1);
     
         // Check if email or citizenship number already exists for pending account
-        $sql2 = "SELECT email, citizenshipNumber FROM pendingstatus WHERE email = '$email' OR citizenshipNumber = '$citizenshipNumber'";
+        $sql2 = "SELECT email, citizenshipNumber FROM pendingVoters WHERE email = '$email' OR citizenshipNumber = '$citizenshipNumber'";
         $result2 = mysqli_query($conn, $sql2);
     
         if (mysqli_num_rows($result1) > 0) {
@@ -122,7 +122,7 @@ if (!$isEmpty) {
             if (mysqli_num_rows($d_result) > 0) {
                 $row = mysqli_fetch_assoc($d_result);
                 $dId = $row['dId'];
-                $voter_query = "INSERT INTO pendingstatus (name, email, password, dateOfBirth, citizenshipNumber, gender, dId,localAddress, citizenshipFrontPhoto, citizenshipBackPhoto, userPhoto)
+                $voter_query = "INSERT INTO pendingVoters (name, email, password, dateOfBirth, citizenshipNumber, gender, dId,localAddress, citizenshipFrontPhoto, citizenshipBackPhoto, userPhoto)
                                 VALUES ('$name', '$email', '$hashed_password', '$dateOfBirth', '$citizenshipNumber', '$gender','$dId','$localAddress',  '$newCitizenshipFrontPhoto', '$newCitizenshipBackPhoto', '$newUserPhoto')";
     
                 if (mysqli_query($conn, $voter_query)) {

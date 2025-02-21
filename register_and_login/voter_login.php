@@ -8,11 +8,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $citizenshipNumber = $_POST['citizenshipNumber'];
     $password = $_POST['password'];
 
-    // Query to fetch user details based on email and citizenship number from the pendingstatus table
-    $sql = "SELECT * FROM pendingstatus WHERE email = '$email' AND citizenshipNumber = '$citizenshipNumber' LIMIT 1";
+    // Query to fetch user details based on email and citizenship number from the pendingVoters table
+    $sql = "SELECT * FROM pendingVoters WHERE email = '$email' AND citizenshipNumber = '$citizenshipNumber' LIMIT 1";
     $result = mysqli_query($conn, $sql);
 
-    // Check if user exists in pendingstatus
+    // Check if user exists in pendingVoters
     if (mysqli_num_rows($result) > 0) {
         // Fetch the user's data
         $row = mysqli_fetch_assoc($result);
@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             header('Location: ../register_and_login/voter_login_form.php');
         }
     } else {
-        // No user found in pendingstatus, check the voters table
+        // No user found in pendingVoters, check the voters table
         $sql2 = "SELECT * FROM voters WHERE email = '$email' AND citizenshipNumber = '$citizenshipNumber' LIMIT 1";
         $result2 = mysqli_query($conn, $sql2);
 

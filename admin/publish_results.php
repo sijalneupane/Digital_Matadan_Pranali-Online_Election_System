@@ -34,16 +34,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new Exception("Cannot archive empty data. Try updating current election");
         } else {
             // Step 2: Insert data from currentresults into archiveresults (without deleting from currentresults)
-            $query = "INSERT INTO archiveresults (electionId, electionName, candidateName, citizenshipNumber, partyName, dId, totalVotes)
+            $query = "INSERT INTO archiveresults (electionId, electionName, candidateName, citizenshipNumber, partyName, dId, totalVotes,candidatePhoto)
         SELECT 
             cr.electionId, 
             '$electionName', 
             c.name, 
             c.citizenship_number,
-            c.candidate_photo,
             p.partyName, 
             cr.dId, 
-            cr.totalVotes
+            cr.totalVotes,
+            c.candidate_photo
         FROM currentresults cr
         INNER JOIN candidates c ON cr.candidateId = c.candidateId
         INNER JOIN parties p ON cr.partyId = p.partyId

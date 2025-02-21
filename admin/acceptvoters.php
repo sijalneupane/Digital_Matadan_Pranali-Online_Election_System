@@ -8,7 +8,7 @@ require '../register_and_login/dbconnection.php';
 if (isset($_GET['id'])) {
   $id = intval($_GET['id']);
 
-  $sql = "SELECT * FROM pendingstatus WHERE id = '$id' LIMIT 1";
+  $sql = "SELECT * FROM pendingVoters WHERE id = '$id' LIMIT 1";
   $result = mysqli_query($conn, $sql);
 
   // Check if user exists
@@ -27,7 +27,7 @@ if (isset($_GET['id'])) {
     $citizenshipBackPhoto = $row['citizenshipBackPhoto'];
     $userPhoto = $row['userPhoto'];
 
-    $deleteSql = "DELETE FROM pendingstatus WHERE id='$id'";
+    $deleteSql = "DELETE FROM pendingVoters WHERE id='$id'";
     if (mysqli_query($conn, $deleteSql)) {
       $sql1 = "INSERT INTO voters (name,  email, password,dateOfBirth,  citizenshipNumber,gender,dId,localAddress, citizenshipFrontPhoto, citizenshipBackPhoto, userPhoto)
         VALUES ('$name',  '$email', '$password', '$dateOfBirth', '$citizenshipNumber','$gender','$dId','$localAddress', '$citizenshipFrontPhoto', '$citizenshipBackPhoto', '$userPhoto')";
@@ -67,7 +67,7 @@ require '../register_and_login/dbconnection.php';
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
 
-    $sql = "SELECT * FROM pendingstatus WHERE id = '$id' LIMIT 1";
+    $sql = "SELECT * FROM pendingVoters WHERE id = '$id' LIMIT 1";
     $result = mysqli_query($conn, $sql);
 
     // Check if user exists
@@ -90,8 +90,8 @@ if (isset($_GET['id'])) {
         mysqli_begin_transaction($conn);
 
         try {
-            // Delete from pendingstatus
-            $deleteSql = "DELETE FROM pendingstatus WHERE id='$id'";
+            // Delete from pendingVoters
+            $deleteSql = "DELETE FROM pendingVoters WHERE id='$id'";
             if (!mysqli_query($conn, $deleteSql)) {
                 throw new Exception("Error occurred while removing the verified data from pending status");
             }

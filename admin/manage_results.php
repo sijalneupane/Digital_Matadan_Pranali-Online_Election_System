@@ -541,7 +541,7 @@ body {
                 var response = JSON.parse(xhr.responseText);
                 if (response.success) {
                   // alert("Results have been published successfully!");
-                  responseMsgFromPublishResult = "Results have been published successfully!";
+                  showErrorModal("Results have been published successfully!",true);
                 } else {
                   // alert("An error occurred: " + response.message);
                   responseMsgFromPublishResult = "An error occurred: " + response.message;

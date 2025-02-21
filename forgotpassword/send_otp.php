@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $sql1 = "SELECT email, citizenshipNumber FROM voters WHERE email = '$email'";
     $result1 = mysqli_query($conn, $sql1);
 
-    $sql2 = "SELECT email, citizenshipNumber FROM pendingstatus WHERE email = '$email'";
+    $sql2 = "SELECT email, citizenshipNumber FROM pendingVoters WHERE email = '$email'";
     $result2 = mysqli_query($conn, $sql2);
     if (mysqli_num_rows($result1) > 0) {
         $message = "Your password reset OTP is:";

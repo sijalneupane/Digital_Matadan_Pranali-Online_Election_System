@@ -26,6 +26,8 @@ require_once "../home/logout_modals_html.php";
     <link rel="stylesheet" href="../admin/admin_home.css">
     <link rel="stylesheet" href="../styles/modal1.css">
     <link rel="icon" href="../images/DMP logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
     <style>
 
     </style>
@@ -57,6 +59,67 @@ require_once "../home/logout_modals_html.php";
         <section class="election-time">
             <!-- Notice Display -->
             <div class="notice-section">
+                <h1>Dashboard</h1>
+                <!-- <div class="content-wrapper"> -->
+                <div class="dashboard">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="text">
+                                <h4>Total Approved Voters</h4>
+                                <p><?= getTotal($conn, "voters"); ?></p>
+                            </div>
+                            <i class="fas fa-users"></i>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="text">
+                                <h4>Total Pending Voters</h4>
+                                <p><?= getTotal($conn, "pendingVoters"); ?></p>
+                            </div>
+                            <i class="fas fa-user-clock"></i>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="text">
+                                <h4>Total Candidates</h4>
+                                <p><?= getTotal($conn, "candidates"); ?></p>
+                            </div>
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="text">
+                                <h4>Total Parties</h4>
+                                <p><?= getTotal($conn, "parties"); ?></p>
+                            </div>
+                            <i class="fas fa-landmark"></i>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="text">
+                                <h4>Votes Cast in numbers</h4>
+                                <p><?= totalVoteCasted($conn); ?></p>
+                            </div>
+                            <i class="fas fa-vote-yea"></i>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="text">
+                                <h4>Votes Cast in percentage</h4>
+                                <p><?= (totalVoteCasted($conn) / getTotal($conn, "voters")) * 100 . " %" ?></p>
+                            </div>
+                            <i class="fas fa-percent"></i>
+                        </div>
+                    </div>
+                </div>
+
+
+
                 <h2>Current Election Details</h2>
                 <div id="current-notice">
                     <table id="notice-table">
@@ -64,73 +127,72 @@ require_once "../home/logout_modals_html.php";
                     </table>
                     <button id="update-notice-btn">Update Election</button>
                 </div>
+                <!-- Election Form -->
+                <form id="election-form" action="../admin/add_election_time.php" method="POST"
+                    onsubmit="return validateElectionForm();">
+                    <h3 id="form-title">Set New Election</h3>
+                    <input type="hidden" id="election-id" name="electionId" />
 
-                <div class="content-wrapper">
-                    <div class="overview">
-                        <h3>Election Overview</h3>
-                        <details class="overview-item">
-                            <summary>Total Voters(<?= getTotal($conn, "voters"); ?>)</summary>
-                            <p>Currently we have total <?= getTotal($conn, "voters"); ?> registered voters till now</p>
-                        </details>
-                        <details class="overview-item">
-                            <summary>Total Pending Voters</summary>
-                            <p>As we progress towards election, we still have <?= getTotal($conn, "pendingstatus"); ?>
-                                no of citizens whose voter resgistration is on pending</p>
-                        </details>
-                        <details class="overview-item">
-                            <summary>Total candidates</summary>
-                            <p><?= getTotal($conn, "candidates"); ?></p>
-                        </details>
-                        <details class="overview-item">
-                            <summary>Total Parties</summary>
-                            <p><?= getTotal($conn, "parties"); ?></p>
-                        </details>
-                        <details class="overview-item">
-                            <summary>Votes Cast</summary>
-                            <p><?= totalVoteCasted($conn); ?></p>
-                        </details>
+                    <div>
+                        <label for="election-name">Election Name</label>
+                        <input type="text" id="election-name" name="electionName" />
+                        <span class="error" id="electionNameError"></span>
                     </div>
 
-                    <!-- Election Form -->
-                    <form id="election-form" action="../admin/add_election_time.php" method="POST"
-                        onsubmit="return validateElectionForm();">
-                        <h3 id="form-title">Set New Election</h3>
-                        <input type="hidden" id="election-id" name="electionId" />
+                    <div>
+                        <label for="start-time">Start Time</label>
+                        <input type="datetime-local" id="start-time" name="startTime" />
+                        <span class="error" id="startTimeError"></span>
+                    </div>
 
-                        <div>
-                            <label for="election-name">Election Name</label>
-                            <input type="text" id="election-name" name="electionName" />
-                            <span class="error" id="electionNameError"></span>
-                        </div>
+                    <div>
+                        <label for="end-time">End Time</label>
+                        <input type="datetime-local" id="end-time" name="endTime" />
+                        <span class="error" id="endTimeError"></span>
+                    </div>
+                    <div>
+                        <label for="nomination-StartTime">Nomination Start Time</label>
+                        <input type="datetime-local" id="nomination-StartTime" name="nominationStartTime" />
+                        <span class="error" id="nominationStartTimeError"></span>
+                    </div>
+                    <div>
+                        <label for="nomination-EndTime">Nomination End Time</label>
+                        <input type="datetime-local" id="nomination-EndTime" name="nominationEndTime" />
+                        <span class="error" id="nominationEndTimeError"></span>
+                    </div>
 
-                        <div>
-                            <label for="start-time">Start Time</label>
-                            <input type="datetime-local" id="start-time" name="startTime" />
-                            <span class="error" id="startTimeError"></span>
-                        </div>
 
-                        <div>
-                            <label for="end-time">End Time</label>
-                            <input type="datetime-local" id="end-time" name="endTime" />
-                            <span class="error" id="endTimeError"></span>
-                        </div>
-                        <div>
-                            <label for="nomination-StartTime">Nomination Start Time</label>
-                            <input type="datetime-local" id="nomination-StartTime" name="nominationStartTime" />
-                            <span class="error" id="nominationStartTimeError"></span>
-                        </div>
-                        <div>
-                            <label for="nomination-EndTime">Nomination End Time</label>
-                            <input type="datetime-local" id="nomination-EndTime" name="nominationEndTime" />
-                            <span class="error" id="nominationEndTimeError"></span>
-                        </div>
-                        
-
-                        <button type="submit" id="set-election-btn">Set Election</button>
-                    </form>
-                </div>
+                    <button type="submit" id="set-election-btn">Set Election</button>
+                </form>
+                <!-- </div> -->
             </div>
         </section>
+        <section id="votersMessages">
+            <h2>Recent Voter Messages</h2>
+            <div class="messages-container">
+                <?php
+                $query = "SELECT vm.messages, v.id AS voterId, v.dId, v.name, vm.created_at 
+                  FROM votersMessages vm 
+                  JOIN voters v ON vm.voterId = v.id 
+                  ORDER BY vm.created_at DESC 
+                  LIMIT 10";
+                $result = mysqli_query($conn, $query);
+
+                if (mysqli_num_rows($result) > 0) {
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        echo "<div class='message-item'>";
+                        echo "<p><strong>ID: " . htmlspecialchars($row['voterId']) . " | District: " . htmlspecialchars($row['dId']) . " | " . htmlspecialchars($row['name']) . ":</strong></p>";
+                        echo "<p>" . nl2br(htmlspecialchars($row['messages'])) . "</p>";
+                        echo "<small>Sent on: " . date("F j, Y, g:i A", strtotime($row['created_at'])) . "</small>";
+                        echo "</div>";
+                    }
+                } else {
+                    echo "<p>No messages found.</p>";
+                }
+                ?>
+            </div>
+        </section>
+
     </div>
 
     <script src="../js/get_votingTime.js"></script>
@@ -203,10 +265,10 @@ require_once "../home/logout_modals_html.php";
                 document.getElementById('nominationEndTimeError').textContent = 'Nomination end Time should not be less than the Nomination start time.';
                 isValid = false;
             }
-            if((document.getElementById("election-id").value)==="" && votingTime.resultStatus === "notPublished"){
-                    showErrorModal("Current election result is not published yet. You can't  set new election",false);
-                    isValid = false;
-                }
+            if ((document.getElementById("election-id").value) === "" && votingTime.resultStatus === "notPublished") {
+                showErrorModal("Current election result is not published yet. You can't  set new election", false);
+                isValid = false;
+            }
             return isValid;
         }
         window.onclick = function () {
@@ -247,8 +309,8 @@ require_once "../home/logout_modals_html.php";
         const successMessage = <?= json_encode($successMessage); ?>;
         if (errorMessage) {
             showErrorModal(errorMessage);
-        }else if(successMessage){
-            showErrorModal(successMessage,true);
+        } else if (successMessage) {
+            showErrorModal(successMessage, true);
         }
 
         // Function to convert date string to required format
@@ -327,10 +389,10 @@ require_once "../home/logout_modals_html.php";
         document.getElementById("update-notice-btn").addEventListener("click", function () {
             const setElectionBtn = document.getElementById("set-election-btn");
             const formTitle = document.getElementById("form-title");
-            
+
             if (setElectionBtn.textContent === "Set Election") {
-                if(votingTime.resultStatus === "published"){
-                    showErrorModal("Result has been published for this election. You can't update the election details.",false);
+                if (votingTime.resultStatus === "published") {
+                    showErrorModal("Result has been published for this election. You can't update the election details.", false);
                     return;
                 }
                 setElectionBtn.textContent = "Update Election";
@@ -350,22 +412,22 @@ require_once "../home/logout_modals_html.php";
             }
         });
 
-        //functionality to close another details when one is opened
-        document.addEventListener('DOMContentLoaded', function () {
-            const detailsElements = document.querySelectorAll('.overview-item');
+        // //functionality to close another details when one is opened
+        // document.addEventListener('DOMContentLoaded', function () {
+        //     const detailsElements = document.querySelectorAll('.overview-item');
 
-            detailsElements.forEach(details => {
-                details.addEventListener('toggle', function () {
-                    if (details.open) {
-                        detailsElements.forEach(otherDetails => {
-                            if (otherDetails !== details) {
-                                otherDetails.removeAttribute('open');
-                            }
-                        });
-                    }
-                });
-            });
-        });
+        //     detailsElements.forEach(details => {
+        //         details.addEventListener('toggle', function () {
+        //             if (details.open) {
+        //                 detailsElements.forEach(otherDetails => {
+        //                     if (otherDetails !== details) {
+        //                         otherDetails.removeAttribute('open');
+        //                     }
+        //                 });
+        //             }
+        //         });
+        //     });
+        // });
     </script>
 </body>
 

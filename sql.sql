@@ -1,5 +1,5 @@
 --1) //pending status table and voters table
-CREATE TABLE pendingstatus (
+CREATE TABLE pendingVoters (
     id INT(11) AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) COLLATE latin1_swedish_ci NOT NULL,
     email VARCHAR(255) COLLATE latin1_swedish_ci NOT NULL,

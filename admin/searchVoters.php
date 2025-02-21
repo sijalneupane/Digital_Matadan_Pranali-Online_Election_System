@@ -10,7 +10,7 @@ $initialRegionNo = $_GET['regionNo'] ?? '';
 $district = ($initialDistrict == 'default') ? '' : $initialDistrict;
 $regionNo = ($initialRegionNo == 'default') ? '' : $initialRegionNo;
 $voterType = $_GET['voterType'] ?? '';
-$tableName = ($voterType == 'verified') ? 'voters' : 'pendingStatus';
+$tableName = ($voterType == 'verified') ? 'voters' : 'pendingVoters';
 $sql = "";
 if (!empty($searchQuery)) {
   $sql = "SELECT *
@@ -53,7 +53,7 @@ if ($result && $result->num_rows > 0) {
     if ($tableName == 'voters') {
       $response[count($response) - 1]['votingStatus'] = $row['votingStatus'];
     }
-    if ($tableName == 'pendingStatus') {
+    if ($tableName == 'pendingVoters') {
       $response[count($response) - 1]['status'] = $row['status'];
     }
   }

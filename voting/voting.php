@@ -12,6 +12,7 @@ if (!isset($_SESSION["email"])) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Voting area</title>
+  <link rel="stylesheet" href="../styles/modal1.css">
   <style>
     /* .not-scheduled {
       background: #fbe9e7; */
@@ -300,6 +301,7 @@ if (!isset($_SESSION["email"])) {
       }
     }
   </style>
+  <script src="../js/errorMessage_modal1.js"></script>
 </head>
 
 <body>
@@ -309,6 +311,12 @@ if (!isset($_SESSION["email"])) {
     <script>
       document.querySelector('a[href="../voting/voting.php"]').classList.add('active');
     </script>
+    <div id="modal1" class="modal-overlay1">
+      <div class="modal-content1">
+        <p id="modalMessage1"></p>
+        <button onclick="closeModal1()">Close</button>
+      </div>
+    </div>
 
     <div class="content" id="content">
     </div>
@@ -506,13 +514,15 @@ if (!isset($_SESSION["email"])) {
       function submitVote() {
         const selectedCandidate = document.querySelector('input[name="candidate"]:checked');
         if (!selectedCandidate) {
-          alert('Please select a candidate before voting.');
+          showErrorModal('Please select a candidate before voting.',false);
+          // alert('Please select a candidate before voting.');
           return;
         }
 
         const voterPassword = prompt('Enter your password to submit your vote:');
         if (!voterPassword) {
-          alert('Password is required to submit your vote.');
+          showErrorModal('Password is required to submit your vote.',false);
+          // alert('Password is required to submit your vote.');
           return;
         }
 
@@ -526,18 +536,22 @@ if (!isset($_SESSION["email"])) {
               response = JSON.parse(this.responseText);
             } catch (e) {
               console.error('Error parsing JSON:', response.error);
-              alert('An error occurred while processing the server response.');
+              // alert('An error occurred while processing the server response.');
+              showErrorModal("An error occurred while processing the server response.",false);
               return;
             }
             console.log(xhr.responseText);
             if (response.success) {
+              showErrorModal("Your vote has been successfully submitted.",true);
               showAlreadyVoted();
               // alert('Your vote has been successfully submitted.');
               // contentDiv.innerHTML = `<h3>Thank you for voting!</h3>`;
             } else if (response.error === 'password_mismatch') {
-              alert('Incorrect password. Please re-enter your password to vote.');
+              // alert('Incorrect password. Please re-enter your password to vote.');
+              showErrorModal("Incorrect password. Please re-enter your password to vote.",false);
             } else {
-              alert('An error occurred while submitting your vote. Please try again.');
+              // alert('An error occurred while submitting your vote. Please try again.');
+              showErrorModal("An error occurred while submitting your vote. Please try again.",false);
             }
           }
         };

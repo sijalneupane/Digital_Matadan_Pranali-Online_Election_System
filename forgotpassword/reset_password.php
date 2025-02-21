@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
 
     // Update query with the hashed password
-    $sql1 = "UPDATE pendingstatus SET password = '$hashed_password' WHERE email = '$email'";
+    $sql1 = "UPDATE pendingVoters SET password = '$hashed_password' WHERE email = '$email'";
     $sql2 = "UPDATE voters SET password = '$hashed_password' WHERE email = '$email'";
 
     $result = isset($_SESSION['pending']) ? mysqli_query($conn, $sql1) : mysqli_query($conn, $sql2);

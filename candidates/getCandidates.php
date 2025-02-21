@@ -56,7 +56,7 @@ if ($result && $result->num_rows > 0) {
             "gender" => $row["gender"],
             "citizenship_number" => $row["citizenship_number"],
             "education_level" => $row["education_level"],
-            "manifesto" => $row["manifesto"],
+            "manifesto" =>  nl2br(htmlspecialchars($row["manifesto"])),
             "district" => $row["district"],
             "regionNo" => $row["regionNo"],
             "partyName" => $row["partyName"],
@@ -71,7 +71,7 @@ if ($result && $result->num_rows > 0) {
     $response["message"] = "Error: " . $conn->error;
 }
 
-echo json_encode($response);
+echo json_encode($response, JSON_UNESCAPED_UNICODE); 
 
 $conn->close();
 ?>

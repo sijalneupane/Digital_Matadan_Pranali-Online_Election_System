@@ -13,7 +13,7 @@ if (isset($_GET['id']) && isset($_GET['message']) && isset($_GET['email']) && is
     mysqli_begin_transaction($conn);
 
     // Step 1: Fetch image paths before deleting the record
-    $sql1 = "SELECT citizenshipFrontPhoto, citizenshipBackPhoto, userPhoto FROM pendingstatus WHERE id = '$id'";
+    $sql1 = "SELECT citizenshipFrontPhoto, citizenshipBackPhoto, userPhoto FROM pendingVoters WHERE id = '$id'";
     $result1 = mysqli_query($conn, $sql1);
 
     if ($result1 && mysqli_num_rows($result1) > 0) {
@@ -26,7 +26,7 @@ if (isset($_GET['id']) && isset($_GET['message']) && isset($_GET['email']) && is
         ];
 
         // Step 2: Delete the record from the database
-        $query = "DELETE FROM pendingstatus WHERE id = '$id'";
+        $query = "DELETE FROM pendingVoters WHERE id = '$id'";
         if (mysqli_query($conn, $query)) {
 
             // Step 3: Send rejection email

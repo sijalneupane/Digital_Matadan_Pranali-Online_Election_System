@@ -351,7 +351,7 @@ if (!isset($_SESSION["email"])) {
             </div>
             <div class="manifesto">
               <h3>Manifesto</h3>
-              <p><?= $row['manifesto'] ?></p>
+              <p><?=  nl2br(htmlspecialchars($row["manifesto"])); ?></p>
             </div>
             <div class="party-info">
               <h3>Party Information</h3>
