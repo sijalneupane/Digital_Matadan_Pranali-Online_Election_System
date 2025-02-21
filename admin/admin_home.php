@@ -111,7 +111,19 @@ require_once "../home/logout_modals_html.php";
                         <div class="card-content">
                             <div class="text">
                                 <h4>Votes Cast in percentage</h4>
-                                <p><?= (totalVoteCasted($conn) / getTotal($conn, "voters")) * 100 . " %" ?></p>
+                                <p>
+                                    <?php
+                                    try {
+                                        $totalVoters = getTotal($conn, "voters");
+                                        if ($totalVoters == 0) {
+                                            throw new Exception("Total voters is zero.");
+                                        }
+                                        echo (totalVoteCasted($conn) / $totalVoters) * 100 . " %";
+                                    } catch (Exception $e) {
+                                        echo $e->getMessage();
+                                    }
+                                    ?>
+                                </p>
                             </div>
                             <i class="fas fa-percent"></i>
                         </div>
