@@ -5,7 +5,7 @@
 }
 
 :root {
-  --main-container-color: #efefef;
+  --main-container-color: #d6e1d9;;
   ;
 }
 
@@ -96,9 +96,10 @@ section {
   font-size: 1.5em;
   color: #007BFF;
 }
-.overview h3{
-  font-size: 1.2em;
-  color: #007BFF;
+.notice-section h1{
+  text-align: left;
+    font-size: 2rem;
+    color: #007ac5;
 }
 
 .notice-section p {
@@ -122,6 +123,7 @@ section {
   color: #fff;
   background-color: #007bff;
   border: none;
+  margin: auto;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
@@ -142,11 +144,14 @@ section {
 /* Form styling */
 form {
   background-color: white;
-  width: 50%;
+  width: 80%;
+  margin:auto;
+  border-radius: 8px;
   padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 15px;
+  box-shadow: 3px 3px 19px 2px rgba(179, 48, 119, 0.41);
 }
 
 form div {
@@ -297,14 +302,12 @@ form button:hover {
     flex-direction: column;
     align-items: center;
   }
-  .content-wrapper {
+  /* .content-wrapper {
     flex-direction: column;
     align-items: center;
-  }
+  } */
 
-  .overview {
-    width:80%;
-  }
+
 
   form {
     width: 80%;
@@ -312,11 +315,11 @@ form button:hover {
 }
 
 @media (max-width: 480px) {
-  .overview-item {
+  /* .overview-item {
     flex: 1 1 100%;
-    /* 1 item per row on very small screens */
+    1 item per row on very small screens
     max-width: 100%;
-  }
+  } */
 
   .election-time {
     padding: 15px;

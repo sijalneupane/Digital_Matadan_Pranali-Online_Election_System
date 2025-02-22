@@ -516,6 +516,29 @@ require_once '../php_for_ajax/districtRegionSelect.php';
             /* background-color: #218838; */
             background-position: right center;
         }
+        .change-password-container {
+            text-align: end;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .change-password-link {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .change-password-link:hover {
+            background-color: #0056b3;
+        }
 
         @media (max-width: 768px) {
             .modal {
@@ -644,6 +667,9 @@ require_once '../php_for_ajax/districtRegionSelect.php';
                     <button class="logout-button" id="logoutBtn" onclick="openLogoutModal();"><i
                             class="fas fa-sign-out-alt"></i> Logout</button>
                 </div>
+                <div class="change-password-container">
+                    <a href="../forgotpassword/reset_password.php?id=<?=$_SESSION['voterId'];?>" class="change-password-link">Change Password &rarr;</a>
+                </div>
             </div>
             <!--Image Modal -->
             <div id="imageModal" class="modal all-modals">
@@ -673,6 +699,7 @@ require_once '../php_for_ajax/districtRegionSelect.php';
             </div>
 
             <div class="modal-overlay" id="modalOverlay"></div>
+            <?php include '../home/footer.php'; ?>
         </div>
     </div>
     <!-- Error modal-->

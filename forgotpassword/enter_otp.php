@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['email'])) {
+if (!isset($_SESSION['fpEmail'])) {
   header("Location: ../forgotpassword/forgot_password.php");
   exit();
 }
@@ -45,7 +45,7 @@ unset($_SESSION['success_message']); // Clear the message
 </head>
 
 <body>
-  <div id="modal1" class="modal-overlay1">
+  <div id="modal1" class="modal-overlay1 all-modals">
         <div class="modal-content1">
             <p id="modalMessage1"></p>
             <button onclick="closeModal1()">Close</button>
@@ -58,7 +58,7 @@ unset($_SESSION['success_message']); // Clear the message
 
   <h2>Enter OTP</h2>
   <form action="../forgotpassword/verify_otp.php" method="post" onsubmit="return validateForm();">
-    <label for="otp">Enter the OTP sent to <?php echo htmlspecialchars($_SESSION['email']); ?>:</label><br>
+    <label for="otp">Enter the OTP sent to <?php echo htmlspecialchars($_SESSION['fpEmail']); ?>:</label><br>
     <input type="number" name="otp" id="otp">
     <span class="error" id="otpError"></span>
     <br><br>
@@ -74,6 +74,16 @@ unset($_SESSION['success_message']); // Clear the message
         }else if(successMessage){
             showErrorModal(successMessage,true);
         }
+        
+        // Close the modal when clicking outside of the modal content
+        window.onclick = function (event) {
+          var modals = document.getElementsByClassName('all-modals');
+          for (var i = 0; i < modals.length; i++) {
+              if (event.target == modals[i]) {
+                  modals[i].style.display = 'none';
+              }
+          }
+      }
   </script>
 </body>
 

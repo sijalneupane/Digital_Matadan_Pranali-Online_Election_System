@@ -15,7 +15,8 @@ body {
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-color: #a1c3b8;
+  /* background-color: #a1c3b8; */
+  background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcCv9c9Z-i2MGzy8XYg0Gj1DJx8CiKye0fVg&s') no-repeat center center fixed;
 }
 
 h2 {

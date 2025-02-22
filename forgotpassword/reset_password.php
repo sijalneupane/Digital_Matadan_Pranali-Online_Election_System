@@ -1,47 +1,9 @@
 <?php
 session_start();
-
-if (!isset($_SESSION['email'])) {
-    header("Location: ../forgotpassword/forgot_password.php");
-    exit();
-}
 $errorMessage = isset($_SESSION['error_message']) ? $_SESSION['error_message'] : '';
 unset($_SESSION['error_message']); // Clear the message
+$id = isset($_GET['id']) ? $_GET['id'] : null;
 
-// $successMessage = isset($_SESSION['success_message']) ? $_SESSION['success_message'] : '';
-// unset($_SESSION['success_message']); // Clear the message
-
-require '../register_and_login/dbconnection.php';
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Fetch new password from the form
-    $new_password = $_POST['password'];
-    $email = $_SESSION['email'];
-
-    // Hash the new password
-    $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
-
-    // Update query with the hashed password
-    $sql1 = "UPDATE pendingVoters SET password = '$hashed_password' WHERE email = '$email'";
-    $sql2 = "UPDATE voters SET password = '$hashed_password' WHERE email = '$email'";
-
-    $result = isset($_SESSION['pending']) ? mysqli_query($conn, $sql1) : mysqli_query($conn, $sql2);
-    unset($_SESSION['pending']);
-    if ($result) {
-        // Notify the user of successful password reset
-        $_SESSION['success_message'] = "Password has been reset successfully.";
-        unset($_SESSION['email']); // Clear session
-        header("Location: ../register_and_login/voter_login_form.php");
-        exit();
-    } else {
-        // Handle update error
-        // echo "Error updating password: " . mysqli_error($conn);
-        $_session['error_message'] = "Error updating password. PLease try again";
-        header("Location: ../forgotpassword/reset_password.php");
-    }
-
-    // Close the connection
-    mysqli_close($conn);
-}
 ?>
 
 <!DOCTYPE html>
@@ -97,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body>
-<div id="modal1" class="modal-overlay1">
+    <div id="modal1" class="modal-overlay1 all-modals">
         <div class="modal-content1">
             <p id="modalMessage1"></p>
             <button onclick="closeModal1()">Close</button>
@@ -109,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <h2>Reset Password</h2>
-    <form action="../forgotpassword/reset_password.php" method="post" onsubmit="return validateForm();">
+    <form action="../forgotpassword/reset_password_controller.php?id=<?= $id ?>" method="post" onsubmit="return validateForm();">
         <label for="password">New Password:</label><br>
         <div class="input-container">
             <input type="password" id="password" name="password" placeholder="Password">
@@ -118,17 +80,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <span class="error" id="passwordError"></span>
         <br><br>
         <input type="submit" value="Reset Password">
+        <?php if ($id!=null): ?>
+            <a href="../register_and_login/user_profile.php">Back to Profile</a>
+        <?php endif; ?>
     </form>
     <script>
-        
+
         // Show error modal if there's an error message
         const errorMessage = <?= json_encode($errorMessage); ?>;
         const successMessage = <?= json_encode($successMessage); ?>;
         if (errorMessage) {
             showErrorModal(errorMessage);
-        }else if(successMessage){
-            showErrorModal(successMessage,true);
+        } else if (successMessage) {
+            showErrorModal(successMessage, true);
         }
+
+        // Close the modal when clicking outside of the modal content
+        window.onclick = function (event) {
+        var modals = document.getElementsByClassName('all-modals');
+        for (var i = 0; i < modals.length; i++) {
+            if (event.target == modals[i]) {
+                modals[i].style.display = 'none';
+            }
+        }
+    }
+
     </script>
 </body>
 

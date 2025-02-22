@@ -3,7 +3,7 @@ session_start();
 require '../register_and_login/dbconnection.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
-    $_session['email'] = $email;
+    $_session['fpEmail'] = $email;
     //check email in voter at first
     $sql1 = "SELECT email, citizenshipNumber FROM voters WHERE email = '$email'";
     $result1 = mysqli_query($conn, $sql1);
@@ -31,7 +31,7 @@ function sendOtp($body, $email)
         // Generate OTP
         $otp = rand(100000, 999999);
         // Save email in session
-        $_SESSION['email'] = $email;
+        $_SESSION['fpEmail'] = $email;
         // Save OTP in a cookie for 5 minutes
         setcookie("otp", $otp, time() + 300, "/");
 

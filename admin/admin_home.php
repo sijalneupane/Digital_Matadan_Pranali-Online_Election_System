@@ -204,8 +204,8 @@ require_once "../home/logout_modals_html.php";
                 ?>
             </div>
         </section>
-
     </div>
+    <?php include '../home/footer.php'; ?>
 
     <script src="../js/get_votingTime.js"></script>
     <script>

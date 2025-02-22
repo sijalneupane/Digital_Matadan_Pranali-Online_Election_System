@@ -36,11 +36,9 @@ unset($_SESSION['error_message']); // Clear the message
             return isValid;
         }
     </script>
-    
 </head>
-
 <body>
-    <div id="modal1" class="modal-overlay1">
+    <div id="modal1" class="modal-overlay1 all-modals">
         <div class="modal-content1">
             <p id="modalMessage1"></p>
             <button onclick="closeModal1()">Close</button>
@@ -65,6 +63,16 @@ unset($_SESSION['error_message']); // Clear the message
     <script>
         const errorMessage = <?= json_encode($errorMessage); ?>;
         showErrorModal(errorMessage); // Pass PHP error to JS function
+          // Close the modal when clicking outside of the modal content
+          window.onclick = function (event) {
+            var modals = document.getElementsByClassName('all-modals');
+            for (var i = 0; i < modals.length; i++) {
+                if (event.target == modals[i]) {
+                    modals[i].style.display = 'none';
+                }
+            }
+        }
+
     </script>
 </body>
 

@@ -22,14 +22,19 @@ unset($_SESSION['success_message']); // Clear the message
       --li-color: rgb(101, 71, 182);
       --button-color: rgb(34, 103, 150);
     }
-
-    .content p {
+.content{
+  padding:0px !important;
+}
+.upper-part{
+  padding:15px;
+}
+    .upper-part p {
       font-size: 1.1em;
       line-height: 1.5;
       margin-bottom: 10px;
     }
 
-    .content ul {
+    .upper-part ul {
       list-style-type: circle;
       /* padding: 0; */
       margin-top: 5px;
@@ -37,7 +42,7 @@ unset($_SESSION['success_message']); // Clear the message
       max-width: 400px;
     }
 
-    .content ul li {
+    .upper-part ul li {
       color: --li-color;
       /* margin: 10px 0; */
       padding: 5px;
@@ -94,7 +99,7 @@ unset($_SESSION['success_message']); // Clear the message
 
 <body>
   <div class="container">
-    <div id="modal1" class="modal-overlay1">
+    <div id="modal1" class="modal-overlay1 all-modals">
       <div class="modal-content1">
         <p id="modalMessage1"></p>
         <button onclick="closeModal1()">Close</button>
@@ -108,6 +113,7 @@ unset($_SESSION['success_message']); // Clear the message
       document.querySelector('a[href="../home/contact_us.php"]').classList.add('active');
     </script>
     <div class="content">
+      <div class="upper-part">
       <p>Our online election system, Digital Matadan Pranali, is designed to provide a seamless and secure voting
         experience. With our system, you can participate in elections from the comfort of your home, ensuring that your
         vote is counted accurately and efficiently.</p>
@@ -122,14 +128,14 @@ unset($_SESSION['success_message']); // Clear the message
         understand that you may encounter issues or have suggestions for improvement. Please use the contact form below
         to reach out to our admin team.
       </p>
-      <form class="contact-form" method="post" onsubmit="return validateContactForm()" action="../home/contact_us_controller.php">
+      <form class="contact-form" method="post" onsubmit="return validateContactForm()"
+        action="../home/contact_us_controller.php">
         <label for="message">Your feedback is valuable to us and helps us enhance the system for everyone.</label>
         <textarea name="message" id="message" cols="30" rows="10"></textarea>
         <button type="submit">Submit</button>
       </form>
-      <footer>
-        <p>&copy; 2023 Your Company. All rights reserved.</p>
-      </footer>
+      </div>
+      <?php include '../home/footer.php'; ?>
     </div>
   </div>
   <script>
@@ -152,6 +158,16 @@ unset($_SESSION['success_message']); // Clear the message
     } else if (successMessage) {
       showErrorModal(successMessage, true);
     }
+    // Close the modal when clicking outside of the modal content
+    window.onclick = function (event) {
+      var modals = document.getElementsByClassName('all-modals');
+      for (var i = 0; i < modals.length; i++) {
+        if (event.target == modals[i]) {
+          modals[i].style.display = 'none';
+        }
+      }
+    }
+
   </script>
 </body>
 

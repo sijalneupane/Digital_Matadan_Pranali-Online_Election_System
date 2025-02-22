@@ -292,6 +292,8 @@ body {
 <body>
   <?php require '../admin/admin_navbar.php'; ?>
   <div class="container">
+  <?php require_once '../home/logout_modals_html.php';
+        logoutModalPhp("admin"); ?>
     <div id="modal1" class="modal-overlay1 all-modals">
       <div class="modal-content1">
         <p id="modalMessage1"></p>
@@ -645,6 +647,15 @@ body {
     } else if (successMessage) {
       showErrorModal(successMessage, true);
     }
+  // Close the modal when clicking outside of the modal content
+  window.onclick = function (event) {
+            var modals = document.getElementsByClassName('all-modals');
+            for (var i = 0; i < modals.length; i++) {
+                if (event.target == modals[i]) {
+                    modals[i].style.display = 'none';
+                }
+            }
+        }
 
   </script>
 </body>

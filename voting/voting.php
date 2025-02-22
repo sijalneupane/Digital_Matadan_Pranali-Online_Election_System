@@ -24,7 +24,9 @@ if (!isset($_SESSION["email"])) {
       margin-top: 20px;
       box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     } */
-
+a{
+  text-decoration: none;
+}
     .not-scheduled h3 {
       color: #d32f2f;
       /* Dark red for heading */
@@ -78,6 +80,126 @@ if (!isset($_SESSION["email"])) {
     .not-scheduled ul.admin-responsibilities li strong {
       color: #1976d2;
     }
+/* not-started css starts here */
+
+.title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #ff4d4d;
+    margin-bottom: 15px;
+}
+
+.description {
+    font-size: 1.2rem;
+    margin: 0 auto 20px;
+    line-height: 1.5;
+}
+
+.info-section {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    border-radius: 12px;
+    margin-top: 20px;
+    text-align: left;
+}
+
+.info-title {
+    font-size: 1.5rem;
+    color:rgb(35, 80, 163);
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.info-list {
+    list-style: none;
+    padding: 0;
+}
+
+.info-item {
+    font-size: 1.1rem;
+    margin: 10px 0;
+    padding-left: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.info-item strong {
+    color:rgb(31, 83, 161);
+}
+
+.contact-link {
+    color:rgb(126, 39, 153);
+    text-decoration: underline;
+}
+
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 25px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    text-transform: uppercase;
+}
+
+.review-btn, .results-btn {
+    background: #4caf50;
+    color: #fff;
+}
+
+.profile-btn {
+    background: #1e88e5;
+    color: #fff;
+}
+
+.contact-btn {
+    background: #ff9800;
+    color: #fff;
+}
+
+.btn:hover {
+    opacity: 0.85;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .not-started {
+        padding: 20px;
+    }
+
+    .title {
+        font-size: 1.8rem;
+    }
+
+    .description {
+        font-size: 1.1rem;
+    }
+
+    .info-title {
+        font-size: 1.3rem;
+    }
+
+    .info-item {
+        font-size: 1rem;
+    }
+
+    .btn {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+    }
+}
+
+/* not-started css ends here */
 
     /* Candidate grid container */
     .candidate-grid {
@@ -260,22 +382,30 @@ if (!isset($_SESSION["email"])) {
   box-shadow: #3c4fe0 0 3px 7px inset;
   transform: translateY(2px);
 }
-    /* .button {
-      background-color: #4CAF50;
-      color: white;
-      padding: 12px 25px;
-      border: none;
-      border-radius: 8px;
-      font-size: 15px;
-      cursor: pointer;
-      transition: all 0.3s;
-      text-transform: uppercase;
-    }
+.vote-button {
+    background: linear-gradient(135deg, #00c9a7, #6a00f4); /* Teal to Purple */
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px 5px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease-in-out;
+    text-transform: uppercase;
+}
 
-    .button:hover {
-      background-color: #45a049;
-      transform: scale(1.05);
-    } */
+.vote-button:hover {
+    background: linear-gradient(135deg, #6a00f4, #00c9a7);
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px 10px rgba(0, 0, 0, 0.3);
+}
+
+.vote-button:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 8px -5px rgba(0, 0, 0, 0.2);
+}
 
     .info-div {
       background-color: #f3f3f3;
@@ -311,7 +441,7 @@ if (!isset($_SESSION["email"])) {
     <script>
       document.querySelector('a[href="../voting/voting.php"]').classList.add('active');
     </script>
-    <div id="modal1" class="modal-overlay1">
+    <div id="modal1" class="modal-overlay1 all-modals">
       <div class="modal-content1">
         <p id="modalMessage1"></p>
         <button onclick="closeModal1()">Close</button>
@@ -404,12 +534,30 @@ if (!isset($_SESSION["email"])) {
       }
 
       function showVotingNotStarted() {
-        contentDiv.innerHTML = `
-        <div class="not-scheduled">
-          <h3>Election Scheduled</h3>
-          <p>Election is currently scheduled. W:</p>
-        </div>`;
-      }
+    contentDiv.innerHTML = `
+    <div class="not-started">
+      <h3 class="title">Election Scheduled</h3>
+      <p class="description">The election is scheduled, but voting has not started yet.</p>
+      
+      <div class="info-section">
+        <h4 class="info-title">Prepare Yourself for the Election:</h4>
+        <ul class="info-list">
+          <li class="info-item">📅 <strong>Election Time:</strong>From :${new Date(votingTime.startTime).toLocaleString()} To:${new Date(votingTime.endTime).toLocaleString()}</li>
+          <li class="info-item">📜 <strong>Review Candidates:</strong> Learn about each candidate’s manifesto, qualifications, and vision for your community.</li>
+          <li class="info-item">📊 <strong>Compare Policies:</strong> Analyze their past performance and plans to make an informed choice.</li>
+          <li class="info-item">🆔 <strong>Manage Your Profile:</strong> Ensure your voter information is up-to-date to avoid any issues during voting.</li>
+          <li class="info-item">📞 <strong>Report Issues:</strong> If you face any problems, reach out through the <a href="#" class="contact-link">Contact Us</a> page.</li>
+          <li class="info-item">📆 <strong>Mark the Date:</strong> Stay updated with the voting start time so you don’t miss your chance.</li>
+        </ul>
+      </div>
+
+      <div class="button-group">
+        <a href="../candidates/candidates.php" class="btn review-btn">Review Candidates</a>
+        <a href="../register_and_login/user_profile.php" class="btn profile-btn">Manage Profile</a>
+        <a href="../home/contact_us.php" class="btn contact-btn">Contact Us</a>
+      </div>
+    </div>`;
+}
 
       function showVotingStarted() {
         contentDiv.innerHTML = `
@@ -427,7 +575,7 @@ if (!isset($_SESSION["email"])) {
         </form>
       </div>
     `;
-        fetchCandidates();
+      fetchCandidates();
       }
 
       function showAlreadyVoted() {
@@ -559,12 +707,38 @@ if (!isset($_SESSION["email"])) {
       }
 
       function showVotingEnded() {
-        contentDiv.innerHTML = `
-        <div class="election-ended">
-          <h3>Election Ended</h3>
-          <p>Election  has finished. :</p>
-         
-        </div>`;
+    contentDiv.innerHTML = `
+    <div class="election-ended">
+      <h3 class="title">Election Ended</h3>
+      <p class="description">The election has concluded, and unfortunately, you did not cast your vote.</p>
+      
+      <div class="info-section">
+        <h4 class="info-title">What You Can Do Next:</h4>
+        <ul class="info-list">
+          <li class="info-item">📅 <strong>Election Period:</strong> From: ${new Date(votingTime.startTime).toLocaleString()} To: ${new Date(votingTime.endTime).toLocaleString()}</li>
+          <li class="info-item">📜 <strong>Review Results:</strong> Check the final election results and see how your community voted.</li>
+          <li class="info-item">📊 <strong>Analyze Outcomes:</strong> Learn about the winning candidates and their upcoming policies.</li>
+          <li class="info-item">🆔 <strong>Stay Updated:</strong> Ensure your voter profile is up-to-date for future elections.</li>
+          <li class="info-item">📞 <strong>Report Concerns:</strong> If you have any queries, reach out through the <a href="#" class="contact-link">Contact Us</a> page.</li>
+          <li class="info-item">📆 <strong>Prepare for Next Time:</strong> Mark your calendar for upcoming elections so you don't miss your chance.</li>
+        </ul>
+      </div>
+
+      <div class="button-group">
+        <a href="../results/results.php" class="btn results-btn">View Results</a>
+        <a href="../register_and_login/user_profile.php" class="btn profile-btn">Manage Profile</a>
+        <a href="../home/contact_us.php" class="btn contact-btn">Contact Us</a>
+      </div>
+    </div>`;
+}
+      // Close the modal when clicking outside of the modal content
+      window.onclick = function (event) {
+          var modals = document.getElementsByClassName('all-modals');
+          for (var i = 0; i < modals.length; i++) {
+              if (event.target == modals[i]) {
+                  modals[i].style.display = 'none';
+              }
+          }
       }
     </script>
 </body>

@@ -22,7 +22,7 @@
 
         body {
             font-family: Arial, sans-serif;
-            /* background: url('https://static.vecteezy.com/system/resources/previews/007/622/546/non_2x/banner-template-design-abstract-black-and-white-geometric-squares-overlapping-layer-on-clean-background-vector.jpg') no-repeat center center fixed; */
+            background: url('../images/index\ background.jpg') no-repeat center center fixed;
             background-size: cover;
             color: #fff;
             min-height: 100dvh;
@@ -253,6 +253,7 @@
                 alt="Voting Image" class="voting-image">
         </div>
     </div>
+    <?php include '../home/footer.php'; ?>
     <script>
     // Global variable to store the voting status
     let votingTime = {};
