@@ -512,7 +512,11 @@ a{
         else if (!votingEnded && currentTime > votingEndTime) {
           votingEnded = true;
           electionNotScheduled = votingNotStarted = votingStarted = false;
+          if (votingStatus == "voted") {
+            showAlreadyVoted();
+          } else {
           showVotingEnded();
+        }
           console.log(votingStatus);
         }
       }
@@ -590,7 +594,7 @@ a{
                 <${paragraphSelector}><strong>Voting End:</strong>  ${votingTime.endTime}</${paragraphSelector}>
                 <div class="info-div">
                     <${headingSelector} style="font-size: 20px;">Important Announcement</${headingSelector}>
-                    <${paragraphSelector}>The election results will be published within 1 hour after the election ends. Please wait patiently.</${paragraphSelector}>
+                    <${paragraphSelector}>The election results will be published within 1 hour after the election ends. Please wait patiently for admin to publish results.</${paragraphSelector}>
                     <${paragraphSelector}>If you want to view your profile, click the button below. If you have questions, contact us using the other button.</${paragraphSelector}>
                     <div class="button-container">
                         <button class="button" onclick="window.location.href='../register_and_login/user_profile.php'">View Profile</button>
