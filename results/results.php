@@ -13,6 +13,8 @@ require_once '../php_for_ajax/districtRegion2.php';
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../styles/results_table.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <title>Results</title>
   <style>
     /* .container {
@@ -20,7 +22,7 @@ require_once '../php_for_ajax/districtRegion2.php';
     } */
 
     .header {
-      margin: 15px auto;
+      margin: auto;
       padding: 0px 10px;
       border-radius: 10px;
       width: 95%;
@@ -240,6 +242,58 @@ body {
     .go-to-top.show {
       display: block;
     }
+
+    /* Trying different ui */
+    .chart-container {
+    width: 300px;
+    height: 300px;
+    margin: auto;
+}
+
+.progress-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.progress-row {
+    display: flex;
+    align-items: center;
+    width: 30%;
+    margin-bottom: 10px;
+}
+
+.candidate-img-small {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.party-img-small {
+    width: 30px;
+    height: 30px;
+    margin-left: 10px;
+}
+
+.progress-wrapper {
+    flex-grow: 1;
+}
+
+.progress-bar {
+    width: 100%;
+    background-color: #ddd;
+    height: 10px;
+    border-radius: 5px;
+    margin: 5px 0;
+    overflow: hidden;
+}
+
+.progress {
+    height: 100%;
+    background-color: #4CAF50;
+}
+
   </style>
 </head>
 
@@ -251,12 +305,13 @@ body {
     <script>
       document.querySelector('a[href="../results/results.php"]').classList.add('active');
     </script>
-<div class="content">
-<div class="header" id="header">
-      <!-- <h1>Lets look at the results of the election</h1>-->
-    </div>
-    <div class="content1" id="content1">
-      <!-- <div id="election-info">
+    <div class="content">
+      <div class="header" id="header">
+        <!-- <h1>Lets look at the results of the election</h1>-->
+      </div>
+      <div class="overview" id="overview" style="display: none;"></div>
+      <div class="content1" id="content1">
+        <!-- <div id="election-info">
         <h3 id="election-name"></h3>
         <p id="startTime"></p>
         <p id="endTime"></p>
@@ -276,33 +331,39 @@ body {
       <div class="responsive-table-container" id="old-results">
 
       </div>  -->
+      </div>
     </div>
-</div>
   </div>
   <button id="goToTop" class="go-to-top" title="Go to Top" onclick="scrollToTop()">↑</button>
 
   <script>
+    let oldHeaderDiv = `<h3>Lets look at the results of the election</h3>`;
+    let oldOverviewDiv = `<div id="election-info">
+          <h3 id="election-name"></h3>
+          <p id="startTime"></p>
+          <p id="endTime"></p>
+        </div>`;
     let oldContentDiv = `
-<div id="election-info">
-  <h3 id="election-name"></h3>
-  <p id="startTime"></p>
-  <p id="endTime"></p>
-</div>
-<form onsubmit="event.preventDefault();" class="search-form">
-  <div class="search-input-container">
-    <input type="text" id="searchQuery" placeholder="Search by name" class="search-input">
-    <i class="fas fa-search" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%);"></i>
-  </div>
-  <!-- PHP generated dropdowns -->
-  ${`
-  <?php
-  district($_SESSION['district']);
-  regionNo($_SESSION['election_region']);
-  ?>`}
-</form>
-<div class="responsive-table-container" id="old-results"></div>
-`;;
-    let oldHeaderDiv = `<h1>Lets look at the results of the election</h1>`;
+        <form onsubmit="event.preventDefault();" class="search-form">
+          <div class="search-input-container">
+            <input type="text" id="searchQuery" placeholder="Search by name" class="search-input">
+            <i class="fas fa-search" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%);"></i>
+          </div>
+          <!-- PHP generated dropdowns -->
+          ${`
+          <?php
+          district($_SESSION['district']);
+          regionNo($_SESSION['election_region']);
+          ?>`}
+        </form>
+        <div class="responsive-table-container" id="old-results"></div>
+        `;
+
+
+    let headerDiv = document.getElementById('header');
+    let overviewDiv = document.getElementById('overview');
+    let content1Div = document.getElementById("content1");
+
     // Global variable to store the voting status
     let votingTime = {};
 
@@ -323,126 +384,155 @@ body {
     };
 
     // Automatically fetch the voting status every 10 seconds
-    setInterval(fetchVotingTime, 1000); // Fetch every 10 seconds (10000 milliseconds)
+    setInterval(fetchVotingTime, 2000); // Fetch every 2 seconds (3000 milliseconds)
 
 
     function fetchCurrentResults() {
-      var searchQuery = document.getElementById('searchQuery').value;
-      var district = document.getElementById('district').value;
-      var regionNo = document.getElementById('regionNo').value;
-      const xhr = new XMLHttpRequest();
-      xhr.open(
+    var searchQuery = document.getElementById('searchQuery').value;
+    var district = document.getElementById('district').value;
+    var regionNo = document.getElementById('regionNo').value;
+    const xhr = new XMLHttpRequest();
+    xhr.open(
         'GET',
         '../results/fetch_currentresults.php?searchQuery=' +
         encodeURIComponent(searchQuery) +
         '&district=' + encodeURIComponent(district) +
         '&regionNo=' + encodeURIComponent(regionNo),
         true
-      );
-      // console.log(district);
-      // console.log(regionNo);
-      
-      xhr.onload = function () {
+    );
+
+    xhr.onload = function () {
         if (xhr.status === 200) {
-          // alert(xhr.responseText);
-          const response = JSON.parse(xhr.responseText);
-          if (response.status === "success") {
-            const results = response.data;
-            const container = document.getElementById('old-results');
+            const response = JSON.parse(xhr.responseText);
+            if (response.status === "success") {
+                const results = response.data;
+                const container = document.getElementById('old-results');
+                // Clear previous content
+                container.innerHTML = "";
 
-            // Clear any previous content1
-            container.innerHTML = "";
+                if (results.length > 0) {
+                    // Sort results by total votes (descending order)
+                    results.sort((a, b) => b.totalVotes - a.totalVotes);
 
-            if (results.length > 0) {
-              // Create table
-              const table = document.createElement('table');
-              table.className = "responsive-table";
+                    // Calculate total votes
+                    const totalVotes = results.reduce((a, b) => parseInt(a) + parseInt(b.totalVotes), 0);
+                    console.log(totalVotes);
+                    
+                    const percentages = results.map(result => ((result.totalVotes / totalVotes) * 100).toFixed(2));
 
-              // Create table header
-              const thead = document.createElement('thead');
-              thead.innerHTML = `
-            <tr>
-              <th>Result ID</th>
-              <th>Candidate Name</th>
-              <th>Citizenship Number</th>
-              <th>Party Name</th>
-              <th>District</th>
-              <th>Region No</th>
-              <th>Total Votes</th>
-            </tr>
-          `;
-              table.appendChild(thead);
+                    // 🎖️ Top 3 Candidates with Pie Chart 🎖️
+                    const top3Container = document.createElement('div');
+                    top3Container.className = "top-three";
 
-              // Create table body
-              const tbody = document.createElement('tbody');
-              results.forEach(result => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-              <td>${result.currentResultId}</td>
-              <td>${result.name}</td>
-              <td>${result.citizenship_number}</td>
-              <td>${result.partyName}</td>
-              <td>${result.district}</td>
-              <td>${result.regionNo}</td>
-              <td>${result.totalVotes}</td>
-            `;
-                tbody.appendChild(row);
-              });
-              table.appendChild(tbody);
+                    const chartContainer = document.createElement('div');
+                    chartContainer.className = "chart-container";
+                    chartContainer.innerHTML = `<canvas id="topCandidatesChart"></canvas>`;
+                    top3Container.appendChild(chartContainer);
 
-              // Append table to container
-              container.appendChild(table);
+                    let topCandidates = results.slice(0, 3);
+                    let chartLabels = topCandidates.map(c => c.name);
+                    let chartData = topCandidates.map(c => c.totalVotes);
+                    let chartColors = ["#FF6384", "#36A2EB", "#FFCE56"]; // Change colors as needed
+
+                    setTimeout(() => {
+                        var ctx = document.getElementById('topCandidatesChart').getContext('2d');
+                        new Chart(ctx, {
+                            type: 'pie',
+                            data: {
+                                labels: chartLabels,
+                                datasets: [{
+                                    data: chartData,
+                                    backgroundColor: chartColors
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                        position: 'bottom'
+                                    }
+                                }
+                            }
+                        });
+                    }, 200);
+
+                    container.appendChild(top3Container);
+
+                    // 📊 Progress Bar Section 📊
+                    const progressContainer = document.createElement('div');
+                    progressContainer.className = "progress-container";
+
+                    results.forEach((result, index) => {
+                        const rowDiv = document.createElement('div');
+                        rowDiv.className = "progress-row";
+
+                        rowDiv.innerHTML = `
+                        <img src="../uploads/${result.candidate_photo}" alt="Candidate" class="candidate-img-small">
+                        <div class="progress-wrapper">
+                            <p>${result.name}</p>
+                            <div class="progress-bar">
+                                <div class="progress" style="width: ${percentages[index]}%;"></div>
+                            </div>
+                            <p class="percentage">${percentages[index]}%</p>
+                        </div>
+                        <img src="../uploads/${result.partyLogo}" alt="Party" class="party-img-small">
+                        `;
+
+                        progressContainer.appendChild(rowDiv);
+                    });
+
+                    container.appendChild(progressContainer);
+                } else {
+                    container.innerHTML = "<p>No results found.</p>";
+                }
             } else {
-              container.innerHTML = "<p>No results found.</p>";
+                console.error("Error: " + response.message);
             }
-          } else {
-            console.error("Error: " + response.message);
-          }
         } else {
-          console.error("AJAX request failed with status: " + xhr.status);
+            console.error("AJAX request failed with status: " + xhr.status);
         }
-      };
-        xhr.send();
-    }
+    };
+    xhr.send();
+}
 
-    let headerDiv = document.getElementById('header');
-    let content1Div = document.getElementById("content1");
+
+
     // let electionNotScheduled = false;
     // let votingNotStarted = false;
     // let votingStarted = false;
-    let isPublishedChecked=false;
-    let isNotPublishedChecked=false;
-    let resultPublished=false;
-    let electionNotEnded=false;
+    let isPublishedChecked = false;
+    let isNotPublishedChecked = false;
+    let resultPublished = false;
+    let electionNotEnded = false;
 
     function checkVotingTime() {
-      resultPublished = (votingTime.resultStatus=='published')?true:false;
+      resultPublished = (votingTime.resultStatus == 'published') ? true : false;
       // let votingStartTime=votingT
       let currentTime = new Date().getTime();
       let votingStartTime = new Date(votingTime.startTime).getTime();
       let votingEndTime = new Date(votingTime.endTime).getTime();
       if (!isPublishedChecked && resultPublished) {
-        isPublishedChecked=true;
-        isNotPublishedChecked=false;
-        electionNotEnded=false
+        isPublishedChecked = true;
+        isNotPublishedChecked = false;
+        electionNotEnded = false
         console.log('a');
         // electionNotScheduled = votingNotStarted = votingStarted = false;
         showResultPublished();
       } else if (!resultPublished && !isNotPublishedChecked && currentTime > votingEndTime) {
-        isPublishedChecked=false;
-        isNotPublishedChecked=true;
-        electionNotEnded=false;
+        isPublishedChecked = false;
+        isNotPublishedChecked = true;
+        electionNotEnded = false;
         console.log('b');
         showResultNotPublished();
-      }else if(!electionNotEnded && currentTime < votingEndTime ){
+      } else if (!electionNotEnded && currentTime < votingEndTime) {
         // isPublishedChecked=false;
-        isNotPublishedChecked=false;
-        electionNotEnded=true;
+        isNotPublishedChecked = false;
+        electionNotEnded = true;
         console.log('c');
         showElectionNotEnded();
-      }else if(votingTime.error){
+      } else if (votingTime.error) {
         alert("No election scheduled or conducted till now. PLease come back later");
-        window.location.href="../home/home.php";
+        window.location.href = "../home/home.php";
       }
     }
 
@@ -452,6 +542,11 @@ body {
       content1Div.className = 'content1';
       headerDiv.id = 'header';
       content1Div.id = 'content1';
+
+      //display overview div
+      overviewDiv.innerHTML = oldOverviewDiv;
+      overviewDiv.style.display = 'block';
+
       content1Div.innerHTML = oldContentDiv;
       document.getElementById('header').innerHTML = oldHeaderDiv;
       setDistrictRegion();
@@ -463,7 +558,8 @@ body {
       document.getElementById('election-name').innerHTML = `${votingTime.electionName}`;
       document.getElementById('startTime').innerHTML = `<strong>Start Time: </strong> ${votingTime.startTime}`;
       document.getElementById('endTime').innerHTML = `<strong>End Time: </strong>${votingTime.endTime}`;
-    
+
+      //dispay the overview with chart for own 
       // Call the function to fetch results
       document.onload = setTimeout(fetchCurrentResults, 200);
       document.getElementById('searchQuery').addEventListener('input', function () {

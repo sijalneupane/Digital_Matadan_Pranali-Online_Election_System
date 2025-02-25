@@ -21,9 +21,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Hash the password
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-    //get the name only from the email to uniquely identify images
-    $emailParts = explode('@', $email);
-    $username = $emailParts[0];
+    // //get the name only from the email to uniquely identify images
+    // $emailParts = explode('@', $email);
+    // $username = $emailParts[0];
 
     // Image uploads handling
     $citizenshipFrontPhoto = isset($_FILES['citizenshipFrontPhoto']['name']) ? $_FILES['citizenshipFrontPhoto']['name'] : '';
@@ -38,9 +38,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $userPhotoExt = pathinfo($userPhoto, PATHINFO_EXTENSION);
 
     // Rename files with the provided username
-    $newCitizenshipFrontPhoto = $username . "CitizenshipFrontPhoto." . $citizenshipFrontExt;
-    $newCitizenshipBackPhoto = $username . "CitizenshipBackPhoto." . $citizenshipBackExt;
-    $newUserPhoto = $username . "UserPhoto." . $userPhotoExt;
+    $newCitizenshipFrontPhoto = $citizenshipNumber . "CitizenshipFrontPhoto." . $citizenshipFrontExt;
+    $newCitizenshipBackPhoto = $citizenshipNumber . "CitizenshipBackPhoto." . $citizenshipBackExt;
+    $newUserPhoto = $citizenshipNumber . "UserPhoto." . $userPhotoExt;
 
 // Initialize a flag to check for empty values
 $isEmpty = false;

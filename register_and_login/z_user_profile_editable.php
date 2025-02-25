@@ -1,13 +1,22 @@
+<!-- THis is the user profile page that has edit profile options for every details excepts the gmail. -->
+<!--Purpose: User profile page for the voter to view and edit their profile information. -->
+<!-- As during the final pre defence, 2 sir suggested to not make profile editable. -->
+<!-- So, I had made new file without edit opitons for many details in the user profile page. -->
+<!-- So, this file will just remain here and will not be used in final defence -->
+<!-- For new profile file, we changed this file name for z_user_profile_editable.php from user_profile.php to sort at last-->
+<!--The new file name is user_profile.php. -->
+<!-- To use this file later on if edit in profile is required then we should rename this to user_profile.php -->
+
 <?php
 session_start();
 if (!isset($_SESSION["email"])) {
     header('Location: ../home/index.php');
 }
-// $_SESSION['allow_logout'] = true;
-// $errorMessage = isset($_SESSION['error_message']) ? $_SESSION['error_message'] : '';
-// unset($_SESSION['error_message']); // Clear the message
-// $successMessage = isset($_SESSION['success_message']) ? $_SESSION['success_message'] : '';
-// unset($_SESSION['success_message']); // Clear the message
+$_SESSION['allow_logout'] = true;
+$errorMessage = isset($_SESSION['error_message']) ? $_SESSION['error_message'] : '';
+unset($_SESSION['error_message']); // Clear the message
+$successMessage = isset($_SESSION['success_message']) ? $_SESSION['success_message'] : '';
+unset($_SESSION['success_message']); // Clear the message
 require_once '../php_for_ajax/districtRegionSelect.php';
 ?>
 <!DOCTYPE html>
@@ -44,7 +53,7 @@ require_once '../php_for_ajax/districtRegionSelect.php';
         /* Profile Card Container */
         .profile-card {
             /* max-width: 800px; */
-           min-height: 90%;
+            min-height: 95%;
             margin: 12px;
             padding: 20px;
             background-color: #f9f9f9;
@@ -263,6 +272,28 @@ require_once '../php_for_ajax/districtRegionSelect.php';
             bottom: -5px;
         }
 
+        /*Logout Button*/
+        .button-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .logout-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #ff4d4d;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-button:hover {
+            background-color: #e60000;
+        }
+
         /* Modal Styles */
         .modal {
             display: none;
@@ -351,6 +382,11 @@ require_once '../php_for_ajax/districtRegionSelect.php';
 
         .field-error-groups input {
             width: 100%;
+        }
+
+        .button-container {
+            margin-top: 20px;
+            text-align: center;
         }
 
         .button {
@@ -497,7 +533,7 @@ require_once '../php_for_ajax/districtRegionSelect.php';
         .change-password-container {
             text-align: end;
             width: 100%;
-            margin-top: 7%;
+            margin-top: 20px;
         }
 
         .change-password-link {
@@ -539,7 +575,7 @@ require_once '../php_for_ajax/districtRegionSelect.php';
         }
     </style>
     <script src="../js/update_validation.js"></script>
-    <!-- <script src="../js/errorMessage_modal1.js"></script> -->
+    <script src="../js/errorMessage_modal1.js"></script>
     <!-- <script src="../js/getRegion_ajax.js" defer></script> -->
 </head>
 
@@ -553,7 +589,7 @@ require_once '../php_for_ajax/districtRegionSelect.php';
                     <div class="user-photo">
                         <img src="../uploads/<?php echo $_SESSION['userPhoto']; ?>" alt="User Photo" id="userPhoto"
                             onclick="openModal(this.src)">
-                        <!-- <div class="" id="cancel-and-apply-box" style="display: none; margin-top: 15px;  gap: 20px;">
+                        <div class="" id="cancel-and-apply-box" style="display: none; margin-top: 15px;  gap: 20px;">
                             <button id="make-changes-userPhoto" style="display: none;"><i class="fa fa-check"
                                     aria-hidden="true"></i> Apply</button>
                             <button id="cancel-image-0" style="display: none;"><i class="fa fa-times"
@@ -568,7 +604,7 @@ require_once '../php_for_ajax/districtRegionSelect.php';
                             <button class="edit-button" onclick="openEditModal()" id="edit-button">
                                 <i class="fas fa-edit"></i> Edit Profile
                             </button>
-                        </div> -->
+                        </div>
                     </div>
 
                     <!-- Hidden form to submit data -->
@@ -605,7 +641,7 @@ require_once '../php_for_ajax/districtRegionSelect.php';
                         <div class="old-image">
                             <img src="../uploads/<?php echo $_SESSION['citizenshipFrontPhoto']; ?>"
                                 alt="Citizenship Front" id="currentImage1" onclick="openModal(this.src)">
-                            <!-- <div class="change-image-box">
+                            <div class="change-image-box">
                                 <label for="change-citizenshipFront" class="change-image-btn" id="change-label-1">
                                     <i class="fa fa-picture-o" aria-hidden="true"></i> Change
                                 </label>
@@ -615,15 +651,15 @@ require_once '../php_for_ajax/districtRegionSelect.php';
                                 <button id="cancel-image-1"><i class="fa fa-times" aria-hidden="true"></i>
                                     Cancel</button>
 
-                            </div> -->
+                            </div>
                         </div>
-                        <!-- <div id="newImageContainer1" class="new-image-container" style="display: none;">
+                        <div id="newImageContainer1" class="new-image-container" style="display: none;">
                             <span class="arrow">→</span>
                             <img id="newImagePreview1" alt="New Image Preview">
                             <button class="make-changes-btn"
                                 onclick="confirmChange('box1','change-label-1','cancel-image-1')"><i class="fa fa-check"
                                     aria-hidden="true"></i> Apply</button>
-                        </div> -->
+                        </div>
                     </div>
 
                     <div class="image-box" id="box2">
@@ -631,7 +667,7 @@ require_once '../php_for_ajax/districtRegionSelect.php';
                         <div class="old-image">
                             <img src="../uploads/<?php echo $_SESSION['citizenshipBackPhoto']; ?>"
                                 alt="Citizenship Back" id="currentImage2" onclick="openModal(this.src)">
-                            <!-- <div class="change-image-box">
+                            <div class="change-image-box">
                                 <label for="change-citizenshipBack" class="change-image-btn" id="change-label-2">
                                     <i class="fa fa-picture-o" aria-hidden="true"></i> Change
                                 </label>
@@ -640,16 +676,22 @@ require_once '../php_for_ajax/districtRegionSelect.php';
                                     style="display: none;">
                                 <button id="cancel-image-2"><i class="fa fa-times" aria-hidden="true"></i>
                                     Cancel</button>
-                            </div> -->
+                            </div>
                         </div>
-                        <!--    <div id="newImageContainer2" class="new-image-container" style="display: none;">
+                        <div id="newImageContainer2" class="new-image-container" style="display: none;">
                             <span class="arrow">→</span>
                             <img id="newImagePreview2" alt="New Image Preview">
                             <button class="make-changes-btn"
                                 onclick="confirmChange('box2','change-label-2','cancel-image-2')"><i class="fa fa-check"
                                     aria-hidden="true"></i> Apply</button>
-                        </div> -->
+                        </div>
                     </div>
+                </div>
+
+                <!-- Logout Button -->
+                <div class="button-container">
+                    <button class="logout-button" id="logoutBtn" onclick="openLogoutModal();"><i
+                            class="fas fa-sign-out-alt"></i> Logout</button>
                 </div>
                 <div class="change-password-container">
                     <a href="../forgotpassword/reset_password.php?id=<?= $_SESSION['voterId']; ?>"
@@ -688,12 +730,12 @@ require_once '../php_for_ajax/districtRegionSelect.php';
         </div>
     </div>
     <!-- Error modal-->
-    <!-- <div id="modal1" class="modal-overlay1">
+    <div id="modal1" class="modal-overlay1">
         <div class="modal-content1">
             <p id="modalMessage1"></p>
             <button onclick="closeModal1()">Close</button>
         </div>
-    </div> -->
+    </div>
 
     <!-- logout Modal -->
     <!-- Modal -->
@@ -810,25 +852,25 @@ require_once '../php_for_ajax/districtRegionSelect.php';
             document.getElementById('citizenshipNumber').value = initialFormValues.citizenshipNumber;
         }
 
-        // // Edit Profile Modal
-        // function openEditModal() {
-        //     document.getElementById('editModal').style.display = 'flex';
-        //     resetFormValues(); // Populate form with current session values
-        //     clearErrors();
-        // }
-        // function closeEditModal() {
-        //     document.getElementById('editModal').style.display = 'none';
-        //     resetFormValues(); // Reset form fields to initial values
-        // }
+        // Edit Profile Modal
+        function openEditModal() {
+            document.getElementById('editModal').style.display = 'flex';
+            resetFormValues(); // Populate form with current session values
+            clearErrors();
+        }
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+            resetFormValues(); // Reset form fields to initial values
+        }
 
         // Show error modal if there's an error message
-        // const errorMessage = <= json_encode($errorMessage); ?>;
-        // const successMessage = <= json_encode($successMessage); ?>;
-        // if (errorMessage) {
-        //     showErrorModal(errorMessage);
-        // } else if (successMessage) {
-        //     showErrorModal(successMessage, true);
-        // }
+        const errorMessage = <?= json_encode($errorMessage); ?>;
+        const successMessage = <?= json_encode($successMessage); ?>;
+        if (errorMessage) {
+            showErrorModal(errorMessage);
+        } else if (successMessage) {
+            showErrorModal(successMessage, true);
+        }
 
         // Close image modal when clicking outside of the image
         window.onclick = function (event) {
@@ -847,172 +889,172 @@ require_once '../php_for_ajax/districtRegionSelect.php';
         }
 
         //show and hide change and edit toggle-edit-buttons-visibility
-        // const toggleEditBtn = document.getElementById('toggle-edit-buttons-visibility');
-        // toggleEditBtn.addEventListener('click', function () {
-        //     var changeUserPhotoBtn = document.getElementById('change-userPhoto-btn');
-        //     var editButton = document.getElementById('edit-button');
-        //     if (toggleEditBtn.textContent === 'Edit Profile') {
-        //         changeUserPhotoBtn.style.display = 'inline-block';
-        //         editButton.style.display = 'inline-block';
-        //         toggleEditBtn.textContent = 'Hide Options';
-        //     } else if (toggleEditBtn.textContent === 'Hide Options') {
-        //         toggleEditBtn.textContent = 'Edit Profile';
-        //         changeUserPhotoBtn.style.display = 'none';
-        //         editButton.style.display = 'none';
-        //     }
-        // });
+        const toggleEditBtn = document.getElementById('toggle-edit-buttons-visibility');
+        toggleEditBtn.addEventListener('click', function () {
+            var changeUserPhotoBtn = document.getElementById('change-userPhoto-btn');
+            var editButton = document.getElementById('edit-button');
+            if (toggleEditBtn.textContent === 'Edit Profile') {
+                changeUserPhotoBtn.style.display = 'inline-block';
+                editButton.style.display = 'inline-block';
+                toggleEditBtn.textContent = 'Hide Options';
+            } else if (toggleEditBtn.textContent === 'Hide Options') {
+                toggleEditBtn.textContent = 'Edit Profile';
+                changeUserPhotoBtn.style.display = 'none';
+                editButton.style.display = 'none';
+            }
+        });
     </script>
     <script>
-        // function previewNewImage(input, boxId, labelId, cancelButton) {
-        //     document.getElementById(labelId).style.display = "none";
-        //     const cancelBtn = document.getElementById(cancelButton);
-        //     cancelBtn.style.display = "inline-block";
-        //     cancelBtn.addEventListener('click', function () {
-        //         cancelBtn.style.display = "none";
-        //         resetNewImage(boxId, labelId, cancelButton);
+        function previewNewImage(input, boxId, labelId, cancelButton) {
+            document.getElementById(labelId).style.display = "none";
+            const cancelBtn = document.getElementById(cancelButton);
+            cancelBtn.style.display = "inline-block";
+            cancelBtn.addEventListener('click', function () {
+                cancelBtn.style.display = "none";
+                resetNewImage(boxId, labelId, cancelButton);
 
-        //     });
+            });
 
-        //     document.getElementById(boxId).style.display = "flex";
-        //     const file = input.files[0];
-        //     if (file) {
-        //         const newImageContainer = document.getElementById(`newImageContainer${boxId.slice(-1)}`);
-        //         const newImagePreview = document.getElementById(`newImagePreview${boxId.slice(-1)}`);
-        //         const reader = new FileReader();
+            document.getElementById(boxId).style.display = "flex";
+            const file = input.files[0];
+            if (file) {
+                const newImageContainer = document.getElementById(`newImageContainer${boxId.slice(-1)}`);
+                const newImagePreview = document.getElementById(`newImagePreview${boxId.slice(-1)}`);
+                const reader = new FileReader();
 
-        //         reader.onload = function (e) {
-        //             newImagePreview.src = e.target.result;
-        //             newImageContainer.style.display = "flex";
-        //         };
+                reader.onload = function (e) {
+                    newImagePreview.src = e.target.result;
+                    newImageContainer.style.display = "flex";
+                };
 
-        //         reader.readAsDataURL(file);
-        //     }
-        // }
+                reader.readAsDataURL(file);
+            }
+        }
 
-        // function confirmChange(boxId, labelId, cancelBtn) {
-        //     const confirmation = confirm("Do you want to confirm this change?");
-        //     if (confirmation) {
-        //         const currentImage = document.getElementById(`currentImage${boxId.slice(-1)}`);
-        //         const newImagePreview = document.getElementById(`newImagePreview${boxId.slice(-1)}`);
-        //         let oldImageName = '';
-        //         let type = '';
-        //         if (boxId == 'box1') {
-        //             type = 'citizenshipFrontPhoto';
-        //             oldImageName = '<php echo $_SESSION['citizenshipFrontPhoto']; ?>';
-        //         } else {
-        //             type = 'citizenshipBackPhoto';
-        //             oldImageName = '<php echo $_SESSION['citizenshipBackPhoto']; ?>';
-        //         }
-        //         // Create a form to submit the image change
-        //         const form = document.createElement('form');
-        //         form.style.display = 'none';
-        //         form.method = 'POST';
-        //         form.action = '../register_and_login/user_photo_update.php?oldImageName=' + oldImageName + '&type=' + type;
-        //         form.enctype = 'multipart/form-data';
+        function confirmChange(boxId, labelId, cancelBtn) {
+            const confirmation = confirm("Do you want to confirm this change?");
+            if (confirmation) {
+                const currentImage = document.getElementById(`currentImage${boxId.slice(-1)}`);
+                const newImagePreview = document.getElementById(`newImagePreview${boxId.slice(-1)}`);
+                let oldImageName = '';
+                let type = '';
+                if (boxId == 'box1') {
+                    type = 'citizenshipFrontPhoto';
+                    oldImageName = '<?php echo $_SESSION['citizenshipFrontPhoto']; ?>';
+                } else {
+                    type = 'citizenshipBackPhoto';
+                    oldImageName = '<?php echo $_SESSION['citizenshipBackPhoto']; ?>';
+                }
+                // Create a form to submit the image change
+                const form = document.createElement('form');
+                form.style.display = 'none';
+                form.method = 'POST';
+                form.action = '../register_and_login/user_photo_update.php?oldImageName=' + oldImageName + '&type=' + type;
+                form.enctype = 'multipart/form-data';
 
-        //         // Create an input element to hold the image file
-        //         const input = document.createElement('input');
-        //         input.type = 'hidden';
-        //         input.name = 'imageData';
-        //         const fileInput = document.querySelector(`#${boxId} input[type="file"]`);
-        //         input.type = 'file';
-        //         input.name = 'newImage';
-        //         input.files = fileInput.files;
+                // Create an input element to hold the image file
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'imageData';
+                const fileInput = document.querySelector(`#${boxId} input[type="file"]`);
+                input.type = 'file';
+                input.name = 'newImage';
+                input.files = fileInput.files;
 
-        //         // Create an input element to hold the box ID
-        //         const voterId = document.createElement('input');
-        //         voterId.type = 'hidden';
-        //         voterId.name = 'voterId';
-        // voterId.value = <= //json_encode($_SESSION['voterId']); ?>;
+                // Create an input element to hold the box ID
+                const voterId = document.createElement('input');
+                voterId.type = 'hidden';
+                voterId.name = 'voterId';
+                voterId.value = <?= json_encode($_SESSION['voterId']); ?>;
 
-        //         // Append the inputs to the form
-        //         form.appendChild(input);
-        //         form.appendChild(voterId);
+                // Append the inputs to the form
+                form.appendChild(input);
+                form.appendChild(voterId);
 
-        //         // Append the form to the body and submit it
-        //         document.body.appendChild(form);
-        //         form.submit();
-        //     } else {
-        //         // Cancel the change
-        //         resetNewImage(boxId, labelId, cancelBtn);
-        //     }
-        // }
+                // Append the form to the body and submit it
+                document.body.appendChild(form);
+                form.submit();
+            } else {
+                // Cancel the change
+                resetNewImage(boxId, labelId, cancelBtn);
+            }
+        }
 
-        // function resetNewImage(boxId, labelId, cancelButton) {
-        //     document.getElementById(labelId).style.display = "inline";
-        //     document.getElementById(cancelButton).style.display = "none";
-        //     const newImageContainer = document.getElementById(`newImageContainer${boxId.slice(-1)}`);
-        //     const newImagePreview = document.getElementById(`newImagePreview${boxId.slice(-1)}`);
-        //     const fileInput = document.querySelector(`#${boxId} input[type="file"]`);
+        function resetNewImage(boxId, labelId, cancelButton) {
+            document.getElementById(labelId).style.display = "inline";
+            document.getElementById(cancelButton).style.display = "none";
+            const newImageContainer = document.getElementById(`newImageContainer${boxId.slice(-1)}`);
+            const newImagePreview = document.getElementById(`newImagePreview${boxId.slice(-1)}`);
+            const fileInput = document.querySelector(`#${boxId} input[type="file"]`);
 
-        //     // Clear the file input
-        //     fileInput.value = "";
+            // Clear the file input
+            fileInput.value = "";
 
-        //     // Hide the new image container
-        //     newImageContainer.style.display = "none";
+            // Hide the new image container
+            newImageContainer.style.display = "none";
 
-        //     // Clear the new image preview
-        //     newImagePreview.src = "";
-        // }
+            // Clear the new image preview
+            newImagePreview.src = "";
+        }
     </script>
     <script>
-        // document.getElementById('change-userPhoto').addEventListener('change', function (event) {
-        //     document.getElementById('edit-options-box').style.display = 'none';
-        //     const fileInput = event.target;
-        //     const newImage = fileInput.files[0];
+        document.getElementById('change-userPhoto').addEventListener('change', function (event) {
+            document.getElementById('edit-options-box').style.display = 'none';
+            const fileInput = event.target;
+            const newImage = fileInput.files[0];
 
-        //     if (newImage) {
-        //         const reader = new FileReader();
-        //         reader.onload = function (e) {
-        //             // Show the new image preview
-        //             document.getElementById('userPhoto').src = e.target.result;
+            if (newImage) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    // Show the new image preview
+                    document.getElementById('userPhoto').src = e.target.result;
 
-        //             // Show cancel and apply changes buttons
-        //             document.getElementById('cancel-and-apply-box').style.display = 'flex';
-        //             document.getElementById('cancel-image-0').style.display = 'block';
-        //             document.getElementById('make-changes-userPhoto').style.display = 'block';
+                    // Show cancel and apply changes buttons
+                    document.getElementById('cancel-and-apply-box').style.display = 'flex';
+                    document.getElementById('cancel-image-0').style.display = 'block';
+                    document.getElementById('make-changes-userPhoto').style.display = 'block';
 
-        //             // Set the selected file to the hidden file input for form submission
-        //             document.getElementById('hiddenFileInput').files = fileInput.files;
-        //         };
-        //         reader.readAsDataURL(newImage);
-        //     }
-        // });
+                    // Set the selected file to the hidden file input for form submission
+                    document.getElementById('hiddenFileInput').files = fileInput.files;
+                };
+                reader.readAsDataURL(newImage);
+            }
+        });
 
-        // document.getElementById('cancel-image-0').addEventListener('click', function () {
-        //     resetProfileImg();
-        // });
-        // function resetProfileImg() {
-        //     // Reset to the original image
-        //     document.getElementById('userPhoto').src = "../uploads/<php echo $_SESSION['userPhoto']; ?>";
+        document.getElementById('cancel-image-0').addEventListener('click', function () {
+            resetProfileImg();
+        });
+        function resetProfileImg() {
+            // Reset to the original image
+            document.getElementById('userPhoto').src = "../uploads/<?php echo $_SESSION['userPhoto']; ?>";
 
-        //     // Hide cancel and apply changes buttons
+            // Hide cancel and apply changes buttons
 
-        //     document.getElementById('cancel-and-apply-box').style.display = 'none';
-        //     document.getElementById('cancel-image-0').style.display = 'none';
-        //     document.getElementById('make-changes-userPhoto').style.display = 'none';
+            document.getElementById('cancel-and-apply-box').style.display = 'none';
+            document.getElementById('cancel-image-0').style.display = 'none';
+            document.getElementById('make-changes-userPhoto').style.display = 'none';
 
-        //     // Clear the file input
-        //     document.getElementById('change-userPhoto').value = '';
-        //     document.getElementById('hiddenFileInput').value = '';
-        //     document.getElementById('hiddenFileInput').files = null;
-        //     document.getElementById('edit-options-box').style.display = 'block';
-        // }
-        // document.getElementById('make-changes-userPhoto').addEventListener('click', function () {
-        //     const newImageFile = document.getElementById('hiddenFileInput').files[0];
+            // Clear the file input
+            document.getElementById('change-userPhoto').value = '';
+            document.getElementById('hiddenFileInput').value = '';
+            document.getElementById('hiddenFileInput').files = null;
+            document.getElementById('edit-options-box').style.display = 'block';
+        }
+        document.getElementById('make-changes-userPhoto').addEventListener('click', function () {
+            const newImageFile = document.getElementById('hiddenFileInput').files[0];
 
-        //     if (newImageFile) {
-        //         const confirmApply = confirm('Are you sure you want to apply the changes?');
-        //         if (confirmApply) {
-        //             // Submit the form
-        //             document.getElementById('updatePhotoForm').submit();
-        //         } else if (!confirmApply) {
-        //             resetProfileImg();
-        //         }
-        //     } else {
-        //         alert('Please select an image before applying changes.');
-        //     }
-        // });
+            if (newImageFile) {
+                const confirmApply = confirm('Are you sure you want to apply the changes?');
+                if (confirmApply) {
+                    // Submit the form
+                    document.getElementById('updatePhotoForm').submit();
+                } else if (!confirmApply) {
+                    resetProfileImg();
+                }
+            } else {
+                alert('Please select an image before applying changes.');
+            }
+        });
     </script>
 </body>
 

@@ -2,6 +2,8 @@
 session_start();
 $errorMessage = isset($_SESSION['error_message']) ? $_SESSION['error_message'] : '';
 unset($_SESSION['error_message']); // Clear the message
+$successMessage = isset($_SESSION['success_message']) ? $_SESSION['success_message'] : '';
+unset($_SESSION['success_message']); // Clear the messages
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 
 ?>

@@ -24,6 +24,7 @@ require_once '../php_for_ajax/districtRegionSelect.php';
             align-items: center;
             min-height: 100vh;
         }
+
         .container {
             margin-top: 20px;
             margin-bottom: 15px;
@@ -54,33 +55,40 @@ require_once '../php_for_ajax/districtRegionSelect.php';
         #backPreview,
         #userPhotoPreview {
             display: none;
-            /* max-width: 100%; */ 
-    /* height: auto; */
-    width: 100%;
-    height: 200px;
-    object-fit: contain;
+            /* max-width: 100%; */
+            /* height: auto; */
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
             border: 1px solid #ccc;
             border-radius: 5px;
             margin-top: 10px;
         }
-        #userPhotoPreview{
+
+        #userPhotoPreview {
             width: 50%;
         }
+
         @media (max-width:768px) {
+
             #frontPreview,
-            #backPreview{
+            #backPreview {
                 width: 50%;
             }
 
         }
     </style>
-    <script src="../js/register_validation.js"></script>
+    <script src="../js/getCurrentTime.js" defer></script>
+    <script src="../js/register_validation.js" defer></script>
     <script src="../js/togglepassword.js"></script>
     <script src="../js/errorMessage_modal1.js"></script>
     <!-- <script src="../js/getRegion_ajax.js" defer></script> -->
 </head>
 
 <body>
+<div id="loading" style="display: none; text-align: center;">
+    <p>Loading...</p>
+</div>
     <div id="modal1" class="modal-overlay1 all-modals">
         <div class="modal-content1">
             <p id="modalMessage1"></p>
@@ -97,8 +105,8 @@ require_once '../php_for_ajax/districtRegionSelect.php';
             </div>
         </div>
         <div class="right">
-            <form name="voterForm" action="../register_and_login/voter_register.php" method="post" enctype="multipart/form-data"
-                onsubmit="return validateForm();">
+            <form name="voterForm" action="../register_and_login/voter_register.php" method="post"
+                enctype="multipart/form-data" onsubmit="return validateForm();">
                 <h2>Create Voter ID</h2>
                 <div class="form-group two-columns">
                     <div class="field-error-groups">
@@ -108,9 +116,9 @@ require_once '../php_for_ajax/districtRegionSelect.php';
                     <div class="field-error-groups">
                         <select name="gender" id="gender">
                             <option value="default">-- Select Gender --</option>
-                            <option value="male">male</option>
-                            <option value="female">female</option>
-                            <option value="other">other</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
                         </select>
                         <span id="genderError" class="error"></span>
                     </div>
@@ -120,18 +128,19 @@ require_once '../php_for_ajax/districtRegionSelect.php';
                         <div id="district-and-region" style="flex:1.5 ;">
                             <div id="district-box" style="flex:1.75">
                                 <label>District</label>
-                                <?php district();?>
+                                <?php district(); ?>
                                 <span id="districtError" class="error"></span>
                             </div>
                             <div id="constituentNo" style="flex: 1.4;">
                                 <label>Constituent No.</label>
-                                <?php regionNo();?>
+                                <?php regionNo(); ?>
                                 <span id="regionNoError" class="error"></span>
                             </div>
                         </div>
                         <div id="localAddress" style="flex:1;">
                             <label>Local Address</label>
-                            <input type="text" name="local_address" id ="local_address" placeholder="eg:Banepa-8, Tindobato">
+                            <input type="text" name="local_address" id="local_address"
+                                placeholder="eg:Banepa-8, Tindobato">
                             <span id="addressError" class="error"></span>
                         </div>
                     </div>
@@ -153,26 +162,28 @@ require_once '../php_for_ajax/districtRegionSelect.php';
                 </div>
                 <div class="form-group two-columns">
                     <div class="field-error-groups">
-                        <label for="" style="text-wrap: nowrap;">Date of Birth:</label>
-                        <input type="date" name="dateOfBirth" id="dateOfBirth" placeholder="DOB:">
+                        <label for="dateOfBirth" style="text-wrap: nowrap;">Date of Birth:</label>
+                        <input type="date" name="dateOfBirth" id="dateOfBirth" placeholder="DOB:" min="">
                         <span id="dobError" class="error"></span>
                     </div>
+
                     <div class="field-error-groups">
-                        <label for="">Citizenship Number</label>
-                        <input type="text" name="citizenshipNumber" id="citizenshipNumber" placeholder="Citizenship Number">
+                        <label for="citizenshipNumber">Citizenship Number</label>
+                        <input type="text" name="citizenshipNumber" id="citizenshipNumber"
+                            placeholder="Citizenship Number">
                         <span id="citizenshipError" class="error"></span>
                     </div>
                 </div>
                 <div class="form-group two-columns">
                     <div class="citizenship">
-                        <label for="">Citizenship Front Photo</label>
+                        <label for="citizenshipFront">Citizenship Front Photo</label>
                         <input type="file" name="citizenshipFrontPhoto" id="citizenshipFront" accept="image/*" capture
                             onchange="previewImage(this, 'frontPreview')">
                         <img id="frontPreview" src="#" alt="Citizenship Front Preview">
                         <span id="citizenshipFrontError" class="error"></span>
                     </div>
                     <div class="citizenship">
-                        <label for="">Citizenship Back Photo</label>
+                        <label for="citizenshipBack">Citizenship Back Photo</label>
                         <input type="file" name="citizenshipBackPhoto" id="citizenshipBack" accept="image/*" capture
                             onchange="previewImage(this, 'backPreview')">
                         <img id="backPreview" src="#" alt="Citizenship Back Preview">
@@ -180,7 +191,7 @@ require_once '../php_for_ajax/districtRegionSelect.php';
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>User Photo</label>
+                    <label for="userPhoto">User Photo</label>
                     <input type="file" name="userPhoto" id="userPhoto" accept="image/*" capture
                         onchange="previewImage(this, 'userPhotoPreview')">
                     <img id="userPhotoPreview" src="#" alt="User Photo Preview">
@@ -189,7 +200,8 @@ require_once '../php_for_ajax/districtRegionSelect.php';
                 <div class="form-group register">
                     <input class="submit-button" type="submit" value="Register">
                 </div>
-                <div class="login-direction">Already a Voter?<a href="../register_and_login/voter_login_form.php">Login</a> </div>
+                <div class="login-direction">Already a Voter?<a
+                        href="../register_and_login/voter_login_form.php">Login</a> </div>
             </form>
         </div>
     </div>
@@ -197,8 +209,8 @@ require_once '../php_for_ajax/districtRegionSelect.php';
         const errorMessage = <?= json_encode($errorMessage); ?>;
         showErrorModal(errorMessage); // Pass PHP error to JS function
 
-          // Close the modal when clicking outside of the modal content
-          window.onclick = function (event) {
+        // Close the modal when clicking outside of the modal content
+        window.onclick = function (event) {
             var modals = document.getElementsByClassName('all-modals');
             for (var i = 0; i < modals.length; i++) {
                 if (event.target == modals[i]) {
@@ -208,7 +220,7 @@ require_once '../php_for_ajax/districtRegionSelect.php';
         }
 
     </script>
-    
+
 </body>
 
 </html>

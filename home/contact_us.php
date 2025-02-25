@@ -4,10 +4,10 @@ session_start();
 if (!isset($_SESSION["email"])) {
   header('Location: ../home/index.php');
 }
-$errorMessage = isset($_SESSION['error_message']) ? $_SESSION['error_message'] : '';
-unset($_SESSION['error_message']); // Clear the message
-$successMessage = isset($_SESSION['success_message']) ? $_SESSION['success_message'] : '';
-unset($_SESSION['success_message']); // Clear the message
+// $errorMessage = isset($_SESSION['error_message']) ? $_SESSION['error_message'] : '';
+// unset($_SESSION['error_message']); // Clear the message
+// $successMessage = isset($_SESSION['success_message']) ? $_SESSION['success_message'] : '';
+// unset($_SESSION['success_message']); // Clear the message
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -16,7 +16,7 @@ unset($_SESSION['success_message']); // Clear the message
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Candidates Page</title>
-  <link rel="stylesheet" href="../styles/modal1.css">
+  <!-- <link rel="stylesheet" href="../styles/modal1.css"> -->
   <style>
     :root {
       --li-color: rgb(101, 71, 182);
@@ -94,17 +94,17 @@ unset($_SESSION['success_message']); // Clear the message
       opacity: 1;
     }
   </style>
-  <script src="../js/errorMessage_modal1.js"></script>
+  <!-- <script src="../js/errorMessage_modal1.js"></script> -->
 </head>
 
 <body>
   <div class="container">
-    <div id="modal1" class="modal-overlay1 all-modals">
+    <!-- <div id="modal1" class="modal-overlay1 all-modals">
       <div class="modal-content1">
         <p id="modalMessage1"></p>
         <button onclick="closeModal1()">Close</button>
       </div>
-    </div>
+    </div> -->
     <!-- Include sidebar -->
     <?php include '../home/sidebar.php'; ?>
 
@@ -143,30 +143,30 @@ unset($_SESSION['success_message']); // Clear the message
       // Validate the contact form
       const message = document.getElementById('message').value;
       if (!message) {
-        showErrorModal('Please enter your message, Dont Submit Empty message');
+        showErrorModal('Please enter your message, Dont Submit Empty message',false);
         return false;
       }
       return true;
     }
 
 
-    // Show error modal if there's an error message
-    const errorMessage = <?= json_encode($errorMessage); ?>;
-    const successMessage = <?= json_encode($successMessage); ?>;
-    if (errorMessage) {
-      showErrorModal(errorMessage);
-    } else if (successMessage) {
-      showErrorModal(successMessage, true);
-    }
-    // Close the modal when clicking outside of the modal content
-    window.onclick = function (event) {
-      var modals = document.getElementsByClassName('all-modals');
-      for (var i = 0; i < modals.length; i++) {
-        if (event.target == modals[i]) {
-          modals[i].style.display = 'none';
-        }
-      }
-    }
+    // // Show error modal if there's an error message
+    // const errorMessage = <= json_encode($errorMessage); ?>;
+    // const successMessage = <= json_encode($successMessage); ?>;
+    // if (errorMessage) {
+    //   showErrorModal(errorMessage);
+    // } else if (successMessage) {
+    //   showErrorModal(successMessage, true);
+    // }
+    // // Close the modal when clicking outside of the modal content
+    // window.onclick = function (event) {
+    //   var modals = document.getElementsByClassName('all-modals');
+    //   for (var i = 0; i < modals.length; i++) {
+    //     if (event.target == modals[i]) {
+    //       modals[i].style.display = 'none';
+    //     }
+    //   }
+    // }
 
   </script>
 </body>

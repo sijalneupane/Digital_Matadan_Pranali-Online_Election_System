@@ -75,6 +75,7 @@ body {
 }
 
 .sidebar ul {
+  flex:1;
   list-style: none;
   padding: 0;
 
@@ -116,7 +117,7 @@ body {
 .left-lower-box .profile-section {
   position: relative;
   width: 100%;
-  margin-bottom: 15%;
+  /* margin-bottom: 15%; */
   padding: 4% 8%;
   text-decoration: none;
 }
@@ -147,6 +148,27 @@ body {
   color: rgb(222, 236, 161);
   font-weight: 500;
 }
+/* logout-button */
+.left-lower-box .logout-button-container {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.left-lower-box .logout-button-container .logout-button {
+  padding:7px 14px;
+  font-size: 14px;
+  background-color: #f53d3d;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.left-lower-box .logout-button-container .logout-button:hover {
+  background-color: #e60000;
+}
+
 /* .profile-section .profile i {
   margin-right: 5px;
 } */

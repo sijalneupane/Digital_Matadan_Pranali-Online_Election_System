@@ -431,7 +431,7 @@ a{
       }
     }
   </style>
-  <script src="../js/errorMessage_modal1.js"></script>
+  <!-- <script src="../js/errorMessage_modal1.js"></script> -->
 </head>
 
 <body>
@@ -441,12 +441,12 @@ a{
     <script>
       document.querySelector('a[href="../voting/voting.php"]').classList.add('active');
     </script>
-    <div id="modal1" class="modal-overlay1 all-modals">
+    <!-- <div id="modal1" class="modal-overlay1 all-modals">
       <div class="modal-content1">
         <p id="modalMessage1"></p>
         <button onclick="closeModal1()">Close</button>
       </div>
-    </div>
+    </div> -->
 
     <div class="content" id="content">
     </div>
@@ -736,14 +736,14 @@ a{
     </div>`;
 }
       // Close the modal when clicking outside of the modal content
-      window.onclick = function (event) {
-          var modals = document.getElementsByClassName('all-modals');
-          for (var i = 0; i < modals.length; i++) {
-              if (event.target == modals[i]) {
-                  modals[i].style.display = 'none';
-              }
-          }
-      }
+      // window.onclick = function (event) {
+      //     var modals = document.getElementsByClassName('all-modals');
+      //     for (var i = 0; i < modals.length; i++) {
+      //         if (event.target == modals[i]) {
+      //             modals[i].style.display = 'none';
+      //         }
+      //     }
+      // }
     </script>
 </body>
 

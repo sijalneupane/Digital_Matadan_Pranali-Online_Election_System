@@ -15,7 +15,7 @@ if (empty($searchQuery) && empty($district) && empty($regionNo)) {
   // Case 1: All are empty
   $query = "SELECT 
             cr.currentResultId, cr.electionId, e.electionName, c.name, c.citizenship_number, 
-            p.partyName, cr.dId, cr.totalVotes, 
+           c.candidate_photo,p.partyLogo, p.partyName, cr.dId, cr.totalVotes, 
             d.district, d.regionNo 
           FROM currentresults cr 
           JOIN district d ON cr.dId = d.dId
@@ -26,7 +26,7 @@ if (empty($searchQuery) && empty($district) && empty($regionNo)) {
   // Case 2: searchQuery is empty, but district and regionNo are not empty
   $query = "SELECT 
             cr.currentResultId, cr.electionId, e.electionName, c.name, c.citizenship_number, 
-            p.partyName, cr.dId, cr.totalVotes, 
+            c.candidate_photo,p.partyLogo,p.partyName, cr.dId, cr.totalVotes, 
             d.district, d.regionNo
           FROM currentresults cr 
           JOIN district d ON cr.dId = d.dId
@@ -40,7 +40,7 @@ if (empty($searchQuery) && empty($district) && empty($regionNo)) {
   // Case 3: searchQuery is not empty, but district and regionNo are empty
   $query = "SELECT 
               cr.currentResultId, cr.electionId, e.electionName, c.name, c.citizenship_number, 
-            p.partyName, cr.dId, cr.totalVotes, 
+            c.candidate_photo,p.partyLogo,p.partyName, cr.dId, cr.totalVotes, 
             d.district, d.regionNo
           FROM currentresults cr 
           JOIN district d ON cr.dId = d.dId
@@ -52,7 +52,7 @@ if (empty($searchQuery) && empty($district) && empty($regionNo)) {
   // Case 4: searchQuery and district are not empty, regionNo is empty
   $query = "SELECT 
               cr.currentResultId, cr.electionId, e.electionName, c.name, c.citizenship_number, 
-            p.partyName, cr.dId, cr.totalVotes, 
+           c.candidate_photo,p.partyLogo, p.partyName, cr.dId, cr.totalVotes, 
             d.district, d.regionNo
           FROM currentresults cr 
           JOIN district d ON cr.dId = d.dId
@@ -66,7 +66,7 @@ if (empty($searchQuery) && empty($district) && empty($regionNo)) {
   // Case 6: searchQuery is empty, district is not empty, regionNo is empty
   $query = "SELECT 
               cr.currentResultId, cr.electionId, e.electionName, c.name, c.citizenship_number, 
-            p.partyName, cr.dId, cr.totalVotes, 
+            c.candidate_photo,p.partyLogo,p.partyName, cr.dId, cr.totalVotes, 
             d.district, d.regionNo
             FROM currentresults cr 
             JOIN district d ON cr.dId = d.dId
@@ -79,7 +79,7 @@ if (empty($searchQuery) && empty($district) && empty($regionNo)) {
   // Case 8: All are not empty
   $query = "SELECT 
             cr.currentResultId, cr.electionId, e.electionName, c.name, c.citizenship_number, 
-            p.partyName, cr.dId, cr.totalVotes, 
+            c.candidate_photo,p.partyLogo,p.partyName, cr.dId, cr.totalVotes, 
             d.district, d.regionNo
             FROM currentresults cr 
             JOIN district d ON cr.dId = d.dId
@@ -93,7 +93,7 @@ if (empty($searchQuery) && empty($district) && empty($regionNo)) {
 } else {
   $query = "SELECT 
     cr.currentResultId, cr.electionId, e.electionName, c.name, c.citizenship_number, 
-    p.partyName, cr.dId, cr.totalVotes, 
+    c.candidate_photo,p.partyLogo,p.partyName, cr.dId, cr.totalVotes, 
     d.district, d.regionNo
     FROM currentresults cr 
    JOIN district d ON cr.dId = d.dId

@@ -13,8 +13,8 @@ session_destroy();
     exit();
 } else {
     try {
-        $_SESSION['error_message']="Failed to logout. Try again through logout button in profile page";
-    header('Location:../register_and_login/user_profile.php');
+        $_SESSION['error_message']="Failed to logout. Try again through logout button in sidebar";
+    header('Location:../home/home.php');
     exit();
     }catch (Exception $e) {
         echo ''. $e->getMessage() .'';
