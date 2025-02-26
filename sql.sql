@@ -152,6 +152,13 @@ END;
 
 DELIMITER ;
 
+-- inserting partyThemeColor in parties table
+-color:
+INde-#8f8f8f
+CPN UML-#cc1e1e
+COngress-#4CAF50
+
+
 -- inserting into candidates and currentresults table
 -- Insert into Candidates table
 INSERT INTO Candidates (name, dob, gender, citizenship_number, education_level, manifesto, partyId, dId, candidate_photo)
