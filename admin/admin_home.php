@@ -150,7 +150,16 @@ require_once "../home/logout_modals_html.php";
                         <input type="text" id="election-name" name="electionName" />
                         <span class="error" id="electionNameError"></span>
                     </div>
-
+                    <div>
+                        <label for="nomination-StartTime">Nomination Start Time</label>
+                        <input type="datetime-local" id="nomination-StartTime" name="nominationStartTime" />
+                        <span class="error" id="nominationStartTimeError"></span>
+                    </div>
+                    <div>
+                        <label for="nomination-EndTime">Nomination End Time</label>
+                        <input type="datetime-local" id="nomination-EndTime" name="nominationEndTime" />
+                        <span class="error" id="nominationEndTimeError"></span>
+                    </div>
                     <div>
                         <label for="start-time">Start Time</label>
                         <input type="datetime-local" id="start-time" name="startTime" />
@@ -161,16 +170,6 @@ require_once "../home/logout_modals_html.php";
                         <label for="end-time">End Time</label>
                         <input type="datetime-local" id="end-time" name="endTime" />
                         <span class="error" id="endTimeError"></span>
-                    </div>
-                    <div>
-                        <label for="nomination-StartTime">Nomination Start Time</label>
-                        <input type="datetime-local" id="nomination-StartTime" name="nominationStartTime" />
-                        <span class="error" id="nominationStartTimeError"></span>
-                    </div>
-                    <div>
-                        <label for="nomination-EndTime">Nomination End Time</label>
-                        <input type="datetime-local" id="nomination-EndTime" name="nominationEndTime" />
-                        <span class="error" id="nominationEndTimeError"></span>
                     </div>
 
 
@@ -209,6 +208,38 @@ require_once "../home/logout_modals_html.php";
 
     <script src="../js/get_votingTime.js"></script>
     <script>
+  document.addEventListener("DOMContentLoaded", function () {
+            const nominationStart = document.getElementById("nomination-StartTime");
+            const nominationEnd = document.getElementById("nomination-EndTime");
+            const startTime = document.getElementById("start-time");
+            const endTime = document.getElementById("end-time");
+
+            function updateMinDates() {
+                const now = new Date().toISOString().slice(0, 16); // Get current datetime in correct format
+
+                // Set initial minimum values
+                nominationStart.min = now;
+                nominationEnd.min = nominationStart.value || now;
+                startTime.min = nominationEnd.value || now;
+                endTime.min = startTime.value || now;
+            }
+
+            function updateMinTime(field, dependentField) {
+                if (field.value) {
+                    dependentField.min = field.value;
+                }
+            }
+
+            // Event listeners (use 'change' for proper handling of time changes)
+            nominationStart.addEventListener("change", () => updateMinTime(nominationStart, nominationEnd));
+            nominationEnd.addEventListener("change", () => updateMinTime(nominationEnd, startTime));
+            startTime.addEventListener("change", () => updateMinTime(startTime, endTime));
+
+            updateMinDates(); // Set initial constraints on load
+        });
+
+
+
         window.onload = function () {
             fetchVotingTime();
         };
@@ -236,7 +267,9 @@ require_once "../home/logout_modals_html.php";
 
             // Clear previous error messages
             clearErrors();
-            if (!electionName) {
+            
+            if((document.getElementById("election-id").value) === ""){
+                if (!electionName) {
                 document.getElementById('electionNameError').textContent = 'Election Name is required.';
                 isValid = false;
             }
@@ -249,14 +282,7 @@ require_once "../home/logout_modals_html.php";
                 isValid = false;
             }
 
-            if (!endTime) {
-                document.getElementById('endTimeError').textContent = 'End Time is required.';
-                isValid = false;
-            } else if (endTime <= startTime) {
-                document.getElementById('endTimeError').textContent = 'End Time should be greater than Start Time.';
-                isValid = false;
-            }
-
+            
             if (!nominationStartTime) {
                 document.getElementById('nominationStartTimeError').textContent = 'Nomination Start Time is required.';
                 isValid = false;
@@ -274,11 +300,27 @@ require_once "../home/logout_modals_html.php";
                 document.getElementById('nominationEndTimeError').textContent = 'Nomination end Time should not be less than the Nomination start time.';
                 isValid = false;
             } else if (nominationEndTime > startTime) {
-                document.getElementById('nominationEndTimeError').textContent = 'Nomination end Time should not be less than the Nomination start time.';
+                document.getElementById('nominationEndTimeError').textContent = 'Nomination end Time should not be more than the Election start time.';
                 isValid = false;
             }
+            
+            }
+
+            if (!endTime) {
+                document.getElementById('endTimeError').textContent = 'End Time is required.';
+                isValid = false;
+            } else if (endTime <= startTime) {
+                document.getElementById('endTimeError').textContent = 'End Time should be greater than Start Time.';
+                isValid = false;
+            }else if (endTime < currentTime) {
+                document.getElementById('endTimeError').textContent = 'End Time should not be less than the current time.';
+                isValid = false;
+            }
+
             if ((document.getElementById("election-id").value) === "" && votingTime.resultStatus === "notPublished") {
-                showErrorModal("Current election result is not published yet. You can't  set new election", false);
+                showErrorModal("Current election result is not published yet. You can't  set new election");
+                // document.getElementById('election-form').reset();
+                clearErrors();
                 isValid = false;
             }
             return isValid;

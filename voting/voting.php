@@ -13,6 +13,8 @@ if (!isset($_SESSION["email"])) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Voting area</title>
   <link rel="stylesheet" href="../styles/modal1.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  <script src="../js/togglepassword.js"></script>
   <style>
     /* .not-scheduled {
       background: #fbe9e7; */
@@ -24,9 +26,10 @@ if (!isset($_SESSION["email"])) {
       margin-top: 20px;
       box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     } */
-a{
-  text-decoration: none;
-}
+    a {
+      text-decoration: none;
+    }
+
     .not-scheduled h3 {
       color: #d32f2f;
       /* Dark red for heading */
@@ -80,126 +83,128 @@ a{
     .not-scheduled ul.admin-responsibilities li strong {
       color: #1976d2;
     }
-/* not-started css starts here */
 
-.title {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #ff4d4d;
-    margin-bottom: 15px;
-}
-
-.description {
-    font-size: 1.2rem;
-    margin: 0 auto 20px;
-    line-height: 1.5;
-}
-
-.info-section {
-    background: rgba(0, 0, 0, 0.3);
-    padding: 20px;
-    border-radius: 12px;
-    margin-top: 20px;
-    text-align: left;
-}
-
-.info-title {
-    font-size: 1.5rem;
-    color:rgb(35, 80, 163);
-    margin-bottom: 10px;
-    text-align: center;
-}
-
-.info-list {
-    list-style: none;
-    padding: 0;
-}
-
-.info-item {
-    font-size: 1.1rem;
-    margin: 10px 0;
-    padding-left: 10px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.info-item strong {
-    color:rgb(31, 83, 161);
-}
-
-.contact-link {
-    color:rgb(126, 39, 153);
-    text-decoration: underline;
-}
-
-.button-group {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 25px;
-    flex-wrap: wrap;
-}
-
-.btn {
-    padding: 12px 20px;
-    font-size: 1rem;
-    font-weight: bold;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.3s;
-    text-transform: uppercase;
-}
-
-.review-btn, .results-btn {
-    background: #4caf50;
-    color: #fff;
-}
-
-.profile-btn {
-    background: #1e88e5;
-    color: #fff;
-}
-
-.contact-btn {
-    background: #ff9800;
-    color: #fff;
-}
-
-.btn:hover {
-    opacity: 0.85;
-}
-
-/* Responsive Design */
-@media (max-width: 600px) {
-    .not-started {
-        padding: 20px;
-    }
+    /* not-started css starts here */
 
     .title {
-        font-size: 1.8rem;
+      font-size: 2rem;
+      font-weight: bold;
+      color: #ff4d4d;
+      margin-bottom: 15px;
     }
 
     .description {
-        font-size: 1.1rem;
+      font-size: 1.2rem;
+      margin: 0 auto 20px;
+      line-height: 1.5;
+    }
+
+    .info-section {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 20px;
+      text-align: left;
     }
 
     .info-title {
-        font-size: 1.3rem;
+      font-size: 1.5rem;
+      color: rgb(35, 80, 163);
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .info-list {
+      list-style: none;
+      padding: 0;
     }
 
     .info-item {
-        font-size: 1rem;
+      font-size: 1.1rem;
+      margin: 10px 0;
+      padding-left: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .info-item strong {
+      color: rgb(31, 83, 161);
+    }
+
+    .contact-link {
+      color: rgb(126, 39, 153);
+      text-decoration: underline;
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 25px;
+      flex-wrap: wrap;
     }
 
     .btn {
+      padding: 12px 20px;
+      font-size: 1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+      text-transform: uppercase;
+    }
+
+    .review-btn,
+    .results-btn {
+      background: #4caf50;
+      color: #fff;
+    }
+
+    .profile-btn {
+      background: #1e88e5;
+      color: #fff;
+    }
+
+    .contact-btn {
+      background: #ff9800;
+      color: #fff;
+    }
+
+    .btn:hover {
+      opacity: 0.85;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 600px) {
+      .not-started {
+        padding: 20px;
+      }
+
+      .title {
+        font-size: 1.8rem;
+      }
+
+      .description {
+        font-size: 1.1rem;
+      }
+
+      .info-title {
+        font-size: 1.3rem;
+      }
+
+      .info-item {
+        font-size: 1rem;
+      }
+
+      .btn {
         padding: 10px 15px;
         font-size: 0.9rem;
+      }
     }
-}
 
-/* not-started css ends here */
+    /* not-started css ends here */
 
     /* Candidate grid container */
     .candidate-grid {
@@ -315,6 +320,70 @@ a{
       display: none;
     }
 
+    /* password form for vote submission */
+    #hiddenFormBox {
+      display: none;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 100;
+    }
+
+    #hiddenForm {
+      min-width: 350px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px;
+      background-color: #f3f3f3;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .input-container {
+      position: relative;
+      width: 100%;
+      margin-bottom: 5px;
+    }
+
+    #password {
+      border: 1px solid burlywood;
+      border-radius: 5px;
+      padding: 10px 32px 10px 10px;
+      color: rgb(0, 0, 0);
+      width: 100%;
+      font-size: 1.2em;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+    }
+
+    #submitVoteButton {
+      background: #6e8efb;
+      border: none;
+      font-size: 1.1rem;
+      padding: 7px 14px;
+      border-radius: 5px;
+      color: white;
+      cursor: pointer;
+      width: 80%;
+      margin-top: 10px;
+    }
 
     /* voting status voted style */
     .heading-1 {
@@ -338,74 +407,77 @@ a{
       gap: 15px;
       justify-content: center;
     }
-.button{
-  align-items: center;
-  appearance: none;
-  background-image: radial-gradient(100% 100% at 100% 0, #5adaff 0, #5468ff 100%);
-  border: 0;
-  border-radius: 6px;
-  box-shadow: rgba(45, 35, 66, .4) 0 2px 4px,rgba(45, 35, 66, .3) 0 7px 13px -3px,rgba(58, 65, 111, .5) 0 -3px 0 inset;
-  box-sizing: border-box;
-  color: #fff;
-  cursor: pointer;
-  display: inline-flex;
-  font-family: "JetBrains Mono",monospace;
-  height: 48px;
-  justify-content: center;
-  line-height: 1;
-  list-style: none;
-  overflow: hidden;
-  padding-left: 16px;
-  padding-right: 16px;
-  position: relative;
-  text-align: left;
-  text-decoration: none;
-  transition: box-shadow .15s,transform .15s;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  white-space: nowrap;
-  will-change: box-shadow,transform;
-  font-size: 18px;
-}
 
-.button:focus {
-  box-shadow: #3c4fe0 0 0 0 1.5px inset, rgba(45, 35, 66, .4) 0 2px 4px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #3c4fe0 0 -3px 0 inset;
-}
+    .button {
+      align-items: center;
+      appearance: none;
+      background-image: radial-gradient(100% 100% at 100% 0, #5adaff 0, #5468ff 100%);
+      border: 0;
+      border-radius: 6px;
+      box-shadow: rgba(45, 35, 66, .4) 0 2px 4px, rgba(45, 35, 66, .3) 0 7px 13px -3px, rgba(58, 65, 111, .5) 0 -3px 0 inset;
+      box-sizing: border-box;
+      color: #fff;
+      cursor: pointer;
+      display: inline-flex;
+      font-family: "JetBrains Mono", monospace;
+      height: 48px;
+      justify-content: center;
+      line-height: 1;
+      list-style: none;
+      overflow: hidden;
+      padding-left: 16px;
+      padding-right: 16px;
+      position: relative;
+      text-align: left;
+      text-decoration: none;
+      transition: box-shadow .15s, transform .15s;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      white-space: nowrap;
+      will-change: box-shadow, transform;
+      font-size: 18px;
+    }
 
-.button:hover {
-  box-shadow: rgba(45, 35, 66, .4) 0 4px 8px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #3c4fe0 0 -3px 0 inset;
-  transform: translateY(-2px);
-}
+    .button:focus {
+      box-shadow: #3c4fe0 0 0 0 1.5px inset, rgba(45, 35, 66, .4) 0 2px 4px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #3c4fe0 0 -3px 0 inset;
+    }
 
-.button:active {
-  box-shadow: #3c4fe0 0 3px 7px inset;
-  transform: translateY(2px);
-}
-.vote-button {
-    background: linear-gradient(135deg, #00c9a7, #6a00f4); /* Teal to Purple */
-    color: white;
-    font-size: 18px;
-    font-weight: bold;
-    padding: 12px 24px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    box-shadow: 0 4px 10px 5px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease-in-out;
-    text-transform: uppercase;
-}
+    .button:hover {
+      box-shadow: rgba(45, 35, 66, .4) 0 4px 8px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #3c4fe0 0 -3px 0 inset;
+      transform: translateY(-2px);
+    }
 
-.vote-button:hover {
-    background: linear-gradient(135deg, #6a00f4, #00c9a7);
-    transform: scale(1.05);
-    box-shadow: 0 6px 15px 10px rgba(0, 0, 0, 0.3);
-}
+    .button:active {
+      box-shadow: #3c4fe0 0 3px 7px inset;
+      transform: translateY(2px);
+    }
 
-.vote-button:active {
-    transform: scale(0.95);
-    box-shadow: 0 8px 8px -5px rgba(0, 0, 0, 0.2);
-}
+    .vote-button {
+      background: linear-gradient(135deg, #00c9a7, #6a00f4);
+      /* Teal to Purple */
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px 5px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease-in-out;
+      text-transform: uppercase;
+    }
+
+    .vote-button:hover {
+      background: linear-gradient(135deg, #6a00f4, #00c9a7);
+      transform: scale(1.05);
+      box-shadow: 0 6px 15px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .vote-button:active {
+      transform: scale(0.95);
+      box-shadow: 0 8px 8px -5px rgba(0, 0, 0, 0.2);
+    }
 
     .info-div {
       background-color: #f3f3f3;
@@ -413,6 +485,37 @@ a{
       border-left: 6px solid #3381a5;
       margin-top: 20px;
       border-radius: 8px;
+    }
+
+    /* loader  */
+
+    /* Center the loader */
+    .loader-container {
+      position: absolute;
+      z-index: 10000;
+      top: -10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: calc(100% + 10px);
+      width: calc(100%);
+      background-color: #03030360;
+    }
+
+    .loader {
+      font-size: 5em;
+      color: #2d404d;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
     }
 
     @media (max-width: 600px) {
@@ -437,7 +540,29 @@ a{
 <body>
   <div class="container">
     <?php include '../home/sidebar.php'; ?>
-
+    <div class="loader-container">
+      <i class="fas fa-spinner loader"></i>
+    </div>
+    <div id="hiddenFormBox" onclick="closePasswordForm(event)">
+      <form id="hiddenForm">
+        <div style="align-self: flex-end; background-color: red; border-radius: 4px;">
+          <button type="button" onclick="document.getElementById('hiddenFormBox').style.display='none';"
+            style="color:white;background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+        </div>
+        <h3 style="margin-top: 0px;">Enter Your Password to Vote</h3>
+        <div class="input-container">
+          <input type="password" id="password" name="password" placeholder="Password">
+          <i id="togglePasswordIcon" class="fas fa-eye toggle-password" onclick="togglePasswordVisibility()"></i>
+        </div>
+        <input type="submit" id="submitVoteButton">
+      </form>
+    </div>
+    <!-- <script>
+      document.getElementById('hiddenForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      // Add your form submission logic here
+      });
+    </script> -->
     <script>
       document.querySelector('a[href="../voting/voting.php"]').classList.add('active');
     </script>
@@ -449,8 +574,38 @@ a{
     </div> -->
 
     <div class="content" id="content">
+
     </div>
     <script>
+      //fetch current time from api to prevent system time change problem
+      let currentTime = null;
+      async function fetchCurrentTime() {
+        try {
+          let response = await fetch(
+            "https://timeapi.io/api/Time/current/zone?timeZone=Asia/Kathmandu"
+          );
+          let data = await response.json();
+          currentTime = new Date(data.dateTime).getTime();
+        } catch (error) {
+          console.error("Error fetching current time:", error);
+          // return null;
+        }
+      }
+      document.addEventListener("DOMContentLoaded", function () {
+        fetchCurrentTime();
+      });
+      setInterval(fetchCurrentTime, 1000);
+
+      // function fetchVotingTime() {
+      //   if (currentTime != null) {
+      //     document.querySelector(".loader-container").style.display = "flex";
+      //   }
+      //   console.log("Current Time:", currentTime);
+      // }
+
+      setInterval(fetchVotingTime, 3000);
+
+
       // Global variable to store the voting status
       let votingTime = {};
 
@@ -461,18 +616,21 @@ a{
         xhr.onload = function () {
           if (this.status === 200) {
             votingTime = JSON.parse(this.responseText);
-            checkVotingTime();
+            if (currentTime != null) {
+              document.querySelector(".loader-container").style.display = "none";
+              checkVotingTime();
+            }
           }
         };
         xhr.send();
       }
 
-      window.onload = function () {
-        fetchVotingTime();
-      };
+      // window.onload = function () {
+      //   fetchVotingTime();
+      // };
 
-      // Automatically fetch the voting status every 1 seconds
-      setInterval(fetchVotingTime, 1000); // Fetch every 1 seconds (1000 milliseconds)
+      // // Automatically fetch the voting status every 1 seconds
+      // setInterval(fetchVotingTime, 1000); // Fetch every 1 seconds (1000 milliseconds)
 
       let votingStatus = <?php echo json_encode($_SESSION['votingStatus']); ?>;
       let contentDiv = document.getElementById("content");
@@ -483,7 +641,7 @@ a{
 
       function checkVotingTime() {
         // let votingStartTime=votingT
-        let currentTime = new Date().getTime();
+        // let currentTime = new Date().getTime();
         let votingStartTime = new Date(votingTime.startTime).getTime();
         let votingEndTime = new Date(votingTime.endTime).getTime();
         // console.log(votingStartTime + " + "+ votingEndTime);
@@ -491,12 +649,13 @@ a{
           electionNotScheduled = true;
           votingNotStarted = votingStarted = votingEnded = false;
           showElectionNotScheduled();
-
         } else if (!votingNotStarted && currentTime < votingStartTime) {
           votingNotStarted = true;
           electionNotScheduled = votingStarted = votingEnded = false
           // contentDiv.innerHTML = "<h3>Election is not started</h3>";
           showVotingNotStarted();
+          console.log(currentTime < votingStartTime);
+
           console.log(votingStatus);
 
         } else if (!votingStarted && (currentTime > votingStartTime && currentTime < votingEndTime)) {
@@ -504,7 +663,7 @@ a{
           electionNotScheduled = votingNotStarted = votingEnded = false;
           if (votingStatus == "voted") {
             showAlreadyVoted();
-          }else {
+          } else {
             showVotingStarted();
           }
           console.log(votingStatus);
@@ -515,8 +674,8 @@ a{
           if (votingStatus == "voted") {
             showAlreadyVoted();
           } else {
-          showVotingEnded();
-        }
+            showVotingEnded();
+          }
           console.log(votingStatus);
         }
       }
@@ -538,7 +697,7 @@ a{
       }
 
       function showVotingNotStarted() {
-    contentDiv.innerHTML = `
+        contentDiv.innerHTML = `
     <div class="not-started">
       <h3 class="title">Election Scheduled</h3>
       <p class="description">The election is scheduled, but voting has not started yet.</p>
@@ -561,7 +720,7 @@ a{
         <a href="../home/contact_us.php" class="btn contact-btn">Contact Us</a>
       </div>
     </div>`;
-}
+      }
 
       function showVotingStarted() {
         contentDiv.innerHTML = `
@@ -575,18 +734,18 @@ a{
           <ul class="candidate-grid" id="candidateList">
             <!-- Candidates will be dynamically inserted here -->
           </ul>
-          <button type="button" onclick="submitVote()" class="vote-button">Vote</button>
+          <button type="button" onclick="openPasswordForm()" class="vote-button">Vote</button>
         </form>
       </div>
     `;
-      fetchCandidates();
+        fetchCandidates();
       }
 
       function showAlreadyVoted() {
-            const headingSelector = 'h1 class="heading-1"';
-            const paragraphSelector = 'p class="voted-paragraph"';
+        const headingSelector = 'h1 class="heading-1"';
+        const paragraphSelector = 'p class="voted-paragraph"';
 
-            contentDiv.innerHTML = `
+        contentDiv.innerHTML = `
                 <${headingSelector}>Thank You for Voting!</${headingSelector}>
                 <${paragraphSelector}>Thank you for utilizing your rights to vote and choosing the best candidates for your progress.</${paragraphSelector}>
                 <${paragraphSelector}> <strong>${votingTime.electionName}</strong></${paragraphSelector}>
@@ -602,7 +761,7 @@ a{
                     </div>
                 </div>
             `;
-        }
+      }
       function fetchCandidates() {
         const xhr = new XMLHttpRequest();
         xhr.open('GET', '../voting/fetch_candidates.php', true);
@@ -635,7 +794,6 @@ a{
             </div>
           </label>
         `;
-
               candidateList.appendChild(listItem);
             });
 
@@ -654,7 +812,6 @@ a{
                   radio.checked = true;
                   label.classList.add('selected');
                 }
-
                 // Prevent default behavior of the label toggling the radio directly
                 e.preventDefault();
               });
@@ -663,18 +820,38 @@ a{
         };
         xhr.send();
       }
+
+      //open passwordForm
+      function openPasswordForm() {
+        const selectedCandidate = document.querySelector('input[name="candidate"]:checked');
+        if (!selectedCandidate) {
+          showErrorModal('Please select a candidate before voting.', false);
+          return;
+        }
+        document.getElementById('hiddenFormBox').style.display = 'flex';
+      }
+      //password form submission
+      document.getElementById('hiddenForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        submitVote();
+      });
+      // close password form
+      function closePasswordForm(event) {
+        if (event.target.id === "hiddenFormBox") {
+          document.getElementById("hiddenFormBox").style.display = "none";
+        }
+      }
       function submitVote() {
         const selectedCandidate = document.querySelector('input[name="candidate"]:checked');
         if (!selectedCandidate) {
-          showErrorModal('Please select a candidate before voting.',false);
-          // alert('Please select a candidate before voting.');
+          showErrorModal('Please select a candidate before voting.', false);
           return;
         }
-
-        const voterPassword = prompt('Enter your password to submit your vote:');
+        let passwordFormBox = document.getElementById('hiddenFormBox');
+        let passwordForm = document.getElementById('hiddenForm');
+        let voterPassword = document.getElementById('password').value;
         if (!voterPassword) {
-          showErrorModal('Password is required to submit your vote.',false);
-          // alert('Password is required to submit your vote.');
+          showErrorModal('Please enter your password to vote.', false);
           return;
         }
 
@@ -683,27 +860,26 @@ a{
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.onload = function () {
           if (this.status === 200) {
+            passwordForm.reset();
             let response;
             try {
               response = JSON.parse(this.responseText);
             } catch (e) {
               console.error('Error parsing JSON:', response.error);
-              // alert('An error occurred while processing the server response.');
-              showErrorModal("An error occurred while processing the server response.",false);
+              showErrorModal("An error occurred while processing the server response.", false);
               return;
             }
             console.log(xhr.responseText);
             if (response.success) {
-              showErrorModal("Your vote has been successfully submitted.",true);
+              passwordFormBox.style.display = 'none';
+              showErrorModal("Your vote has been successfully submitted.", true);
               showAlreadyVoted();
-              // alert('Your vote has been successfully submitted.');
-              // contentDiv.innerHTML = `<h3>Thank you for voting!</h3>`;
             } else if (response.error === 'password_mismatch') {
-              // alert('Incorrect password. Please re-enter your password to vote.');
-              showErrorModal("Incorrect password. Please re-enter your password to vote.",false);
+              showErrorModal("Incorrect password. Please re-enter your password to vote.", false);
+              passwordFormBox.style.display = 'flex';
             } else {
-              // alert('An error occurred while submitting your vote. Please try again.');
-              showErrorModal("An error occurred while submitting your vote. Please try again.",false);
+              passwordFormBox.style.display = 'none';
+              showErrorModal("An error occurred while submitting your vote. Please try again.", false);
             }
           }
         };
@@ -711,30 +887,30 @@ a{
       }
 
       function showVotingEnded() {
-    contentDiv.innerHTML = `
-    <div class="election-ended">
-      <h3 class="title">Election Ended</h3>
-      <p class="description">The election has concluded, and unfortunately, you did not cast your vote.</p>
-      
-      <div class="info-section">
-        <h4 class="info-title">What You Can Do Next:</h4>
-        <ul class="info-list">
-          <li class="info-item">📅 <strong>Election Period:</strong> From: ${new Date(votingTime.startTime).toLocaleString()} To: ${new Date(votingTime.endTime).toLocaleString()}</li>
-          <li class="info-item">📜 <strong>Review Results:</strong> Check the final election results and see how your community voted.</li>
-          <li class="info-item">📊 <strong>Analyze Outcomes:</strong> Learn about the winning candidates and their upcoming policies.</li>
-          <li class="info-item">🆔 <strong>Stay Updated:</strong> Ensure your voter profile is up-to-date for future elections.</li>
-          <li class="info-item">📞 <strong>Report Concerns:</strong> If you have any queries, reach out through the <a href="#" class="contact-link">Contact Us</a> page.</li>
-          <li class="info-item">📆 <strong>Prepare for Next Time:</strong> Mark your calendar for upcoming elections so you don't miss your chance.</li>
-        </ul>
-      </div>
+        contentDiv.innerHTML = `
+        <div class="election-ended">
+          <h3 class="title">Election Ended</h3>
+          <p class="description">The election has concluded, and unfortunately, you did not cast your vote.</p>
+          
+          <div class="info-section">
+            <h4 class="info-title">What You Can Do Next:</h4>
+            <ul class="info-list">
+              <li class="info-item">📅 <strong>Election Period:</strong> From: ${new Date(votingTime.startTime).toLocaleString()} To: ${new Date(votingTime.endTime).toLocaleString()}</li>
+              <li class="info-item">📜 <strong>Review Results:</strong> Check the final election results and see how your community voted.</li>
+              <li class="info-item">📊 <strong>Analyze Outcomes:</strong> Learn about the winning candidates and their upcoming policies.</li>
+              <li class="info-item">🆔 <strong>Stay Updated:</strong> Ensure your voter profile is up-to-date for future elections.</li>
+              <li class="info-item">📞 <strong>Report Concerns:</strong> If you have any queries, reach out through the <a href="#" class="contact-link">Contact Us</a> page.</li>
+              <li class="info-item">📆 <strong>Prepare for Next Time:</strong> Mark your calendar for upcoming elections so you don't miss your chance.</li>
+            </ul>
+          </div>
 
-      <div class="button-group">
-        <a href="../results/results.php" class="btn results-btn">View Results</a>
-        <a href="../register_and_login/user_profile.php" class="btn profile-btn">Manage Profile</a>
-        <a href="../home/contact_us.php" class="btn contact-btn">Contact Us</a>
-      </div>
-    </div>`;
-}
+          <div class="button-group">
+            <a href="../results/results.php" class="btn results-btn">View Results</a>
+            <a href="../register_and_login/user_profile.php" class="btn profile-btn">Manage Profile</a>
+            <a href="../home/contact_us.php" class="btn contact-btn">Contact Us</a>
+          </div>
+        </div>`;
+      }
       // Close the modal when clicking outside of the modal content
       // window.onclick = function (event) {
       //     var modals = document.getElementsByClassName('all-modals');

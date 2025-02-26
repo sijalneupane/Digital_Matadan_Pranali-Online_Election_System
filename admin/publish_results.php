@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         WHERE cr.electionId = $electionId
     ";
             if (!mysqli_query($conn, $query)) {
-                throw new Exception("Failed to insert into archive results.");
+                throw new Exception("Failed to insert into archive results.".mysqli_error($conn));
             }
            
         }

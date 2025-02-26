@@ -532,6 +532,39 @@ if (isset($_GET['id'])) {
 
     <button id="goToTop" class="go-to-top" title="Go to Top" onclick="scrollToTop()">↑</button>
     <script>
+        //set the max date 25 years from before for the age of the candidate
+        async function setMinDOB() {
+            // const loader = document.getElementById("loading"); // Reference the loader
+            //   loader.style.display = "block"; // Show the loader
+            let dob=document.getElementById("dob");
+            dob.disabled=true;
+
+            try {
+                let response = await fetch("https://timeapi.io/api/Time/current/zone?timeZone=Asia/Kathmandu");
+                let apiDate = await response.json();
+
+                let currentDate = new Date(apiDate.dateTime);
+                currentDate.setFullYear(currentDate.getFullYear() - 25);
+
+                document.getElementById("dob").setAttribute("max", currentDate.toISOString().split("T")[0]);
+            } catch (error) {
+                console.error("Failed to fetch time from API. Falling back to local time.");
+
+                // // Fallback to local time
+                // let today = new Date();
+                // today.setFullYear(today.getFullYear() - 18);
+                // let formattedDate = today.toISOString().split("T")[0];
+
+                // document.getElementById("dateOfBirth").setAttribute("max", formattedDate);
+            } finally {
+                // loader.style.display = "none"; // Hide the loader
+                dob.disabled=false;
+
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", setMinDOB);
+
         // Global variable to store the voting status
         let votingTime = {};
         let previousNominationStart = null;
@@ -666,7 +699,7 @@ if (isset($_GET['id'])) {
                         electionEnded = true;
                     }
 
-                } else if(votingTime.error) {
+                } else if (votingTime.error) {
                     if (noElectionScheduledChecked == false) {
                         showCandidateFormModal('No upcoming election found. Please ensure that you have scheduled any election.');
                         // makeDisabled(true);
@@ -811,8 +844,8 @@ if (isset($_GET['id'])) {
         let successMessage = <?= json_encode($successMessage); ?>;
         if (errorMessage) {
             showErrorModal(errorMessage);
-        }else if(successMessage){
-            showErrorModal(successMessage,true);
+        } else if (successMessage) {
+            showErrorModal(successMessage, true);
         }
 
         // Function to show the form (right1)
@@ -946,7 +979,7 @@ if (isset($_GET['id'])) {
             }
 
             // return valid;
-            if(valid){
+            if (valid) {
                 document.getElementById("addCandidateForm").submit();
             }
         }

@@ -78,7 +78,6 @@ require_once '../php_for_ajax/districtRegionSelect.php';
 
         }
     </style>
-    <script src="../js/getCurrentTime.js" defer></script>
     <script src="../js/register_validation.js" defer></script>
     <script src="../js/togglepassword.js"></script>
     <script src="../js/errorMessage_modal1.js"></script>
@@ -206,6 +205,7 @@ require_once '../php_for_ajax/districtRegionSelect.php';
         </div>
     </div>
     <script>
+        
         const errorMessage = <?= json_encode($errorMessage); ?>;
         showErrorModal(errorMessage); // Pass PHP error to JS function
 

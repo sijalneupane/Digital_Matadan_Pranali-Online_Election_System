@@ -14,7 +14,7 @@ require_once '../php_for_ajax/districtRegion2.php';
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../styles/results_table.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
   <title>Results</title>
   <style>
     /* .container {
@@ -30,19 +30,20 @@ require_once '../php_for_ajax/districtRegion2.php';
       align-items: center;
     }
 
-    .header h1 {
+    .header h1,
+    .header h2 {
       flex: 1;
       text-align: center;
     }
 
     .content1 {
-      height: 75vh;
-      overflow-y: auto;
+      min-height: 100%;
+      overflow-y: visible;
       scrollbar-width: 0px;
-      width: 95%;
-      margin: 0 auto;
+      width: 100%;
+      /* margin: 0 auto; */
       background-color: white;
-      padding: 30px 20px;
+      padding: 10px 20px;
       border-radius: 10px;
       -ms-overflow-style: none;
       /* IE and Edge */
@@ -130,7 +131,7 @@ body {
 
     #election-info {
       display: flex;
-      justify-content: space-around;
+      justify-content: space-evenly;
       align-items: center;
       width: 100%;
       flex-wrap: wrap;
@@ -142,16 +143,17 @@ body {
     #endTime {
       padding: 10px;
       width: 20%;
-      min-width: 280px;
+      min-width: 230px;
       background-color: #344a59;
       color: white;
       border-radius: 8px;
-      font-size: 16px;
+      font-size: 14px;
       text-align: center;
+      margin: 10px;
     }
 
     #election-name {
-      font-size: 20px;
+      font-size: 14px;
 
       @media screen and (max-width:965px) {
         margin: 0 16%;
@@ -163,8 +165,8 @@ body {
       display: flex;
       gap: 15px;
       /* max-width: 450px; */
-      margin: 10px auto;
-      padding: 15px;
+      margin: 0px auto;
+      padding: 6px;
       border: 1px solid #ddd;
       border-radius: 8px;
       background-color: #fff;
@@ -180,9 +182,10 @@ body {
 
     .search-input {
       width: 100%;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
+      padding: 7px;
+      border: none;
+      border-right: 1px solid #ccc;
+      /* border-radius: 5px; */
       font-size: 16px;
       transition: border-color 0.3s;
     }
@@ -244,56 +247,89 @@ body {
     }
 
     /* Trying different ui */
+    /* Top 3 Candidates Section */
+    .top-three-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 50px;
+
+      @media screen and (max-width: 965px) {
+        flex-direction: column;
+        gap: 20px;
+
+      }
+
+      /* margin-bottom: 20px; */
+    }
+
     .chart-container {
-    width: 300px;
-    height: 300px;
-    margin: auto;
-}
+      width: 300px;
+      height: 300px;
+    }
 
-.progress-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-}
+    .percentage-list {
+      width: 200px;
+      font-size: 16px;
+    }
 
-.progress-row {
-    display: flex;
-    align-items: center;
-    width: 30%;
-    margin-bottom: 10px;
-}
+    .percentage-list h3 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
 
-.candidate-img-small {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin-right: 10px;
-}
+    /* Candidate Progress List */
+    .progress-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
 
-.party-img-small {
-    width: 30px;
-    height: 30px;
-    margin-left: 10px;
-}
+    .progress-row {
+      display: flex;
+      align-items: center;
+      width: 30%;
+      min-width: 320px;
+      margin-bottom: 10px;
+    }
 
-.progress-wrapper {
-    flex-grow: 1;
-}
+    .candidate-img-small {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
 
-.progress-bar {
-    width: 100%;
-    background-color: #ddd;
-    height: 10px;
-    border-radius: 5px;
-    margin: 5px 0;
-    overflow: hidden;
-}
+    .party-img-small {
+      width: 30px;
+      height: 30px;
+      object-fit: contain;
+      margin-left: 10px;
+    }
 
-.progress {
-    height: 100%;
-    background-color: #4CAF50;
-}
+    .progress-wrapper {
+      flex-grow: 1;
+    }
 
+    .progress-bar {
+      width: 100%;
+      background-color: #ddd;
+      height: 10px;
+      border-radius: 5px;
+      margin: 5px 0;
+      overflow: hidden;
+    }
+
+    .progress {
+      height: 100%;
+      background-color: #4CAF50;
+    }
+
+    .votes {
+      font-size: 14px;
+      font-weight: bold;
+    }
   </style>
 </head>
 
@@ -305,7 +341,7 @@ body {
     <script>
       document.querySelector('a[href="../results/results.php"]').classList.add('active');
     </script>
-    <div class="content">
+    <div class="content" id="content">
       <div class="header" id="header">
         <!-- <h1>Lets look at the results of the election</h1>-->
       </div>
@@ -337,7 +373,7 @@ body {
   <button id="goToTop" class="go-to-top" title="Go to Top" onclick="scrollToTop()">↑</button>
 
   <script>
-    let oldHeaderDiv = `<h3>Lets look at the results of the election</h3>`;
+    let oldHeaderDiv = `<h2 style="margin:0px;">Lets look at the results of the election</h2>`;
     let oldOverviewDiv = `<div id="election-info">
           <h3 id="election-name"></h3>
           <p id="startTime"></p>
@@ -388,112 +424,166 @@ body {
 
 
     function fetchCurrentResults() {
-    var searchQuery = document.getElementById('searchQuery').value;
-    var district = document.getElementById('district').value;
-    var regionNo = document.getElementById('regionNo').value;
-    const xhr = new XMLHttpRequest();
-    xhr.open(
+      var searchQuery = document.getElementById('searchQuery').value;
+      var district = document.getElementById('district').value;
+      var regionNo = document.getElementById('regionNo').value;
+      const xhr = new XMLHttpRequest();
+      xhr.open(
         'GET',
         '../results/fetch_currentresults.php?searchQuery=' +
         encodeURIComponent(searchQuery) +
         '&district=' + encodeURIComponent(district) +
         '&regionNo=' + encodeURIComponent(regionNo),
         true
-    );
+      );
 
-    xhr.onload = function () {
+      xhr.onload = function () {
         if (xhr.status === 200) {
-            const response = JSON.parse(xhr.responseText);
-            if (response.status === "success") {
-                const results = response.data;
-                const container = document.getElementById('old-results');
-                // Clear previous content
-                container.innerHTML = "";
+          const response = JSON.parse(xhr.responseText);
+          if (response.status === "success") {
+            const results = response.data;
+            const container = document.getElementById('old-results');
 
-                if (results.length > 0) {
-                    // Sort results by total votes (descending order)
-                    results.sort((a, b) => b.totalVotes - a.totalVotes);
+            // Clear previous content
+            container.innerHTML = "";
 
-                    // Calculate total votes
-                    const totalVotes = results.reduce((a, b) => parseInt(a) + parseInt(b.totalVotes), 0);
-                    console.log(totalVotes);
-                    
-                    const percentages = results.map(result => ((result.totalVotes / totalVotes) * 100).toFixed(2));
+            if (results.length > 0) {
+              // Sort results by total votes (descending order)
+              results.sort((a, b) => b.totalVotes - a.totalVotes);
 
-                    // 🎖️ Top 3 Candidates with Pie Chart 🎖️
-                    const top3Container = document.createElement('div');
-                    top3Container.className = "top-three";
+              // Calculate total votes
+              const totalVotes = results.reduce((a, b) => parseInt(a) + parseInt(b.totalVotes), 0);
 
-                    const chartContainer = document.createElement('div');
-                    chartContainer.className = "chart-container";
-                    chartContainer.innerHTML = `<canvas id="topCandidatesChart"></canvas>`;
-                    top3Container.appendChild(chartContainer);
+              // Extract top 3 and others
+              let topCandidates = results.slice(0, 3);
+              let othersVotes = results.slice(3).reduce((sum, candidate) => parseInt(sum) + parseInt(candidate.totalVotes), 0);
 
-                    let topCandidates = results.slice(0, 3);
-                    let chartLabels = topCandidates.map(c => c.name);
-                    let chartData = topCandidates.map(c => c.totalVotes);
-                    let chartColors = ["#FF6384", "#36A2EB", "#FFCE56"]; // Change colors as needed
+              // Prepare data for chart
+              let chartLabels = [...topCandidates.map(c => c.name), "Others"];
+              let chartData = [...topCandidates.map(c => c.totalVotes), othersVotes];
+              let chartColors = [...topCandidates.map(c => c.partyThemeColor), "#000000"]; // Custom colors
 
-                    setTimeout(() => {
-                        var ctx = document.getElementById('topCandidatesChart').getContext('2d');
-                        new Chart(ctx, {
-                            type: 'pie',
-                            data: {
-                                labels: chartLabels,
-                                datasets: [{
-                                    data: chartData,
-                                    backgroundColor: chartColors
-                                }]
-                            },
-                            options: {
-                                responsive: true,
-                                plugins: {
-                                    legend: {
-                                        position: 'bottom'
-                                    }
-                                }
-                            }
-                        });
-                    }, 200);
+              // 🎖️ Top 3 Candidates with Donut Chart 🎖️
+              const top3Container = document.createElement('div');
+              top3Container.className = "top-three-container";
 
-                    container.appendChild(top3Container);
+              // Chart Container
+              const chartContainer = document.createElement('div');
+              chartContainer.className = "chart-container";
+              chartContainer.innerHTML = `<canvas id="topCandidatesChart" height="250"></canvas>`;
 
-                    // 📊 Progress Bar Section 📊
-                    const progressContainer = document.createElement('div');
-                    progressContainer.className = "progress-container";
+              // Percentage List
+              const percentageList = document.createElement('div');
+              percentageList.className = "percentage-list";
+              percentageList.innerHTML = `
+                <h3>Results Breakdown</h3>
+                ${topCandidates.map((c, index) => {
+                            let electedTag = ((index === 0)&&(district!='default' && regionNo!='default'&& !searchQuery)) ? ' 🏆 (Elected)' : '';
+                            return `<p>${c.name}: ${(c.totalVotes / totalVotes * 100).toFixed(2)}%${electedTag}</p>`;
+                          }).join("")}
+                <p>Others: ${(othersVotes / totalVotes * 100).toFixed(2)}%</p>
+            `;
 
-                    results.forEach((result, index) => {
-                        const rowDiv = document.createElement('div');
-                        rowDiv.className = "progress-row";
+              top3Container.appendChild(chartContainer);
+              top3Container.appendChild(percentageList);
+              container.appendChild(top3Container);
+              // Initialize Chart after DOM is updated
+              setTimeout(() => {
+                var ctx = document.getElementById('topCandidatesChart').getContext('2d');
+                new Chart(ctx, {
+                  type: 'doughnut',
+                  data: {
+                    labels: chartLabels,
+                    datasets: [{
+                      data: chartData,
+                      backgroundColor: chartColors
+                    }]
+                  },
+                  options: {
+                    responsive: true,
+                    cutout: '50%',
+                    plugins: {
+                      legend: {
+                        labels: {
+                          boxWidth: 10, // Reduce the width of color boxes in the legend
+                          color: 'black', // Change legend text color
+                          // font: {
+                          //   size: 14 // Change legend font size
+                          // }
+                        },
+                        position: 'bottom'
+                      },
+                      tooltip: {
+                        callbacks: {
+                          label: function (tooltipItem) {
+                            let value = tooltipItem.raw;
+                            let percentage = ((value / totalVotes) * 100).toFixed(2);
+                            return `${tooltipItem.label}: ${percentage}%`;
+                          }
+                        }
+                      }, datalabels: {
+                        color: 'white', // Change this to any color (e.g., 'black', '#FF0000', etc.)
+                        font: {
+                          size: 14, // Adjust font size
+                          weight: 'bold' // Make it bold if needed
+                        },
 
-                        rowDiv.innerHTML = `
-                        <img src="../uploads/${result.candidate_photo}" alt="Candidate" class="candidate-img-small">
-                        <div class="progress-wrapper">
-                            <p>${result.name}</p>
-                            <div class="progress-bar">
-                                <div class="progress" style="width: ${percentages[index]}%;"></div>
-                            </div>
-                            <p class="percentage">${percentages[index]}%</p>
-                        </div>
-                        <img src="../uploads/${result.partyLogo}" alt="Party" class="party-img-small">
-                        `;
+                      }
+                    }
+                  },
+                  plugins: [ChartDataLabels] // Enable datalabels
+                });
+              }, 200);
 
-                        progressContainer.appendChild(rowDiv);
-                    });
 
-                    container.appendChild(progressContainer);
-                } else {
-                    container.innerHTML = "<p>No results found.</p>";
+              // 📊 Candidate List with Votes 📊
+              const progressContainer = document.createElement('div');
+              progressContainer.className = "progress-container";
+              const overallProgressHeading = document.createElement('h3');
+              overallProgressHeading.innerHTML = "All candidates results";
+              overallProgressHeading.style.width = "100%";
+              progressContainer.appendChild(overallProgressHeading);
+
+              results.forEach((result, index) => {
+                let isElected = ((index === 0)&&(district!='default' && regionNo!='default'&& !searchQuery)); // First candidate in sorted list is elected
+
+                const rowDiv = document.createElement('div');
+                rowDiv.className = "progress-row";
+                if (isElected) {
+                  rowDiv.style.paddingInline = "10px";
+                  rowDiv.style.border = "2px solid gold"; // Highlight elected candidate
+                  rowDiv.style.backgroundColor = "#fffae5"; // Light yellow background
                 }
+
+                rowDiv.innerHTML = `
+                    <img src="../uploads/${result.candidate_photo}" alt="Candidate" class="candidate-img-small">
+                    <div class="progress-wrapper">
+                        <p style="${isElected ? 'font-weight:bold;color:green;' : ''}">${result.name} ${isElected ? '🏆 (Elected)' : ''}</p>
+                        <div class="progress-bar">
+                            <div class="progress" style="background-color:${result.partyThemeColor};width: ${(result.totalVotes / totalVotes * 100)}%;"></div>
+                        </div>
+                        <p class="votes">${result.totalVotes} votes ${isElected ? '🏆' : ''}</p>
+                    </div>
+                    <img src="../uploads/${result.partyLogo}" alt="Party" class="party-img-small">
+                `;
+
+                progressContainer.appendChild(rowDiv);
+              });
+
+              container.appendChild(progressContainer);
             } else {
-                console.error("Error: " + response.message);
+              container.innerHTML = "<p>No results found.</p>";
             }
+          } else {
+            console.error("Error: " + response.message);
+          }
         } else {
-            console.error("AJAX request failed with status: " + xhr.status);
+          console.error("AJAX request failed with status: " + xhr.status);
         }
-    };
-    xhr.send();
-}
+      };
+      xhr.send();
+    }
+
 
 
 
@@ -531,8 +621,9 @@ body {
         console.log('c');
         showElectionNotEnded();
       } else if (votingTime.error) {
-        alert("No election scheduled or conducted till now. PLease come back later");
-        window.location.href = "../home/home.php";
+        electionNotScheduled();
+        // alert("No election scheduled or conducted till now. PLease come back later");
+        // window.location.href = "../home/home.php";
       }
     }
 
@@ -669,6 +760,34 @@ body {
         </div>
     `;
     }
+
+    // Election not scheduled function
+    function electionNotScheduled() {
+      document.getElementById('content').innerHTML = `
+      <div id="no-election-modal-overlay" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.5); display: flex; justify-content: center; align-items: center;">
+        <div id="no-election-modal-content" style="background: white; padding: 20px; border-radius: 10px; position: relative; width: 300px; text-align: center; border: 2px solid red; box-shadow: 0 0 5px red;">
+          <button id="no-election-modal-close-btn" style="position: absolute; top: 10px; right: 10px; background: red; color: white; border: none; border-radius:4px;padding: 5px 10px; cursor: pointer;">&times;</button>
+          <h2 style="color: red;">No Election Found</h2>
+          <p style="font-weight:bold;">Any election has not been Scheduled. Please check back later.</p>
+        </div>
+      </div>
+    `;
+
+      // Close modal when clicking outside the modal content
+      document.getElementById('no-election-modal-overlay').addEventListener('click', function (event) {
+        if (event.target.id === 'no-election-modal-overlay' || event.target.id === 'no-election-modal-close-btn') {
+          closeNoElectionModal();
+        }
+      });
+    }
+
+    function closeNoElectionModal() {
+      document.getElementById('content').innerHTML = '';
+      window.location.href = '../home/home.php';
+    }
+
+
+
     // Show/hide the Go to Top button based on scroll position of the content1 container
     const contentContainer = document.getElementById("content1");
     const goToTopButton = document.getElementById("goToTop");

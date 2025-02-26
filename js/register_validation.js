@@ -1,32 +1,37 @@
-function setMinDOB() {
+async function setMinDOB() {
   // const loader = document.getElementById("loading"); // Reference the loader
-  // loader.style.display = "block"; // Show the loader
-
+  //   loader.style.display = "block"; // Show the loader
+  let dob = document.getElementById("dateOfBirth");
+  dob.disabled=true;
   try {
-      let response =  fetch("https://timeapi.io/api/Time/current/zone?timeZone=UTC");
-      let data =response.json();
+    let response = await fetch(
+      "https://timeapi.io/api/Time/current/zone?timeZone=Asia/Kathmandu"
+    );
+    let apiDate = await response.json();
 
-      let currentDate = new Date(data.dateTime);
-      currentDate.setFullYear(currentDate.getFullYear() - 18);
+    let currentDate = new Date(apiDate.dateTime);
+    currentDate.setFullYear(currentDate.getFullYear() - 18);
 
-      document.getElementById("dateOfBirth").setAttribute("max", currentDate.toISOString().split("T")[0]);
+    document
+      .getElementById("dateOfBirth")
+      .setAttribute("max", currentDate.toISOString().split("T")[0]);
   } catch (error) {
-      console.error("Failed to fetch time from API. Falling back to local time.");
+    console.error("Failed to fetch time from API. Falling back to local time.");
 
-      // Fallback to local time
-      let today = new Date();
-      today.setFullYear(today.getFullYear() - 18);
-      let formattedDate = today.toISOString().split("T")[0];
+    // Fallback to local time
+    let today = new Date();
+    today.setFullYear(today.getFullYear() - 18);
+    let formattedDate = today.toISOString().split("T")[0];
 
-      document.getElementById("dateOfBirth").setAttribute("max", formattedDate);
+    document.getElementById("dateOfBirth").setAttribute("max", formattedDate);
   } finally {
-      loader.style.display = "none"; // Hide the loader
-      
+    // loader.style.display = "none"; // Hide the loader
+    dob.disabled=false;
   }
 }
-
 document.addEventListener("DOMContentLoaded", setMinDOB);
 
+//validation starts here
 function showError(elementId, message) {
   document.getElementById(elementId).innerHTML = message;
 }
@@ -56,7 +61,7 @@ function validateForm() {
   let userPhoto = document.getElementById("userPhoto").files[0];
 
   // Regular expressions for validation
-let namePattern = /^[A-Za-z\s]+$/;
+  let namePattern = /^[A-Za-z\s]+$/;
   let emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
   let passwordPattern =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/;
@@ -66,7 +71,7 @@ let namePattern = /^[A-Za-z\s]+$/;
   if (name === "") {
     showError("nameError", "Full Name is required");
     isValid = false;
-  }else if (!namePattern.test(name)) {
+  } else if (!namePattern.test(name)) {
     showError("nameError", "Full Name should only contain alphabets");
     isValid = false;
   }

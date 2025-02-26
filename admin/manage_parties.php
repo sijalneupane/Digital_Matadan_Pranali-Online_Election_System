@@ -125,6 +125,11 @@ unset($_SESSION['successMsg']); // Clear the message
                             <span id="partyLeaderError"></span>
                         </div>
                         <div class="form-group">
+                            <label for="partyThemeColor">Party Theme Color:</label>
+                            <input type="color" id="partyThemeColor" name="partyThemeColor">
+                            <span id="partyThemeColorError"></span>
+                        </div>
+                        <div class="form-group">
                             <label for="partyLogo">Party Logo:</label>
                             <input type="file" id="partyLogo" name="partyLogo" accept="image/*">
                             <div class="photo-preview" id="logoPreview">
@@ -149,6 +154,7 @@ unset($_SESSION['successMsg']); // Clear the message
                                     <th>Party Name</th>
                                     <th>Party Leader</th>
                                     <th>Party Logo</th>
+                                    <th>Theme Color</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -166,10 +172,13 @@ unset($_SESSION['successMsg']); // Clear the message
                                             <td><img src="../uploads/<?= $row['partyLogo'] ?>"
                                                     onclick="openModal(<?= $row['partyId'] ?>,'<?= $row['partyLogo'] ?>')"
                                                     alt='Party Logo' style='max-width: 100px;'></td>
+                                            <td style="text-align:center">
+                                                <div style="width: 50px; height: 30px; background-color: <?= $row['partyThemeColor'] ?>;"></div>
+                                            </td>
                                             <td>
                                             <button class="delete-btn styled-btn"
                                             onclick="openDeleteModal(<?= $row['partyId'] ?>)">Delete</button>
-                                                <button class="update-btn styled-btn" onclick="editParty(<?= $row['partyId'] ?>, '<?= $row['partyName'] ?>', '<?= $row['partyLeader'] ?>', '<?= $row['partyLogo'] ?>')">Edit</button>
+                                                <button class="update-btn styled-btn" onclick="editParty(<?= $row['partyId'] ?>, '<?= $row['partyName'] ?>', '<?= $row['partyLeader'] ?>', '<?= $row['partyThemeColor'] ?>','<?= $row['partyLogo'] ?>')">Edit</button>
                                             </td>
                                         </tr>
                                         <div id="delete-modal-<?= $row['partyId'] ?>" class="delete-modal all-modals">
@@ -234,6 +243,7 @@ unset($_SESSION['successMsg']); // Clear the message
             let isValid = true;
             const partyName = document.getElementById('partyName').value;
             const partyLeader = document.getElementById('partyLeader').value;
+            const partyThemeColor = document.getElementById('partyThemeColor').value;
             const partyLogo = document.getElementById('partyLogo').files[0];
             const allowedTypes = ['image/jpeg', 'image/png'];
             const maxSize = 2 * 1024 * 1024; // 2MB
@@ -241,6 +251,7 @@ unset($_SESSION['successMsg']); // Clear the message
             document.getElementById('partyNameError').innerText = '';
             document.getElementById('partyLeaderError').innerText = '';
             document.getElementById('partyLogoError').innerText = '';
+            document.getElementById('partyThemeColorError').innerText = '';
 
             if (!partyName) {
                 document.getElementById('partyNameError').innerText = 'Party name is required.';
@@ -249,6 +260,10 @@ unset($_SESSION['successMsg']); // Clear the message
 
             if (!partyLeader) {
                 document.getElementById('partyLeaderError').innerText = 'Party leader is required.';
+                isValid = false;
+            }
+            if (partyThemeColor === '#000000') {
+                document.getElementById('partyThemeColorError').innerText = 'Party Theme color is required.';
                 isValid = false;
             }
             if (!partyLogo) {
@@ -334,7 +349,7 @@ unset($_SESSION['successMsg']); // Clear the message
         function confirmDelete(id, table,photoPath) {
             window.location.href = `delete_party_candidate.php?table=${table}&id=${id}&photoPath=${photoPath}`;
         }
-        function editParty(partyId, partyName, partyLeader, partyLogo) {
+        function editParty(partyId, partyName, partyLeader,partyThemeColor, partyLogo) {
             showForm();
             document.getElementById("formTitle").innerText = "Update Party";
             document.getElementById("submitButton").value = "Update Party";
@@ -342,6 +357,7 @@ unset($_SESSION['successMsg']); // Clear the message
             document.getElementById("partyId").value = partyId;
             document.getElementById("partyName").value = partyName;
             document.getElementById("partyLeader").value = partyLeader;
+            document.getElementById("partyThemeColor").value = partyThemeColor;
             const partyLogoInput = document.getElementById("partyLogo");
             const filePath = `../uploads/${partyLogo}`;
             fetch(filePath)

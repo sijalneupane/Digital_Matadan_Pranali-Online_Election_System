@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $partyId = isset($_POST['partyId']) ? $_POST['partyId'] : '';
   $partyName = isset($_POST['partyName']) ? $_POST['partyName'] : '';
   $partyLeader = isset($_POST['partyLeader']) ? $_POST['partyLeader'] : '';
-
+  $partyThemeColor=isset($_POST['partyThemeColor']) ? $_POST['partyThemeColor'] : '';
   // Get image information
   $image = isset($_FILES['partyLogo']) ? $_FILES['partyLogo'] : '';
   $targetDir = '../uploads/';
@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $newImageName = $partyName . 'logo.' . $fileExtension;
   $targetFile = $targetDir . $newImageName;
 
-  if ($partyName == '' || $partyLeader == '' || $image == '') {
+  if ($partyName == '' || $partyLeader == '' || $partyThemeColor=='' || $image == '') {
     $_SESSION['errorMsg'] = "All fields are required.";
     header('Location: ../admin/manage_parties.php');
   } else {
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header('Location: ../admin/manage_parties.php');
       } else {
         // Insert data and new image name into the database
-        $sql = "INSERT INTO parties (partyName, partyLeader, partyLogo) VALUES ('$partyName', '$partyLeader', '$newImageName')";
+        $sql = "INSERT INTO parties (partyName, partyLeader,partyThemeColor, partyLogo) VALUES ('$partyName', '$partyLeader','$partyThemeColor', '$newImageName')";
       }
     } else {
       // Get the current image path
@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header('Location: ../admin/manage_parties.php');
       } else {
         // Update existing record
-        $sql = "UPDATE parties SET partyName='$partyName', partyLeader='$partyLeader', partyLogo='$newImageName' WHERE partyId='$partyId'";
+        $sql = "UPDATE parties SET partyName='$partyName', partyLeader='$partyLeader',partyThemeColor='$partyThemeColor', partyLogo='$newImageName' WHERE partyId='$partyId'";
       }
     }
     if (mysqli_query($conn, $sql)) {
