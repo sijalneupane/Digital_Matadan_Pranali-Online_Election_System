@@ -153,7 +153,7 @@ END;
 DELIMITER ;
 
 -- inserting partyThemeColor in parties table
--color:
+-- -color:
 INde-#8f8f8f
 CPN UML-#cc1e1e
 COngress-#4CAF50

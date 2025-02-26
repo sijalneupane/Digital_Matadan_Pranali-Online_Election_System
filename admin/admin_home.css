@@ -77,6 +77,34 @@ section {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   font-family: Arial, sans-serif;
 }
+/* notice file link */
+.notice-link-box {
+  text-align: center;
+  /* margin: 20px auto; */
+  align-self: start;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  width: fit-content;
+}
+
+.notice-link {
+  display: inline-block;
+  padding: 10px 20px;
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #007bff, #00d4ff);
+  transition: all 0.3s ease-in-out;
+}
+
+.notice-link:hover {
+  background: linear-gradient(135deg, #0056b3, #00a6d6);
+  transform: scale(1.05);
+}
 
 /* Notice section Styling  */
 .notice-section {

@@ -47,10 +47,12 @@
             width: 145px;
             min-width: 50px;
         }
-        .election-time{
+
+        .election-time {
             font-size: 1.2rem;
-            color:#0d2ec4;
+            color: #0d2ec4;
         }
+
         .nav-links .admin-login {
             color: #fff;
             text-decoration: none;
@@ -112,8 +114,8 @@
             color: white;
             border: 1px solid rgb(170, 147, 14);
             border-radius: 10px;
-             font-size: 1.2rem;
-            /* font-weight: bold; */ 
+            font-size: 1.2rem;
+            /* font-weight: bold; */
             /* transition:;? */
             transition: all 0.1s ease-in-out;
             display: flex;
@@ -149,7 +151,7 @@
         }
 
         .guidelines-link:hover {
-            text-decoration:underline;
+            text-decoration: underline;
             /* background-color: rgb(39, 94, 116); */
             /* box-shadow: 0 2px 5px 4px rgba(0255, 0255, 255, 0.45); */
         }
@@ -163,6 +165,26 @@
 
         .content {
             text-align: center;
+        }
+
+        .marquee {
+            white-space: nowrap;
+            overflow: hidden;
+            display: none;
+            padding: 10px;
+            width: 100%;
+            background-color:rgb(114, 114, 114);
+        }
+        .marquee span {
+            color: white;
+            font-size: 1.2em;
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 40s ease infinite;
+        }
+        @keyframes marquee {
+            from { transform: translateX(0%); }
+            to { transform: translateX(-100%); }
         }
 
         @media (max-width: 768px) {
@@ -192,9 +214,10 @@
             .arrow img {
                 width: 10%;
             }
-            .guidelines-link{
+
+            .guidelines-link {
                 width: 70%;
-                font-size:0.8rem ;
+                font-size: 0.8rem;
             }
         }
 
@@ -230,23 +253,32 @@
             <img src="../images/DMP logo.png" alt="Election Logo">
         </div>
         <div class="election-time" id="election-time">
-        
+
         </div>
         <div class="nav-links">
             <a href="../admin/admin_login.php" class="admin-login">Admin Login</a>
         </div>
     </nav>
 
+        <div id="marquee" class="marquee">
+        </div>
     <!-- Main Content -->
     <div class="main-content">
         <div class="content">
             <h1>Welcome to the Online Election System</h1>
             <p>Participate in a fair and transparent voting system. Your vote matters.</p>
             <div class="action-buttons">
-                <a href="../register_and_login/voter_login_form.php" class="voter-login">Voter Login <span>&rarr;</span></a>
-                <a href="../register_and_login/voter_register_form.php" class="voter-register">Voter Register<span>&rarr;</span></a>
+                <a href="../register_and_login/voter_login_form.php" class="voter-login">Voter Login
+                    <span>&rarr;</span></a>
+                <a href="../register_and_login/voter_register_form.php" class="voter-register">Voter
+                    Register<span>&rarr;</span></a>
             </div>
             <a href="../home/guidelines.php" class="guidelines-link">Need Some Guidelines? Click here</a>
+            <div class="notice-link-box" style="margin-top: 20px;">
+                <a href="../home/notices.php" class="notice-link" style="color: #fff; text-decoration: none; background-color: #007bff; padding: 10px 20px; border-radius: 5px; transition: background-color 0.3s;">
+                    View All Notices
+                </a>
+            </div>
         </div>
         <div class="image-section">
             <img src="https://media.istockphoto.com/id/1258633187/vector/online-vote.jpg?s=612x612&w=0&k=20&c=7eOLMUx6_EKkXPjMrElvFYkz2x0rdShD8DNAlrff6-E="
@@ -255,43 +287,44 @@
     </div>
     <?php include '../home/footer.php'; ?>
     <script>
-    // Global variable to store the voting status
-    let votingTime = {};
+        // Global variable to store the voting status
+        let votingTime = {};
 
-    // Function to fetch voting status from the server
-    function fetchVotingTime() {
-      const xhr = new XMLHttpRequest();
-      xhr.open('GET', '../time/fetch_voting_time.php', true);
-      xhr.onload = function () {
-        if (this.status === 200) {
-          const newVotingTime = JSON.parse(this.responseText);
-          if (JSON.stringify(votingTime) !== JSON.stringify(newVotingTime)) {
-            votingTime = newVotingTime;
-            if (votingTime.error) {
-              document.getElementById('election-time').innerHTML = 'No election scheduled till now';
-            } else {
-              const currentTime = new Date();
-              const startTime = new Date(votingTime.startTime);
-              const endTime = new Date(votingTime.endTime);
-
-              if (currentTime < endTime) {
-                  console.log('hello');
-                  document.getElementById('election-time').innerHTML = `
-                    <div>Election Start: ${startTime.toLocaleString()} <br>Election End: ${endTime.toLocaleString()}</div>
-                  `;
-            } else {
-                console.log('changed');
-                document.getElementById('election-time').innerHTML = 'Election has ended';
-              }
-            }
-          }
+        // Function to fetch voting status from the server
+        function fetchVotingTime() {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', '../time/fetch_voting_time.php', true);
+            xhr.onload = function () {
+                if (this.status === 200) {
+                    const newVotingTime = JSON.parse(this.responseText);
+                    if (JSON.stringify(votingTime) !== JSON.stringify(newVotingTime)) {
+                        votingTime = newVotingTime;
+                        if (votingTime.error) {
+                            document.getElementById('election-time').innerHTML = 'No election scheduled till now';
+                        } else {
+                            const currentTime = new Date();
+                            const startTime = new Date(votingTime.startTime);
+                            const endTime = new Date(votingTime.endTime);
+                            let marqueeElement = document.getElementById('marquee');
+                            if (currentTime < endTime) {
+                                marqueeElement.style.display = 'block';
+                                marqueeElement.innerHTML = `<span>New Election is scheduled. Make sure to view the notices and participate in voting.</span>`;
+                                document.getElementById('election-time').innerHTML =`
+                                <div>Election Start: ${startTime.toLocaleString()} <br>Election End: ${endTime.toLocaleString()}</div>
+                                `;
+                            } else {
+                                console.log('changed');
+                                document.getElementById('election-time').innerHTML = 'Election has ended';
+                            }
+                        }
+                    }
+                }
+            };
+            xhr.send();
         }
-      };
-      xhr.send();
-    }
-    fetchVotingTime();
-    setInterval(fetchVotingTime,2000);
-  </script>
+        fetchVotingTime();
+        setInterval(fetchVotingTime, 2000);
+    </script>
 </body>
 
 </html>

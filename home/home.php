@@ -36,7 +36,7 @@ require_once '../register_and_login/dbconnection.php';
     }
 
     .box {
-      flex: 1 1 calc(33.333% - 20px);
+      flex: 1 1 calc(20% - 20px);
       min-width: 150px;
       max-width: 250px;
 
@@ -70,7 +70,9 @@ require_once '../register_and_login/dbconnection.php';
     /* .box.home {
       background-color: #4CAF50;
     } */
-
+    .box.notice {
+      background-color:rgb(21, 128, 53);
+    }
     .box.candidates {
       background-color: #2196F3;
     }
@@ -153,7 +155,6 @@ require_once '../register_and_login/dbconnection.php';
 
 .winner-card {
     display: flex;
-     
     align-items: center;
     background: rgba(255, 255, 255, 0.2);
     border-radius: 10px;
@@ -218,6 +219,12 @@ require_once '../register_and_login/dbconnection.php';
   <i class="fas fa-home"></i>
   <span>Home</span>
 </div> -->
+<div class="box notice">
+  <a href="../home/notices.php?userType=voter">
+    <i class="fa-solid fa-bell"></i>
+    <span>Notices</span>
+  </a>
+</div>
 <div class="box candidates">
   <a href="../candidates/candidates.php">
     <i class="fas fa-users"></i>
