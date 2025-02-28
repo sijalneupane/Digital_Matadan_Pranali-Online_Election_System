@@ -292,12 +292,27 @@ body {
 <body>
   <?php require '../admin/admin_navbar.php'; ?>
   <div class="container">
-  <?php require_once '../home/logout_modals_html.php';
-        logoutModalPhp("admin"); ?>
+    <?php require_once '../home/logout_modals_html.php';
+    logoutModalPhp("admin"); ?>
     <div id="modal1" class="modal-overlay1 all-modals">
       <div class="modal-content1">
         <p id="modalMessage1"></p>
         <button onclick="closeModal1()">Close</button>
+      </div>
+    </div>
+    <!-- Modal Structure -->
+    <div id="publishModal" class="publishModal all-modals"
+      style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5);">
+      <div class="publish-modal-content"
+        style=" background: white; padding: 20px; width: 350px; text-align: center; border-radius: 10px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);">
+        <h2 style="margin-bottom:15px;">Confirm Publish</h2>
+        <p style="margin-bottom:5px;">Do you really want to publish the results?</p>
+        <div class="publish-modal-buttons" style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">
+          <button id="confirmPublish"
+            style="font-size: 1.1em;margin: 10px; padding: 10px 15px; border: none; cursor: pointer; border-radius: 5px; background-color: #28a745; color: white;">Publish</button>
+          <button id="cancelPublish"
+            style="font-size: 1.1em;margin: 10px; padding: 10px 15px; border: none; cursor: pointer; border-radius: 5px; background-color: #dc3545; color: white;">Cancel</button>
+        </div>
       </div>
     </div>
     <div class="header" id="header">
@@ -496,15 +511,7 @@ body {
       document.getElementById('startTime').innerHTML = `<strong>Start Time: </strong> ${votingTime.startTime}`;
       document.getElementById('endTime').innerHTML = `<strong>End Time: </strong>${votingTime.endTime}`;
       if (votingTime.resultStatus == 'published') {
-        publishResultBtn = document.getElementById('publish-result-btn');
-        publishResultBtn.textContent = `Result Published`;
-        publishResultBtn.style.background = `#2c9f43`;
-        publishResultBtn.disabled = true;
-        publishResultBtn.style.boxShadow = "none";
-        publishResultBtn.onmouseover = function () {
-          publishResultBtn.style.cursor = `not-allowed`;
-
-        }
+        changePublishButtonStatus();
         // publishResultBtn.style.width=`0px`;
       }
       // Call the function to fetch results
@@ -518,56 +525,77 @@ body {
       document.getElementById('regionNo').addEventListener('change', function () {
         fetchCurrentResults();
       });
+
+      //Confirm publish button
+      document.getElementById('confirmPublish').addEventListener('click', function () {
+        hidePublishModal();
+        sendPublishRequest();
+      });
+      //Cancel publish button
+      document.getElementById('cancelPublish').addEventListener('click', function () {
+        hidePublishModal();
+      });
+      //Publish result button
       document.getElementById('publish-result-btn').onclick = function () {
-        publishResult();
+        showPublishModal();
       };
+
     }
 
+    function showPublishModal() {
+      document.getElementById('publishModal').style.display = 'block';
+    }
 
+    function hidePublishModal() {
+      document.getElementById('publishModal').style.display = 'none';
+    }
+
+    function changePublishButtonStatus() {
+      publishResultBtn = document.getElementById('publish-result-btn');
+        publishResultBtn.textContent = `Result Published`;
+        publishResultBtn.style.background = `#2c9f43`;
+        publishResultBtn.disabled = true;
+        publishResultBtn.style.boxShadow = "none";
+        publishResultBtn.onmouseover = function () {
+          publishResultBtn.style.cursor = `not-allowed`;
+
+        }
+    }
     let responseMsgFromPublishResult = '';
-    function publishResult() {
-      // Display a confirmation box
-      if (confirm("Are you sure you want to publish the results?")) {
-        // Create a new XMLHttpRequest object
-        var xhr = new XMLHttpRequest();
 
-        // Configure it: POST-request to the 'publishResult.php' page
-        xhr.open('POST', '../admin/publish_results.php', true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    function sendPublishRequest() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '../admin/publish_results.php', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-        // Handle the response
-        xhr.onreadystatechange = function () {
-          if (xhr.readyState === 4) { // Request is done
-            if (xhr.status === 200) { // Successfully received response
-              try {
-                var response = JSON.parse(xhr.responseText);
-                if (response.success) {
-                  // alert("Results have been published successfully!");
-                  showErrorModal("Results have been published successfully!",true);
-                } else {
-                  // alert("An error occurred: " + response.message);
-                  responseMsgFromPublishResult = "An error occurred: " + response.message;
-                }
-              } catch (e) {
-                // alert("Unexpected response from the server.");
-                responseMsgFromPublishResult = "Unexpected response from the server.";
-                console.error(e);
-              }
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          try {
+            var response = JSON.parse(xhr.responseText);
+            if (response.success) {
+              showElectionEnded();
+              changePublishButtonStatus();
+              showErrorModal("Results have been published successfully!", true);
             } else {
-              // alert("Failed to connect to the server. Please try again later.");
-              responseMsgFromPublishResult = "Failed to connect to the server. Please try again later.";
+              responseMsgFromPublishResult = "An error occurred: " + response.message;
             }
-            if (responseMsgFromPublishResult) {
-              showErrorModal(responseMsgFromPublishResult);
-              responseMsgFromPublishResult = '';
-            }
+          } catch (e) {
+            responseMsgFromPublishResult = "Unexpected response from the server.";
           }
-        };
+        } else {
+          responseMsgFromPublishResult = "Failed to connect to the server. Please try again later.";
+        }
 
-        // Send the request
-        xhr.send("action=publish");
+        if (responseMsgFromPublishResult) {
+          showErrorModal(responseMsgFromPublishResult);
+          responseMsgFromPublishResult = '';
+        }
       }
     };
+
+    xhr.send("action=publish");
+  }
 
 
     function showElectionNotEnded() {
@@ -647,15 +675,15 @@ body {
     } else if (successMessage) {
       showErrorModal(successMessage, true);
     }
-  // Close the modal when clicking outside of the modal content
-  window.onclick = function (event) {
-            var modals = document.getElementsByClassName('all-modals');
-            for (var i = 0; i < modals.length; i++) {
-                if (event.target == modals[i]) {
-                    modals[i].style.display = 'none';
-                }
-            }
+    // Close the modal when clicking outside of the modal content
+    window.onclick = function (event) {
+      var modals = document.getElementsByClassName('all-modals');
+      for (var i = 0; i < modals.length; i++) {
+        if (event.target == modals[i]) {
+          modals[i].style.display = 'none';
         }
+      }
+    }
 
   </script>
 </body>

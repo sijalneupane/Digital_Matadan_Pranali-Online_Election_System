@@ -78,17 +78,22 @@ $_SESSION['pageName'] = "Manage Voters";// Clear the message
         .accept-button:hover {
             background-color: #218838;
         }
+
         .send-msg-button {
             background-color: #007bff;
         }
+
         .send-msg-button:hover {
             background-color: #0056b3;
         }
-        .decline-button,.delete-button {
+
+        .decline-button,
+        .delete-button {
             background-color: #dc3545;
         }
 
-        .decline-button:hover,.delete-button:hover {
+        .decline-button:hover,
+        .delete-button:hover {
             background-color: #c82333;
         }
 
@@ -177,25 +182,28 @@ $_SESSION['pageName'] = "Manage Voters";// Clear the message
 
 <body>
     <?php require '../admin/admin_navbar.php'; ?>
-    
-  <!-- Universal Modal (Only one instance) -->
-<div id="universal-modal" class="modal all-modals" style="display: none;">
-    <button class="close-modal" onclick="closeModal()">&times;</button>
-    <div class="modal-content img-modal">
-        <h3 id="modal-title" style="color: Black; text-align: center;"></h3>
-        <img id="modal-img" src="" alt="Selected Image">
-    </div>
-</div>
 
+    <!-- Universal Modal (Only one instance) -->
+    <div id="universal-modal" class="modal all-modals" style="display: none;">
+        <div class="modal-content img-modal" style="position: relative;">
+            <button class="close-modal" onclick="closeModal()"
+                style="position: absolute; top: 10px; right: 10px; background-color:rgb(211, 56, 56); border-radius: 5px;
+                padding:0px 5px;">&times;</button>
+            <h3 id="modal-title" style="color: Black; text-align: center;"></h3>
+            <img id="modal-img" src="" alt="Selected Image">
+        </div>
+    </div>
 
     <!-- Universal Action Modal (Only one instance) -->
     <div id="universal-action-modal" class="modal all-modals" style="display: none;">
-    <div class="modal-content action-modal" style="align-items: center; gap: 20px;">
-        <h3 id="modal-action-title" style="text-align: center;"></h3>
-        <div id="modal-buttons" class="buttons"></div>
-        <button class="close-modal" onclick="closeActionModal()">&times;</button>
+        <div class="modal-content action-modal" style="align-items: center; gap: 20px;position: relative;">
+            <button class="close-modal" onclick="closeActionModal()"
+                style="position: absolute; top: 10px; right: 10px; background-color:rgb(211, 56, 56); border-radius: 5px;
+                padding:0px 5px;">&times;</button>
+            <h3 id="modal-action-title" style="text-align: center;"></h3>
+            <div id="modal-buttons" class="buttons"></div>
+        </div>
     </div>
-</div>
 
     <div id="modal1" class="modal-overlay1 all-modals">
         <div class="modal-content1">
@@ -239,7 +247,7 @@ $_SESSION['pageName'] = "Manage Voters";// Clear the message
                     </tr>
                 </thead>
                 <tbody id="searchResults">
-
+                    <!-- Search results will be displayed here -->
                 </tbody>
             </table>
         </div>
@@ -264,68 +272,68 @@ $_SESSION['pageName'] = "Manage Voters";// Clear the message
             document.getElementById('universal-modal').style.display = 'none';
         }
 
-//action handling function
+        //action handling function
         function openActionModal(id, name, email, userType) {
-    const modal = document.getElementById('universal-action-modal');
-    const modalTitle = document.getElementById('modal-action-title');
-    const modalButtons = document.getElementById('modal-buttons');
+            const modal = document.getElementById('universal-action-modal');
+            const modalTitle = document.getElementById('modal-action-title');
+            const modalButtons = document.getElementById('modal-buttons');
 
-    // Update modal title dynamically
-    modalTitle.innerText = `Action for ${name}`;
+            // Update modal title dynamically
+            modalTitle.innerText = `Action for ${name}`;
 
-    // Clear previous buttons
-    modalButtons.innerHTML = '';
+            // Clear previous buttons
+            modalButtons.innerHTML = '';
 
-    if (userType === 'pending') {
-        // Structure for pending users
-        modalButtons.innerHTML = `
+            if (userType === 'pending') {
+                // Structure for pending users
+                modalButtons.innerHTML = `
             <button class="action-btn accept-button" onclick="handleAccept(${id})">Accept</button>
             <div style="display: flex; align-items: center; border-top: 1px solid black; padding-top: 12px;">
                 <textarea id="decline-message" rows="3" placeholder="Enter reason for rejection..." style="width: 100%;"></textarea>
                 <button class="action-btn decline-button" onclick="handleDecline(${id}, '${email}', '${name}')">Decline</button>
             </div>
         `;
-    } else if (userType === 'verified') {
-        // Structure for voters
-        modalButtons.innerHTML = `
+            } else if (userType === 'verified') {
+                // Structure for voters
+                modalButtons.innerHTML = `
             <textarea id="voter-message" rows="3" placeholder="Enter a message or reason for deletion..." style="width: 100%;"></textarea>
             <button class="action-btn send-msg-button" onclick="sendMessageOrDelete(${id}, '${email}', '${name}', 'message')">Send Message</button>
             <button class="action-btn delete-button" onclick="sendMessageOrDelete(${id}, '${email}', '${name}', 'delete')">Delete Voter</button>
         `;
-    }
+            }
 
-    // Show modal
-    modal.style.display = 'flex';
-}
+            // Show modal
+            modal.style.display = 'flex';
+        }
 
-function closeActionModal() {
-    document.getElementById('universal-action-modal').style.display = 'none';
-}
+        function closeActionModal() {
+            document.getElementById('universal-action-modal').style.display = 'none';
+        }
 
-function handleAccept(id) {
-    window.location.href = `../admin/acceptvoters.php?id=${id}`;
-}
+        function handleAccept(id) {
+            window.location.href = `../admin/acceptvoters.php?id=${id}`;
+        }
 
-function handleDecline(id, email, name) {
-    const message = document.getElementById('decline-message').value.trim();
-    if (message === '') {
-        alert('Please enter a reason for rejection.');
-        return;
-    }
-    const encodedMessage = encodeURIComponent(message);
-    window.location.href = `../admin/declinevoters.php?id=${id}&message=${encodedMessage}&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`;
-}
+        function handleDecline(id, email, name) {
+            const message = document.getElementById('decline-message').value.trim();
+            if (message === '') {
+                alert('Please enter a reason for rejection.');
+                return;
+            }
+            const encodedMessage = encodeURIComponent(message);
+            window.location.href = `../admin/declinevoters.php?id=${id}&message=${encodedMessage}&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`;
+        }
 
-function sendMessageOrDelete(id, email, name, action) {
-    const message = document.getElementById('voter-message').value.trim();
-    if (message === '') {
-        alert('Please enter a message or reason for deletion.');
-        return;
-    }
-    
-    const encodedMessage = encodeURIComponent(message);
-    window.location.href = `../admin/sendMsgOrDeleteVoters.php?id=${id}&message=${encodedMessage}&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}&action=${action}`;
-}
+        function sendMessageOrDelete(id, email, name, action) {
+            const message = document.getElementById('voter-message').value.trim();
+            if (message === '') {
+                alert('Please enter a message or reason for deletion.');
+                return;
+            }
+
+            const encodedMessage = encodeURIComponent(message);
+            window.location.href = `../admin/sendMsgOrDeleteVoters.php?id=${id}&message=${encodedMessage}&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}&action=${action}`;
+        }
 
 
         // Close the modal when clicking outside of the modal content
@@ -421,14 +429,14 @@ function sendMessageOrDelete(id, email, name, action) {
         }
     </script>
     <script>
-        
+
         // Show error modal if there's an error message
         const errorMessage = <?= json_encode($errorMessage); ?>;
         const successMessage = <?= json_encode($successMessage); ?>;
         if (errorMessage) {
             showErrorModal(errorMessage);
-        }else if(successMessage){
-            showErrorModal(successMessage,true);
+        } else if (successMessage) {
+            showErrorModal(successMessage, true);
         }
     </script>
 </body>

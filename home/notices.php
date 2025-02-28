@@ -18,8 +18,19 @@ function getNotices($folderPath)
         $notices[] = [
             'name' => basename($file),
             'path' => $file,
-            'modified' => date("d M Y, H:i", filemtime($file)) // Format modified date
+            'modified' => date(  "d M Y, h:i A", filemtime($file)), // Format modified date
+            'timestamp' => filemtime($file) // Add timestamp for sorting
         ];
+    }
+
+    // Sort notices by modified timestamp in descending order
+    usort($notices, function ($a, $b) {
+        return $b['timestamp'] - $a['timestamp'];
+    });
+
+    // Remove timestamp from the final array
+    foreach ($notices as &$notice) {
+        unset($notice['timestamp']);
     }
 
     return $notices;
@@ -88,9 +99,9 @@ if ($userType === 'admin' && isset($_GET['delete'])) {
             margin: 5px;
         }
         .btn-view { background: #28a745; }
-        .btn-download {  background:rgb(32, 142, 231);}
+        .btn-download {  background:rgb(35, 118, 241);}
         .btn-delete { background: #dc3545; }
-        .btn-back { background:rgb(102, 124, 143); margin-top: 20px; }
+        .btn-back { background:rgb(158, 96, 182); margin-top: 20px; }
         .btn:hover { opacity: 0.8; }
     </style>
 </head>
