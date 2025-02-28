@@ -219,8 +219,8 @@ require_once "../home/logout_modals_html.php";
 
         // Function to update the minimum dates for the election form
         document.addEventListener("DOMContentLoaded", function () {
-            if(document.getElementById("election-id").value===""){
-             return;
+            if (document.getElementById("election-id").value === "") {
+                return;
             }
             const nominationStart = document.getElementById("nomination-StartTime");
             const nominationEnd = document.getElementById("nomination-EndTime");
@@ -228,7 +228,14 @@ require_once "../home/logout_modals_html.php";
             const endTime = document.getElementById("end-time");
 
             function updateMinDates() {
-                const now = new Date().toISOString().slice(0, 16); // Get current datetime in correct format
+                let nowUTC = new Date();
+                let offset = 5.75 * 60; // 5 hours 45 minutes in minutes
+                let now = new Date(nowUTC.getTime() + offset * 60000)
+                    .toISOString()
+                    .slice(0, 16);
+
+                // console.log(now);
+
 
                 // Set initial minimum values
                 nominationStart.min = now;
@@ -375,7 +382,7 @@ require_once "../home/logout_modals_html.php";
         const errorMessage = <?= json_encode($errorMessage); ?>;
         const successMessage = <?= json_encode($successMessage); ?>;
         if (errorMessage) {
-            showErrorModal(errorMessage);
+            showErrorModal(errorMessage,false);
         } else if (successMessage) {
             showErrorModal(successMessage, true);
         }

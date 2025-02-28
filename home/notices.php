@@ -1,4 +1,6 @@
 <?php
+date_default_timezone_set('Asia/Kathmandu');
+
 session_start();
 // Get userType from URL (default to 'guest' if not provided)
 $userType = isset($_GET['userType']) ? $_GET['userType'] : 'guest';

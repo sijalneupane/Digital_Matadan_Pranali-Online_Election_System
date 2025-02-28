@@ -1,5 +1,6 @@
 <?php
 session_start();
+date_default_timezone_set('Asia/Kathmandu');
 
 // Database connection
 require_once '../register_and_login/dbconnection.php';
@@ -29,6 +30,11 @@ function generateElectionNotice($subject, $body, $electionId,$updatedOrAdded, $n
         $pdf->Cell(0, 10, "Digital Matadan Pranali", 0, 1, 'C');
         $pdf->Image('../images/DMP logo.png', 25.4, 10, 30); // Ensure logo path is correct
         $pdf->Ln(10);
+
+        // Date
+        $pdf->SetFont('Arial', '', 12);
+        $pdf->Cell(0, 10, "Date: " . date("Y-m-d"), 0, 1, 'L');
+        $pdf->Ln(5);
 
         // Subject
         $pdf->SetFont('Arial', 'B', 14);
@@ -67,7 +73,7 @@ function generateElectionNotice($subject, $body, $electionId,$updatedOrAdded, $n
     );
 
         // Footer
-        $pdf->Ln(80);
+        $pdf->Ln(65);
         // $pdf->Cell(0, 8, "Signature: _______________", 0, 1, 'L');
         $pdf->Cell(0, 8, "Election Commission of Nepal", 0, 1, align: 'L');
 
