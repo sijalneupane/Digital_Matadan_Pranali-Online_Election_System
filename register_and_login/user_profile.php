@@ -8,7 +8,7 @@ if (!isset($_SESSION["email"])) {
 // unset($_SESSION['error_message']); // Clear the message
 // $successMessage = isset($_SESSION['success_message']) ? $_SESSION['success_message'] : '';
 // unset($_SESSION['success_message']); // Clear the message
-require_once '../php_for_ajax/districtRegionSelect.php';
+// require_once '../php_for_ajax/districtRegionSelect.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -160,9 +160,9 @@ require_once '../php_for_ajax/districtRegionSelect.php';
             cursor: pointer;
         }
 
-        #change-userPhoto-btn,
+        /* #change-userPhoto-btn, */
         #edit-button {
-            display: none;
+            /* display: none; */
         }
 
         /* .edit-button {
@@ -558,17 +558,17 @@ require_once '../php_for_ajax/districtRegionSelect.php';
                                     aria-hidden="true"></i> Apply</button>
                             <button id="cancel-image-0" style="display: none;"><i class="fa fa-times"
                                     aria-hidden="true"></i> Cancel</button>
-                        </div>
+                        </div> -->
                         <div class="edit-options-box" id="edit-options-box">
-                            <button class="button-70" id="toggle-edit-buttons-visibility">Edit Profile</button><br>
+                            <!-- <button class="button-70" id="toggle-edit-buttons-visibility">Edit Profile</button><br>
                             <label for="change-userPhoto" class="change-image-btn" id="change-userPhoto-btn">
                                 <i class="fa fa-picture-o" aria-hidden="true"></i> Change
                             </label>
-                            <input type="file" id="change-userPhoto" accept="image/*" style="display: none;">
+                            <input type="file" id="change-userPhoto" accept="image/*" style="display: none;"> -->
                             <button class="edit-button" onclick="openEditModal()" id="edit-button">
-                                <i class="fas fa-edit"></i> Edit Profile
+                                <i class="fas fa-edit"></i> Update Details
                             </button>
-                        </div> -->
+                        </div>
                     </div>
 
                     <!-- Hidden form to submit data -->
@@ -706,66 +706,66 @@ require_once '../php_for_ajax/districtRegionSelect.php';
             <form action="../register_and_login/user_profile_update.php" method="POST"
                 onsubmit="return validateForm();">
                 <h3>Edit Profile</h3>
-                <div class="form-group two-columns">
+                <!-- <div class="form-group two-columns">
                     <div class="field-error-groups">
                         <label for="name">Name:</label>
-                        <input type="text" id="name" name="name" value="<?php echo $_SESSION['name']; ?>">
+                        <input type="text" id="name" name="name" value="<?php //echo $_SESSION['name']; ?>">
                         <span id="nameError" class="error"></span>
                     </div>
                     <div class="field-error-groups">
                         <label for="gender">Gender:</label>
                         <select id="gender" name="gender">
-                            <option value="male" <?php echo ($_SESSION['gender'] == 'male') ? 'selected' : ''; ?>>Male
+                            <option value="male" <?php // echo ($_SESSION['gender'] == 'male') ? 'selected' : ''; ?>>Male
                             </option>
-                            <option value="female" <?php echo ($_SESSION['gender'] == 'female') ? 'selected' : ''; ?>>
+                            <option value="female" <?php // echo ($_SESSION['gender'] == 'female') ? 'selected' : ''; ?>>
                                 Female</option>
-                            <option value="other" <?php echo ($_SESSION['gender'] == 'other') ? 'selected' : ''; ?>>Other
+                            <option value="other" <?php // echo ($_SESSION['gender'] == 'other') ? 'selected' : ''; ?>>Other
                             </option>
                         </select>
                         <span id="genderError" class="error"></span>
                     </div>
-                </div>
+                </div> -->
 
-                <div class="form-group two-columns">
+                <!-- <div class="form-group two-columns">
                     <div class="field-error-groups">
                         <label for="district">District:</label>
-                        <?php district($_SESSION['district']); ?>
+                        <?php // district($_SESSION['district']); ?>
                         <span id="districtError" class="error"></span>
                     </div>
                     <div class="field-error-groups">
                         <label for="regionNo">Election Region:</label>
-                        <?php regionNo($_SESSION['election_region']); ?>
+                        <?php // regionNo($_SESSION['election_region']); ?>
                         <span id="regionNoError" class="error"></span>
                     </div>
-                </div>
+                </div> -->
                 <div class="form-group two-columns">
-                    <div class="field-error-groups">
+                    <!-- <div class="field-error-groups">
                         <label for="local_address">Local Address:</label>
                         <input type="text" id="local_address" name="local_address"
-                            value="<?php echo $_SESSION['localAddress']; ?>">
+                            value="<?php //echo $_SESSION['localAddress']; ?>">
                         <span id="addressError" class="error"></span>
-                    </div>
+                    </div> -->
                     <div class="field-error-groups">
                         <label for="email">Email:</label>
-                        <input type="text" id="email" name="email" value="<?php echo $_SESSION['email']; ?>" disabled>
+                        <input type="text" id="email" name="email" value="<?php echo $_SESSION['email']; ?>">
                         <span id="emailError" class="error"></span>
                     </div>
                 </div>
 
-                <div class="form-group two-columns">
+                <!-- <div class="form-group two-columns">
                     <div class="field-error-groups">
                         <label for="dateOfBirth">Birth Date:</label>
                         <input type="date" id="dateOfBirth" name="dateOfBirth"
-                            value="<?php echo $_SESSION['birthDate']; ?>">
+                            value="<?php // echo $_SESSION['birthDate']; ?>">
                         <span id="dobError" class="error"></span>
                     </div>
                     <div class="field-error-groups">
                         <label for="citizenshipNumber">Citizenship Number:</label>
                         <input type="text" id="citizenshipNumber" name="citizenshipNumber"
-                            value="<?php echo $_SESSION['citizenshipNumber']; ?>">
+                            value="<?php // echo $_SESSION['citizenshipNumber']; ?>">
                         <span id="citizenshipError" class="error"></span>
                     </div>
-                </div>
+                </div> -->
                 <div style="margin-top: 20px; text-align: center;">
                     <input type="submit" class="button" value="Update Profile">
                 </div>
@@ -800,26 +800,26 @@ require_once '../php_for_ajax/districtRegionSelect.php';
 
         // Function to populate form with initial values
         function resetFormValues() {
-            document.getElementById('name').value = initialFormValues.name;
-            document.getElementById('gender').value = initialFormValues.gender;
-            document.getElementById('district').value = initialFormValues.district;
-            document.getElementById('regionNo').value = initialFormValues.election_region;
-            document.getElementById('local_address').value = initialFormValues.local_address;
+            // document.getElementById('name').value = initialFormValues.name;
+            // document.getElementById('gender').value = initialFormValues.gender;
+            // document.getElementById('district').value = initialFormValues.district;
+            // document.getElementById('regionNo').value = initialFormValues.election_region;
+            // document.getElementById('local_address').value = initialFormValues.local_address;
             document.getElementById('email').value = initialFormValues.email;
-            document.getElementById('dateOfBirth').value = initialFormValues.birthDate;
-            document.getElementById('citizenshipNumber').value = initialFormValues.citizenshipNumber;
+            // document.getElementById('dateOfBirth').value = initialFormValues.birthDate;
+            // document.getElementById('citizenshipNumber').value = initialFormValues.citizenshipNumber;
         }
 
-        // // Edit Profile Modal
-        // function openEditModal() {
-        //     document.getElementById('editModal').style.display = 'flex';
-        //     resetFormValues(); // Populate form with current session values
-        //     clearErrors();
-        // }
-        // function closeEditModal() {
-        //     document.getElementById('editModal').style.display = 'none';
-        //     resetFormValues(); // Reset form fields to initial values
-        // }
+        // Edit Profile Modal
+        function openEditModal() {
+            document.getElementById('editModal').style.display = 'flex';
+            resetFormValues(); // Populate form with current session values
+            clearErrors();
+        }
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+            resetFormValues(); // Reset form fields to initial values
+        }
 
         // Show error modal if there's an error message
         // const errorMessage = <= json_encode($errorMessage); ?>;

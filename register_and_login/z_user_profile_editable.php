@@ -273,7 +273,7 @@ require_once '../php_for_ajax/districtRegionSelect.php';
         }
 
         /*Logout Button*/
-        .button-container {
+        /* .button-container {
             margin-top: 20px;
             text-align: center;
         }
@@ -292,7 +292,7 @@ require_once '../php_for_ajax/districtRegionSelect.php';
 
         .logout-button:hover {
             background-color: #e60000;
-        }
+        } */
 
         /* Modal Styles */
         .modal {
@@ -689,10 +689,10 @@ require_once '../php_for_ajax/districtRegionSelect.php';
                 </div>
 
                 <!-- Logout Button -->
-                <div class="button-container">
+                <!-- <div class="button-container">
                     <button class="logout-button" id="logoutBtn" onclick="openLogoutModal();"><i
                             class="fas fa-sign-out-alt"></i> Logout</button>
-                </div>
+                </div> -->
                 <div class="change-password-container">
                     <a href="../forgotpassword/reset_password.php?id=<?= $_SESSION['voterId']; ?>"
                         class="change-password-link">Change Password &rarr;</a>
