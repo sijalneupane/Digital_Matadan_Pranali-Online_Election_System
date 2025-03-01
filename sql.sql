@@ -19,7 +19,7 @@ create table district(
 
 -- 3)parties table
 CREATE TABLE parties (
-    partyId INT AUTO_INCREMENT PRIMARY KEY,
+    partyId INT(11) AUTO_INCREMENT PRIMARY KEY,
     partyName VARCHAR(255) NOT NULL UNIQUE,
     partyLeader VARCHAR(255) NOT NULL UNIQUE,
     partyThemeColor VARCHAR(10) NOT NULL,
@@ -57,7 +57,7 @@ CREATE TABLE candidates (
 );
 
 
---5) pending status table
+-- 5) pending status table
 CREATE TABLE pendingVoters (
     id INT(11) AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) COLLATE latin1_swedish_ci NOT NULL,
@@ -76,7 +76,7 @@ CREATE TABLE pendingVoters (
     FOREIGN KEY (dId) REFERENCES district(dId) ON DELETE CASCADE
 );
 
---6) voters table:
+-- 6) voters table:
 CREATE TABLE voters (
     id INT(11) AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) COLLATE latin1_swedish_ci NOT NULL,
@@ -115,7 +115,7 @@ CREATE TABLE votersMessages (
 
 
 
---8) currentresults table 
+-- 8) currentresults table 
 CREATE TABLE currentresults ( 
     currentResultId INT AUTO_INCREMENT PRIMARY KEY, 
     electionId INT NOT NULL,
@@ -130,7 +130,7 @@ CREATE TABLE currentresults (
     FOREIGN KEY (dId) REFERENCES district(dId) ON DELETE CASCADE
 );
 
---9) archive results table(holds total election results till now altogether) 
+-- 9) archive results table(holds total election results till now altogether) 
 CREATE TABLE archiveresults (
     archiveResultsId INT AUTO_INCREMENT PRIMARY KEY,
     electionId INT NOT NULL,
