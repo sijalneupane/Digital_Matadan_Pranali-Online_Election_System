@@ -2,7 +2,7 @@
 session_start();
 $errorMessage = isset($_SESSION['error_message']) ? $_SESSION['error_message'] : '';
 unset($_SESSION['error_message']); // Clear the message
-$conn = mysqli_connect('localhost', 'root', '', 'online_election');
+// $conn = mysqli_connect('localhost', 'root', '', 'online_election');
 require_once '../php_for_ajax/districtRegionSelect.php';
 ?>
 

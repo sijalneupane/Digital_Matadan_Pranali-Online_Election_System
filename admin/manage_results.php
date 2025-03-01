@@ -480,8 +480,9 @@ body {
       let votingStartTime = new Date(votingTime.startTime).getTime();
       let votingEndTime = new Date(votingTime.endTime).getTime();
       if (votingTime.error) {
-        alert("No election scheduled or conducted till now. PLease come back later");
-        window.location.href = "../admin/admin_home.php";
+        showElectionNotScheduled();
+        // alert("No election scheduled or conducted till now. PLease come back later");
+        // window.location.href = "../admin/admin_home.php";
       } else if (!votingEnded && currentTime > votingEndTime) {
         votingEnded = true;
         electionNotScheduled = votingNotStarted = votingStarted = false;
@@ -645,6 +646,32 @@ body {
         </div>
     `;
     }
+
+      // Election not scheduled function
+      function showElectionNotScheduled() {
+      document.getElementById('content').innerHTML = `
+      <div id="no-election-modal-overlay" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.5); display: flex; justify-content: center; align-items: center;">
+        <div id="no-election-modal-content" style="background: white; padding: 20px; border-radius: 10px; position: relative; width: 300px; text-align: center; border: 2px solid red; box-shadow: 0 0 5px red;">
+          <button id="no-election-modal-close-btn" style="position: absolute; top: 10px; right: 10px; background: red; color: white; border: none; border-radius:4px;padding: 5px 10px; cursor: pointer;">&times;</button>
+          <h2 style="color: red;">No Election Found</h2>
+          <p style="font-weight:bold;">Any election has not been Scheduled. Please check back later.</p>
+        </div>
+      </div>
+    `;
+
+      // Close modal when clicking outside the modal content
+      document.getElementById('no-election-modal-overlay').addEventListener('click', function (event) {
+        if (event.target.id === 'no-election-modal-overlay' || event.target.id === 'no-election-modal-close-btn') {
+          closeNoElectionModal();
+        }
+      });
+    }
+    function closeNoElectionModal() {
+      document.getElementById('content').innerHTML = '';
+      window.location.href = '../admin/admin_home.php';
+    }
+
+
 
     // Show/hide the Go to Top button based on scroll position of the content container
     let contentContainer = document.getElementById("content");

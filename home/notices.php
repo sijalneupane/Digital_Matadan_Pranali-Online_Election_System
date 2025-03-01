@@ -1,4 +1,5 @@
 <?php
+
 date_default_timezone_set('Asia/Kathmandu');
 
 session_start();
@@ -18,7 +19,7 @@ function getNotices($folderPath)
         $notices[] = [
             'name' => basename($file),
             'path' => $file,
-            'modified' => date(  "d M Y, h:i A", filemtime($file)), // Format modified date
+            'modified' => date("d M Y, h:i A", filemtime($file)), // Format modified date
             'timestamp' => filemtime($file) // Add timestamp for sorting
         ];
     }
@@ -27,11 +28,6 @@ function getNotices($folderPath)
     usort($notices, function ($a, $b) {
         return $b['timestamp'] - $a['timestamp'];
     });
-
-    // Remove timestamp from the final array
-    foreach ($notices as &$notice) {
-        unset($notice['timestamp']);
-    }
 
     return $notices;
 }
@@ -43,9 +39,11 @@ if ($userType === 'admin' && isset($_GET['delete'])) {
     $fileToDelete = $noticesFolder . basename($_GET['delete']);
     if (file_exists($fileToDelete)) {
         unlink($fileToDelete);
-        header("Location: ../home/notices.php?userType=admin");
-        exit;
+        echo "success";
+    } else {
+        echo "failure";
     }
+    exit;
 }
 ?>
 
@@ -95,6 +93,8 @@ if ($userType === 'admin' && isset($_GET['delete'])) {
             padding: 8px 12px;
             border-radius: 5px;
             color: white;
+            border: none;
+            cursor: pointer;
             display: inline-block;
             margin: 5px;
         }
@@ -103,13 +103,88 @@ if ($userType === 'admin' && isset($_GET['delete'])) {
         .btn-delete { background: #dc3545; }
         .btn-back { background:rgb(158, 96, 182); margin-top: 20px; }
         .btn:hover { opacity: 0.8; }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            width: 400px;
+        }
+        .close-btn {
+            float: right;
+            color:white;
+            padding:5px 10px;
+            border-radius: 5px;
+            background: #dc3545;
+            cursor: pointer;
+        }
+        .btn-delete { background: #dc3545; }
+        .btn-cancel { background:rgb(31, 160, 63); }
+
     </style>
+    <script>
+        function showConfirmModal(deleteUrl, fileName) {
+            const modal = document.createElement("div");
+            modal.classList.add("modal-overlay");
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <span class="close-btn" onclick="closeModal(this)">&times;</span>
+                    <h3>Confirm Delete</h3>
+                    <p>Are you sure you want to delete "${fileName}"?</p>
+                    <button class="btn btn-delete" onclick="deleteNotice('${deleteUrl}', this)">Delete</button>
+                    <button class="btn btn-cancel" onclick="closeModal(this)">Cancel</button>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function deleteNotice(deleteUrl, btn) {
+            fetch(deleteUrl)
+                .then(response => response.text())
+                .then(data => {
+                    if (data.trim() === "success") {
+                        showSuccessModal("Notice successfully deleted.");
+                        setTimeout(() => location.reload(), 2000);
+                    } else {
+                        showSuccessModal("Failed to delete notice.");
+                    }
+                })
+                .catch(() => showSuccessModal("An error occurred."));
+            closeModal(btn);
+        }
+
+        function showSuccessModal(message) {
+            const modal = document.createElement("div");
+            modal.classList.add("modal-overlay");
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <span class="close-btn" onclick="closeModal(this)">&times;</span>
+                    <h3>Notification</h3>
+                    <p>${message}</p>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            setTimeout(() => closeModal(modal), 2000);
+        }
+
+        function closeModal(element) {
+            let modal = element.closest(".modal-overlay");
+            if (modal) {
+                modal.remove();
+            }
+        }
+    </script>
 </head>
 <body>
-
 <div class="container">
     <h2>Election Notices</h2>
-
     <?php if (empty($notices)): ?>
         <p>No notices available.</p>
     <?php else: ?>
@@ -127,20 +202,17 @@ if ($userType === 'admin' && isset($_GET['delete'])) {
                         <a href="<?php echo $notice['path']; ?>" target="_blank" class="btn btn-view">View</a>
                         <a href="<?php echo $notice['path']; ?>" download class="btn btn-download">Download</a>
                         <?php if ($userType === 'admin'): ?>
-                            <a href="?userType=admin&delete=<?php echo urlencode($notice['name']); ?>" class="btn btn-delete" onclick="return confirm('Are you sure you want to delete this notice?');">Delete</a>
+                            <button class="btn btn-delete" onclick="showConfirmModal('?userType=admin&delete=<?php echo urlencode($notice['name']); ?>', '<?php echo $notice['name']; ?>')">Delete</button>
                         <?php endif; ?>
                     </td>
                 </tr>
             <?php endforeach; ?>
         </table>
     <?php endif; ?>
-
     <a href="<?php echo getBackUrl($userType); ?>" class="btn btn-back">Back</a>
 </div>
-
 </body>
 </html>
-
 <?php
 function getBackUrl($userType) {
     switch ($userType) {
