@@ -67,6 +67,22 @@
             background-color: #ff4500;
         }
 
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 4% 2% 2%;
+            flex: 1;
+            gap: 7%;
+            /* Light white shadow */
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(10px);
+            /* For Safari support */
+            /* margin: 3% 10%; */
+        }
+
         .main-content {
             display: flex;
             flex-direction: row;
@@ -167,14 +183,47 @@
             text-align: center;
         }
 
+        .buttons-box {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .buttons-box a {
+            width: 200px;
+            display: inline-block;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: all ease-in 0.05s;
+            opacity: 0.9;
+        }
+        .buttons-box a:first-child {
+            background-color: rgb(189, 52, 52);
+        }
+        .buttons-box a:nth-child(2) {
+            background-color: rgb(24, 103, 187);
+        }
+        .buttons-box a:nth-child(3) {
+            background-color: rgb(182, 115, 15);
+        }
+        .buttons-box a:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
         .marquee {
             white-space: nowrap;
             overflow: hidden;
             display: none;
             padding: 10px;
             width: 100%;
-            background-color:rgb(114, 114, 114);
+            background-color: rgb(114, 114, 114);
         }
+
         .marquee span {
             color: white;
             font-size: 1.2em;
@@ -182,9 +231,15 @@
             padding-left: 100%;
             animation: marquee 40s ease infinite;
         }
+
         @keyframes marquee {
-            from { transform: translateX(0%); }
-            to { transform: translateX(-100%); }
+            from {
+                transform: translateX(0%);
+            }
+
+            to {
+                transform: translateX(-100%);
+            }
         }
 
         @media (max-width: 768px) {
@@ -260,37 +315,38 @@
         </div>
     </nav>
 
-        <div id="marquee" class="marquee">
-        </div>
+    <div id="marquee" class="marquee">
+    </div>
     <!-- Main Content -->
-    <div class="main-content">
-        <div class="content">
-            <h1>Welcome to the Online Election System</h1>
-            <p>Participate in a fair and transparent voting system. Your vote matters.</p>
-            <div class="action-buttons">
-                <a href="../register_and_login/voter_login_form.php" class="voter-login">Voter Login
-                    <span>&rarr;</span></a>
-                <a href="../register_and_login/voter_register_form.php" class="voter-register">Voter
-                    Register<span>&rarr;</span></a>
+    <div class="container">
+        <div class="main-content">
+            <div class="content">
+                <h1>Welcome to the Online Election System</h1>
+                <p>Participate in a fair and transparent voting system. Your vote matters.</p>
+                <div class="action-buttons">
+                    <a href="../register_and_login/voter_login_form.php" class="voter-login">Voter Login
+                        <span>&rarr;</span></a>
+                    <a href="../register_and_login/voter_register_form.php" class="voter-register">Voter
+                        Register<span>&rarr;</span></a>
+                </div>
+                <a href="../home/guidelines.php" class="guidelines-link">Need Some Guidelines? Click here</a>
+
             </div>
-            <a href="../home/guidelines.php" class="guidelines-link">Need Some Guidelines? Click here</a>
-            <div class="notice-link-box" style="margin-top: 20px;">
-                <a href="../home/notices.php" class="notice-link" style="min-width:150px;display:inline-block; margin-right:20px;color: #fff; text-decoration: none; background-color:rgb(172, 72, 72); padding: 10px 20px; border-radius: 5px; transition: background-color 0.3s;">
-                    View All Notices
-                </a>
-            </div>
-            <div class="canidate-result-link-box" style="margin-top: 20px;">
-                <a href="../home/view_all_candidates.php" class="notice-link" style="min-width:150px;display:inline-block;margin-right:20px; color: #fff; text-decoration: none; background-color:rgb(49, 102, 158); padding: 10px 20px; border-radius: 5px; transition: background-color 0.3s;">
-                    View Candidates
-                </a>
-                <a href="../home/view_all_results.php" class="notice-link" style="min-width:150px;display:inline-block;color: #fff; text-decoration: none; background-color:rgb(49, 102, 158); padding: 10px 20px; border-radius: 5px; transition: background-color 0.3s;">
-                    View Results
-                </a>
+            <div class="image-section">
+                <img src="https://media.istockphoto.com/id/1258633187/vector/online-vote.jpg?s=612x612&w=0&k=20&c=7eOLMUx6_EKkXPjMrElvFYkz2x0rdShD8DNAlrff6-E="
+                    alt="Voting Image" class="voting-image">
             </div>
         </div>
-        <div class="image-section">
-            <img src="https://media.istockphoto.com/id/1258633187/vector/online-vote.jpg?s=612x612&w=0&k=20&c=7eOLMUx6_EKkXPjMrElvFYkz2x0rdShD8DNAlrff6-E="
-                alt="Voting Image" class="voting-image">
+        <div class="buttons-box">
+            <a href="../home/notices.php">
+                View All Notices &rarr;
+            </a>
+            <a href="../home/view_all_candidates.php">
+                View Candidates &rarr;
+            </a>
+            <a href="../home/view_all_results.php">
+                View Results &rarr;
+            </a>
         </div>
     </div>
     <?php include '../home/footer.php'; ?>
@@ -317,7 +373,7 @@
                             if (currentTime < endTime) {
                                 marqueeElement.style.display = 'block';
                                 marqueeElement.innerHTML = `<span>New Election is scheduled. Make sure to view the notices and participate in voting.</span>`;
-                                document.getElementById('election-time').innerHTML =`
+                                document.getElementById('election-time').innerHTML = `
                                 <div>Election Start: ${startTime.toLocaleString()} <br>Election End: ${endTime.toLocaleString()}</div>
                                 `;
                             } else {

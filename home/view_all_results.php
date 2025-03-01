@@ -14,7 +14,7 @@ require_once '../php_for_ajax/districtRegion2.php';
   <link rel="stylesheet" href="../results/results.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
-  <title>Results</title>
+  <title>Overall results</title>
   <style>
      body{
       /* margin:0; */
@@ -56,26 +56,11 @@ require_once '../php_for_ajax/districtRegion2.php';
       </div>
       <div class="overview" id="overview" style="display: none;"></div>
       <div class="content1" id="content1">
-        <!-- <div id="election-info">
-        <h3 id="election-name"></h3>
-        <p id="startTime"></p>
-        <p id="endTime"></p>
-      </div>
-      <form onsubmit="event.preventDefault();" class="search-form">
-        <div class="search-input-container">
-
-          <input type="text" id="searchQuery" placeholder="Search by name" class="search-input">
-          <i class="fas fa-search" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%);"></i>
-        </div>
-        <?php
-
-        // district();
-        // regionNo();
-        ?>
+        
       </form>
       <div class="responsive-table-container" id="old-results">
 
-      </div>  -->
+      </div>  
       </div>
     </div>
   </div>
