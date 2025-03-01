@@ -1,9 +1,7 @@
 <!-- guidelines.php -->
 <?php
 session_start();
-if (!isset($_SESSION["email"])) {
-  header('Location: ../home/index.php');
-}
+
 require_once '../php_for_ajax/districtRegion2.php';
 ?>
 <!DOCTYPE html>
@@ -18,18 +16,40 @@ require_once '../php_for_ajax/districtRegion2.php';
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
   <title>Results</title>
   <style>
+     body{
+      /* margin:0; */
+      padding: 20px 0 !important;
+      /* width: 100%; */
+      min-height: 100svh;
+      background-color: #d3d3d3;
 
+    }
+    .content1{
+      width:95%;
+    }
+  .back-button {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 1000;
+  }
+
+  .back-button:hover {
+    background-color: #0056b3;
+  }
   </style>
 </head>
 
 
 <body>
   <div class="container">
-    <?php include '../home/sidebar.php'; ?>
 
-    <script>
-      document.querySelector('a[href="../results/results.php"]').classList.add('active');
-    </script>
     <div class="content" id="content">
       <div class="header" id="header">
         <!-- <h1>Lets look at the results of the election</h1>-->
@@ -60,7 +80,7 @@ require_once '../php_for_ajax/districtRegion2.php';
     </div>
   </div>
   <button id="goToTop" class="go-to-top" title="Go to Top" onclick="scrollToTop()">↑</button>
-
+  <button id="backButton" class="back-button" onclick="window.location.href='../home/index.php'">← Back</button>
   <script>
     let oldHeaderDiv = `<h2 style="margin:0px;">Lets look at the results of the election</h2>`;
     let oldOverviewDiv = `<div id="election-info">
@@ -77,8 +97,8 @@ require_once '../php_for_ajax/districtRegion2.php';
           <!-- PHP generated dropdowns -->
           ${`
           <?php
-          district($_SESSION['district']);
-          regionNo($_SESSION['election_region']);
+          district();
+          regionNo();
           ?>`}
         </form>
         <div class="responsive-table-container" id="old-results"></div>

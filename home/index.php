@@ -275,8 +275,16 @@
             </div>
             <a href="../home/guidelines.php" class="guidelines-link">Need Some Guidelines? Click here</a>
             <div class="notice-link-box" style="margin-top: 20px;">
-                <a href="../home/notices.php" class="notice-link" style="color: #fff; text-decoration: none; background-color: #007bff; padding: 10px 20px; border-radius: 5px; transition: background-color 0.3s;">
+                <a href="../home/notices.php" class="notice-link" style="min-width:150px;display:inline-block; margin-right:20px;color: #fff; text-decoration: none; background-color:rgb(172, 72, 72); padding: 10px 20px; border-radius: 5px; transition: background-color 0.3s;">
                     View All Notices
+                </a>
+            </div>
+            <div class="canidate-result-link-box" style="margin-top: 20px;">
+                <a href="../home/view_all_candidates.php" class="notice-link" style="min-width:150px;display:inline-block;margin-right:20px; color: #fff; text-decoration: none; background-color:rgb(49, 102, 158); padding: 10px 20px; border-radius: 5px; transition: background-color 0.3s;">
+                    View Candidates
+                </a>
+                <a href="../home/view_all_results.php" class="notice-link" style="min-width:150px;display:inline-block;color: #fff; text-decoration: none; background-color:rgb(49, 102, 158); padding: 10px 20px; border-radius: 5px; transition: background-color 0.3s;">
+                    View Results
                 </a>
             </div>
         </div>

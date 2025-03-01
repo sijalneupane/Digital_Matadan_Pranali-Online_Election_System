@@ -1,9 +1,6 @@
 <!-- candidates.php -->
 <?php
-session_start();
-if (!isset($_SESSION["email"])) {
-  header('Location:../home/index.php');
-}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,17 +11,41 @@ if (!isset($_SESSION["email"])) {
   <title>Candidates Page</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="stylesheet" href="../candidates/candidates.css">
+  <style>
+    body{
+      margin:0;
+      padding: 20px 0;
+      width: 100%;
+      min-height: 100svh;
+      background-color: #d3d3d3;
+
+    }
+    .container {
+      /* display: flex;
+      justify-content: center;
+      align-items: start;
+       */
+    }
+  .back-button {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 1000;
+  }
+
+  .back-button:hover {
+    background-color: #0056b3;
+  }
+  </style>
 </head>
 
 <div class="container">
-  <!-- Include sidebar -->
-  <?php include '../home/sidebar.php'; ?>
-
-  <!-- Add 'active' class to Candidates link -->
-  <script>
-    document.querySelector('a[href="../candidates/candidates.php"]').classList.add('active');
-  </script>
-
   <div class="content" id="content">
     <button id="open-search" class="inactive">Open Search Area</button>
     <form onsubmit="event.preventDefault();" class="search-form">
@@ -33,8 +54,8 @@ if (!isset($_SESSION["email"])) {
         <i class="fas fa-search" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%);"></i>
       </div>
       <?php require_once '../php_for_ajax/districtRegionSelect.php';
-      district("$_SESSION[district]");
-      regionNo("$_SESSION[election_region]");
+      district();
+      regionNo();
       ?>
       <div class="search-input" id="view-all-checkbox" style=" align-content:center">
         <input type="checkbox" name="all" id="all" value="all" style="margin: 0;"><span style="font-size: 12px;">View
@@ -48,18 +69,17 @@ if (!isset($_SESSION["email"])) {
       <div id="caption"></div>
     </div>
 
-    <h1 id="h1-candidates">Candidates from Your Constituency</h1>
+    <h1 id="h1-candidates">View All the candidates present in this election</h1>
     <div class="candidates" id="candidates">
-      <?php
+    <?php
       require_once '../register_and_login/dbconnection.php';
 
-      $dId = $_SESSION['dId'];
+      // $dId = $_SESSION['dId'];
       // $dId = 1; // For testing purposes, set the district ID to 1
       $query = "SELECT candidates.*, parties.partyName,parties.partyLogo, district.district, district.regionNo 
                 FROM candidates 
                 JOIN parties ON candidates.partyId = parties.partyId 
-                JOIN district ON candidates.dId = district.dId
-                where candidates.dId = $dId";
+                JOIN district ON candidates.dId = district.dId";
       $result = mysqli_query($conn, $query);
 
       if (mysqli_num_rows($result) > 0) {
@@ -98,9 +118,12 @@ if (!isset($_SESSION["email"])) {
       ?>
     </div>
     <button id="goToTop" class="go-to-top" title="Go to Top" onclick="scrollToTop()">↑</button>
+    <button id="backButton" class="back-button" onclick="window.location.href='../home/index.php'">← Back</button>
   </div>
 </div>
+
 <script>
+  document.addEventListener('DOMContentLoaded', searchCandidates);
   // Function to attach event listeners to candidate photos
   function attachModalEventListeners() {
     var modal = document.getElementById("imageModal");
@@ -157,7 +180,7 @@ if (!isset($_SESSION["email"])) {
       resetResults();
     } else {
       var xhr = new XMLHttpRequest();
-      xhr.open('GET', 'getCandidates.php?searchQuery=' + encodeURIComponent(searchQuery) + '&district=' + encodeURIComponent(district) + '&regionNo=' + encodeURIComponent(regionNo), true);
+      xhr.open('GET', '../candidates/getCandidates.php?searchQuery=' + encodeURIComponent(searchQuery) + '&district=' + encodeURIComponent(district) + '&regionNo=' + encodeURIComponent(regionNo), true);
       xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {
           document.getElementById('h1-candidates').textContent = "All Candidates"
