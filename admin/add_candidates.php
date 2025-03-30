@@ -883,6 +883,7 @@ if (isset($_GET['id'])) {
 
         function validateForm() {
             let valid = true;
+            let namePattern = /^[A-Za-z\s]{7,}$/;
             // Clear previous errors
             document.querySelectorAll('.form-group span').forEach(span => span.textContent = '');
 
@@ -890,6 +891,9 @@ if (isset($_GET['id'])) {
             let name = document.getElementById('name').value;
             if (name.trim() === '') {
                 document.getElementById('nameError').textContent = 'Name is required';
+                valid = false;
+            }else if (!namePattern.test(name.trim())){
+                document.getElementById('nameError').textContent = 'Name must only contain alphabet characters';
                 valid = false;
             }
 
@@ -924,8 +928,11 @@ if (isset($_GET['id'])) {
             if (citizenshipNumber.trim() === '') {
                 document.getElementById('citizenshipNumberError').textContent = 'Citizenship Number is required';
                 valid = false;
+            }else if (isNaN(citizenshipNumber.trim())) {
+                document.getElementById('citizenshipNumberError').textContent = 'Citizenship Number must be number';
+                valid = false;
             }
-
+            
             // Validate Education Level
             let educationLevel = document.getElementById('education_level').value;
             if (educationLevel.trim() === '') {

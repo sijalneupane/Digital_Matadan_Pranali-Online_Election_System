@@ -61,8 +61,8 @@ function validateForm() {
   let userPhoto = document.getElementById("userPhoto").files[0];
 
   // Regular expressions for validation
-  let namePattern = /^[A-Za-z\s]+$/;
-  let emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+  let namePattern = /^[A-Za-z\s]{7,}$/;
+  let emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z.-]+\.[a-zA-Z]{2,6}$/;
   let passwordPattern =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/;
 
@@ -72,7 +72,7 @@ function validateForm() {
     showError("nameError", "Full Name is required");
     isValid = false;
   } else if (!namePattern.test(name)) {
-    showError("nameError", "Full Name should only contain alphabets");
+    showError("nameError", "Full Name should only contain alphabets and more than 7 characters");
     isValid = false;
   }
 

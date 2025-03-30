@@ -146,21 +146,22 @@ CREATE TABLE archiveresults (
 
 -- inserting into candidates and currentresults table
 -- Insert into Candidates table
-INSERT INTO Candidates (name, dob, gender, citizenship_number, education_level, manifesto, partyId, dId, candidate_photo)
+INSERT INTO candidates (candidateId, name, dob, gender, citizenship_number, education_level, manifesto, partyId, dId, candidate_photo) 
 VALUES 
-('Hari Thakur', '1985-03-15', 'Male', '123456789', 'Bachelor', 'Committed to economic reform and employment generation.', 1, 19, '1_1_19_Hari Thakur.jpg'),
-('Ramulal Kc', '1978-07-22', 'Male', '123456780', 'Master', 'Advocating for quality education and healthcare accessibility.', 1, 19, '1_1_19_Ramulal Kc.jpg'),
-('Ram kumar karki', '1980-05-10', 'Male', '123456781', 'PhD', 'Prioritizing technological advancement and digital governance.', 1, 20, '1_1_20_Ram kumar karki.jpg'),
-('Ram Karki', '1982-02-18', 'Male', '123456784', 'Bachelor', 'Advocating for environmental sustainability and green energy.', 2, 19, '1_2_19_Ram Karki.jpg'),
-('Ramri manxey', '1983-11-25', 'Female', '123456785', 'Master', 'Empowering women and promoting gender equality.', 2, 20, '1_2_20_Ramri manxey.jpg'),
-('Gita Waiba', '1976-06-14', 'Female', '123456786', 'PhD', 'Strengthening rural infrastructure and public transport.', 3, 19, '1_3_19_Gita Waiba.jpg'),
-('HAr har mahadev', '1973-08-29', 'Male', '123456788', 'Diploma', 'Dedicated to preserving cultural heritage and traditions.', 3, 20, '1_3_20_HAr har mahadev.jpg');
+(1, 'Hari gopal Kc', '1995-01-01', 'male', '123123', "master's degree", 'Passadadasdasdas', 1, 19, '1_1_19_Hari gopal Kc.jpg'),
+(2, 'Gokul Baskota', '1994-01-02', 'male', '111111', "master's degree", 'ouuiwerwerwerw', 3, 19, '1_3_19_Gokul Baskota.jpg'),
+(3, 'Sangita Raul', '1978-01-01', 'female', '3434343', "master's degree", 'Master 123213123', 2, 19, '1_2_19_Sangita Raul.jpg'),
+(4, 'Samish Shrestha', '1976-12-12', 'male', '8765', 'bachelors', 'Hi hello there', 2, 20, '1_2_20_Samish Shrestha.jpg'),
+(5, 'dr stone', '1979-01-01', 'male', '12345667789', 'bachelors', 'Hi i will increase these world', 3, 20, '1_3_20_dr stone.jpg'),
+(6, 'Saraswoti Ji', '1985-07-06', 'male', '45455454545', 'Engineering', 'Make nepal great again', 1, 19, '1_1_19_Saraswoti Ji.jpg');
 
 -- Insert into CurrentResults table
 -- INSERT INTO CurrentResults (electionId, candidateId, partyId, dId,FLOOR(RAND() * 100))
 INSERT INTO CurrentResults (electionId, candidateId, partyId, dId)
 SELECT 1, candidateId, partyId, dId 
 FROM Candidates;
+-- update current results
+update `currentresults` set totalVotes=FLOOR(RAND() * 1000);
 
 --creating trigger in mysql to update the votingStatus to 'notVoted' in the voters table when new election is added 
 DELIMITER //

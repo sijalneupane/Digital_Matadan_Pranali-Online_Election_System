@@ -118,7 +118,7 @@
       ?>
     </div>
     <button id="goToTop" class="go-to-top" title="Go to Top" onclick="scrollToTop()">↑</button>
-    <button id="backButton" class="back-button" onclick="window.location.href='../home/index.php'">← Back</button>
+    <!-- <button id="backButton" class="back-button" onclick="window.location.href='../home/index.php'">← Back</button> -->
   </div>
 </div>
 

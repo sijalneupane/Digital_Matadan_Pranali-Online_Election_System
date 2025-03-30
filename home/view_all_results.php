@@ -65,7 +65,7 @@ require_once '../php_for_ajax/districtRegion2.php';
     </div>
   </div>
   <button id="goToTop" class="go-to-top" title="Go to Top" onclick="scrollToTop()">↑</button>
-  <button id="backButton" class="back-button" onclick="window.location.href='../home/index.php'">← Back</button>
+  <!-- <button id="backButton" class="back-button" onclick="window.location.href='../home/index.php'">← Back</button> -->
   <script>
     let oldHeaderDiv = `<h2 style="margin:0px;">Lets look at the results of the election</h2>`;
     let oldOverviewDiv = `<div id="election-info">
