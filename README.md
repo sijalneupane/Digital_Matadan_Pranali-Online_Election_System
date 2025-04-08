@@ -32,7 +32,7 @@ Digital Matadan Pranali is an online election platform inspired by the **First P
 - **Backend:** PHP  
 - **APIs & Tools:**  
   - **Abstract API ✉️** - Email validation and verification.  
-  - **MailMaster 📧** - Sending emails (Voter ID, status updates).  
+  - **MailMaster 📧** - Sending emails (Voter ID and registration status).  
   - **FPDF 📄** - Generating PDF notices.
 
 ---
@@ -56,8 +56,7 @@ You can either **run the project locally by cloning** or **visit the live site**
 6. Run the server and visit `http://localhost/[project-folder]`.
 
 ### Option 2: Visit Live Site
-- Access the deployed version at: [https://sjnp.tech](https://sjnp.tech)  
-  *(Replace this URL with the actual site link if available.)*
+- Access the deployed version at: [https://sjnp.tech](https://sjnp.tech)
 
 ---
 
@@ -83,7 +82,7 @@ You can either **run the project locally by cloning** or **visit the live site**
 
 - Expand to all Nepal provinces.  
 - Add real-time vote tracking and visuals.  
-- Enhance security with OTP or biometric login.
+- Enhance security with biometric login.
 
 ---
 
