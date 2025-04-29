@@ -1,4 +1,4 @@
-## 📝 This is project done for BCA 4th Semester
+## 📝 Digital Matadan Pranali
 
 **Project Name:** Digital Matadan Pranali (Online Election System)  
 **Developers:** Sijal Neupane & Simrika Raul  
